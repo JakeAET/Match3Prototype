@@ -98,15 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5a4c098d22c67443974fd804e7d5734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileElements:
-  - {fileID: 1743847467780583441, guid: ed0555974b76e634389ad7994bacef27, type: 3}
-  - {fileID: 1743847467780583441, guid: 8455beed9434e564c817dc8db509e51a, type: 3}
-  - {fileID: 1743847467780583441, guid: 5ca098550d66c0740b4c497d259e168f, type: 3}
-  - {fileID: 1743847467780583441, guid: f10a309b063bf3b4380bca9d2055e1e0, type: 3}
-  - {fileID: 1743847467780583441, guid: 22a1604f32dc7fb4582c4e88adee7aeb, type: 3}
-  elementSpawnHeight: 13
   fallSpeed: 30
+  currentElement: {fileID: 0}
   spawnDelay: 0
+  falling: 0
 --- !u!1 &8240746388253706594
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +128,7 @@ Transform:
   m_GameObject: {fileID: 8240746388253706594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
+  m_LocalScale: {x: 0.95, y: 0.95, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7835872136145428004}
