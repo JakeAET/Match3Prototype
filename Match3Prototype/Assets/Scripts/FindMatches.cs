@@ -85,5 +85,10 @@ public class FindMatches : MonoBehaviour
                 }
             }
         }
+        if (currentMatches.Count == 0)
+        {
+            //board.currentState = GameState.move;
+            //gameManager.turnEnded();
+        }
     }
 }

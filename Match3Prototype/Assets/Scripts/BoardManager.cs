@@ -25,6 +25,8 @@ public class BoardManager : MonoBehaviour
     private FindMatches findMatches;
     private GameManager gameManager;
 
+    private bool collapsingActive = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -163,6 +165,7 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator DecreaseRow()
     {
+        //collapsingActive = true;
         int nullCount = 0;
         for (int i = 0; i < width; i++)
         {
@@ -183,6 +186,7 @@ public class BoardManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.4f);
         StartCoroutine(FillBoard());
+        collapsingActive = false;
     }
 
     public void RefillBoard()
@@ -274,11 +278,21 @@ public class BoardManager : MonoBehaviour
         {
             gameManager.increaseStreak();
             yield return new WaitForSeconds(0.5f);
+            collapsingActive = true;
             DestroyMatches();
         }
+        StartCoroutine(checkTurnEnd());
         yield return new WaitForSeconds(0.5f);
-        currentState = GameState.move;
-        gameManager.turnEnded();
         gameManager.streakValue = 1;
+    }
+
+    private IEnumerator checkTurnEnd()
+    {
+        yield return new WaitForSeconds(0.6f);
+        if (!MatchesOnBoard() && !collapsingActive)
+        {
+            Debug.Log("all matches collapsed");
+            gameManager.turnEnded();
+        }
     }
 }

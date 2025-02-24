@@ -93,6 +93,18 @@ public class Element : MonoBehaviour
             {
                 board.DestroyMatches();
             }
+            else if(!isMatched && !otherElement.GetComponent<Element>().isMatched)
+            {
+                Debug.Log("no matches created by move");
+                //board.currentState = GameState.move;
+                gameManager.turnEnded();
+            }
+        }
+        else
+        {
+            //Debug.Log(gameObject.name + " triggered turn end");
+            //board.currentState = GameState.move;
+            //gameManager.turnEnded();
         }
     }
 

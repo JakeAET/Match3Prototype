@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Diagnostics;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,9 +18,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] int maxTurns = 0;
     public int currentTurn = 0;
 
-    private int currentRound = 0;
+    public int currentRound = 0;
+
+    private bool turnActive = false;
 
     private BoardManager board;
+    private UIManager ui;
 
     [SerializeField] TMP_Text scoreText;
     [SerializeField] TMP_Text streakText;
@@ -31,6 +35,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<BoardManager>();
+        ui = FindObjectOfType<UIManager>();
         startRound();
     }
 
@@ -42,19 +47,30 @@ public class GameManager : MonoBehaviour
 
     public void turnStarted()
     {
-        currentTurn--;
-        turnsText.text = "Turns Left: " + currentTurn;
+        UnityEngine.Debug.Log("turn started");
+        if (!turnActive)
+        {
+            currentTurn--;
+            ui.updateTurns(currentTurn);
+            turnActive = true;
+        }
     }
 
     public void turnEnded()
     {
-        if (currentScore >= currentTargetScore) // game ends, won
+        if (turnActive)
         {
-            roundEnded(true);
-        }
-        else if (currentTurn == 0) // game ends, lost
-        {
-            roundEnded(false);
+            UnityEngine.Debug.Log("turn ended - current score: " + currentScore);
+            board.currentState = GameState.move;
+            if (currentScore >= currentTargetScore) // game ends, won
+            {
+                roundEnded(true);
+            }
+            else if (currentTurn == 0) // game ends, lost
+            {
+                roundEnded(false);
+            }
+            turnActive = false;
         }
     }
 
@@ -62,19 +78,21 @@ public class GameManager : MonoBehaviour
     {
         if (roundWon)
         {
-            Debug.Log("Round Won");
+            UnityEngine.Debug.Log("Round Won");
             board.clearBoard();
-            board.RefillBoard();
-            startRound();
+            board.ResetBoard();
+            ui.displayWinScreen();
+            //startRound();
         }
         else
         {
-            Debug.Log("Round Lost");
+            UnityEngine.Debug.Log("Round Lost");
+            ui.displayLoseScreen();
             gameOver();
         }
     }
 
-    private void startRound()
+    public void startRound()
     {
         currentScore = 0;
         currentTurn = maxTurns;
@@ -82,11 +100,16 @@ public class GameManager : MonoBehaviour
 
         currentTargetScore = baseTargetScore * targetScoreIncMult * currentRound;
 
-        scoreText.text = "Score: " + currentScore;
+        ui.updateScore(currentScore);
+        ui.updateTurns(currentTurn);
+        ui.updateRounds(currentRound);
+        ui.updateTargetScore(currentTargetScore);
+
+        //scoreText.text = "Score: " + currentScore;
         //streakText.text = "Streak: " + streakValue;
-        turnsText.text = "Turns Left: " + currentTurn;
-        roundsText.text = "Round: " + currentRound;
-        targetScoreText.text = "Target Score: " + currentTargetScore;
+        //turnsText.text = "Turns Left: " + currentTurn;
+        //roundsText.text = "Round: " + currentRound;
+        //targetScoreText.text = "Target Score: " + currentTargetScore;
     }
 
     private void gameOver()
@@ -99,7 +122,7 @@ public class GameManager : MonoBehaviour
     public void IncreaseScore(float increaseAmount)
     {
         currentScore += increaseAmount;
-        scoreText.text = "Score: " + currentScore;
+        ui.updateScore(currentScore);
     }
 
     public void increaseStreak()
