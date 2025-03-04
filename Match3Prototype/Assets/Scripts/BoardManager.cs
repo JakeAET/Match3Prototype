@@ -184,7 +184,7 @@ public class BoardManager : MonoBehaviour
             nullCount = 0;
         }
 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.2f);
         StartCoroutine(FillBoard());
         collapsingActive = false;
     }
@@ -277,7 +277,7 @@ public class BoardManager : MonoBehaviour
         while (MatchesOnBoard())
         {
             gameManager.increaseStreak();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.8f);
             collapsingActive = true;
             DestroyMatches();
         }

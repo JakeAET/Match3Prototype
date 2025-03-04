@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     private GameManager gameManager;
+    private PatronManager patronManager;
 
     [Header("Top Panel")]
     [SerializeField] TMP_Text scoreText;
@@ -18,15 +20,26 @@ public class UIManager : MonoBehaviour
     [Header("Win Screen")]
     [SerializeField] GameObject winPanel;
     [SerializeField] TMP_Text winRoundText;
+    [SerializeField] Image patronImg1;
+    [SerializeField] Image patronImg2;
+    [SerializeField] Image patronImg3;
+    private Patron patronOption1;
+    private Patron patronOption2;
+    private Patron patronOption3;
 
     [Header("Lose Screen")]
     [SerializeField] GameObject losePanel;
     [SerializeField] TMP_Text loseRoundText;
 
+    [Header("Bottom Panel")]
+    public Image[] patronLowerImgs;
+    public TMP_Text[] patronLvls;
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        patronManager = FindObjectOfType<PatronManager>();
     }
 
     // Update is called once per frame
@@ -62,6 +75,14 @@ public class UIManager : MonoBehaviour
 
     public void displayWinScreen()
     {
+        List<Patron> patronOptions = patronManager.select3Patrons();
+        patronOption1 = patronOptions[0];
+        patronOption2 = patronOptions[1];
+        patronOption3 = patronOptions[2];
+        patronImg1.sprite = patronOption1.sprite;
+        patronImg2.sprite = patronOption2.sprite;
+        patronImg3.sprite = patronOption3.sprite;
+
         winPanel.SetActive(true);
         winRoundText.text = "Round " + gameManager.currentRound + " Complete";
     }
@@ -72,11 +93,35 @@ public class UIManager : MonoBehaviour
         loseRoundText.text = "Round " + gameManager.currentRound + " Failed";
     }
 
-    public void startNextRound()
+    public void patronBttn1()
     {
+        patronManager.selectNewPatron(patronOption1);
+        
         winPanel.SetActive(false);
         gameManager.startRound();
     }
+
+    public void patronBttn2()
+    {
+        patronManager.selectNewPatron(patronOption2);
+
+        winPanel.SetActive(false);
+        gameManager.startRound();
+    }
+
+    public void patronBttn3()
+    {
+        patronManager.selectNewPatron(patronOption3);
+
+        winPanel.SetActive(false);
+        gameManager.startRound();
+    }
+
+    //public void startNextRound()
+    //{
+    //    winPanel.SetActive(false);
+    //    gameManager.startRound();
+    //}
 
     public void startAfterLoss()
     {

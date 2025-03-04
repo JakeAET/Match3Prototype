@@ -4,6 +4,7 @@ using UnityEngine;
 public class Element : MonoBehaviour
 {
     [SerializeField] private float swapSpeed;
+    [SerializeField] private GameObject matchedIcon;
     public string colorName;
 
     [Header("Board Variables")]
@@ -40,8 +41,9 @@ public class Element : MonoBehaviour
 
         if (isMatched)
         {
-            SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
-            mySprite.color = new Color(1f, 1f, 1f, 0.5f);
+            matchedIcon.SetActive(true);
+            //SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
+            //mySprite.color = new Color(1f, 1f, 1f, 0.5f);
         }
 
         targetX = column;
