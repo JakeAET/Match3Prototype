@@ -66,27 +66,44 @@ public class PatronManager : MonoBehaviour
             targetPatron.levelUp();
             uiManager.patronLvls[index].text = "" + targetPatron.level;
 
+            if(targetPatron.level == targetPatron.maxLevel)
+            {
+                // Remove patron from selection list
+            }
+
         }
         else
         {
-            targetPatron = copyPatron(patron);
+            var newPatron = Instantiate(patron);
+            //Debug.Log("new patron added");
+
+            // TODO Instantiate new patron
+
+            targetPatron = newPatron;
             activePatrons.Add(targetPatron);
-            uiManager.patronLowerImgs[activePatrons.Count - 1].sprite = targetPatron.sprite;
-            uiManager.patronLowerImgs[activePatrons.Count - 1].gameObject.SetActive(true);
+            uiManager.patronSlots[activePatrons.Count - 1].SetActive(true);
+            uiManager.patronUpperImgs[activePatrons.Count - 1].sprite = targetPatron.sprite;
+            uiManager.patronUpperImgs[activePatrons.Count - 1].color = targetPatron.color;
+            uiManager.patronUpperImgs[activePatrons.Count - 1].gameObject.SetActive(true);
             uiManager.patronLvls[activePatrons.Count - 1].gameObject.SetActive(true);
+
+            if (targetPatron.constantEffect && targetPatron.conditionMet()) //activate constant effect immediately
+            {
+                targetPatron.triggerEffect();
+            }
         }
     }
 
-    private Patron copyPatron(Patron patronRef)
-    {
-        Patron newPatron = new Patron();
-        newPatron.title = patronRef.title;
-        newPatron.effectDescription = patronRef.effectDescription;
-        newPatron.conditionalEffect = patronRef.conditionalEffect;
-        newPatron.constantEffect = patronRef.constantEffect;
-        newPatron.level = patronRef.level;
-        newPatron.maxLevel = patronRef.maxLevel;
-        newPatron.sprite = patronRef.sprite;
-        return newPatron;
-    }
+    //private Patron copyPatron(Patron patronRef)
+    //{
+    //    Patron newPatron = new Patron;
+    //    newPatron.title = patronRef.title;
+    //    newPatron.effectDescription = patronRef.effectDescription;
+    //    newPatron.conditionalEffect = patronRef.conditionalEffect;
+    //    newPatron.constantEffect = patronRef.constantEffect;
+    //    newPatron.level = patronRef.level;
+    //    newPatron.maxLevel = patronRef.maxLevel;
+    //    newPatron.sprite = patronRef.sprite;
+    //    return newPatron;
+    //}
 }

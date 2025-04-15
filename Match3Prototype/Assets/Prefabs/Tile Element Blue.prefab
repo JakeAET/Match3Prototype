@@ -8,20 +8,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1203373384818866496, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8e70e118c54fedc47bafed6c78381e37, type: 3}
+    - target: {fileID: 1203373384818866496, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1203373384818866496, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_Color.g
-      value: 0.67300844
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1203373384818866496, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_Color.r
-      value: 0.4575472
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: colorName
       value: Blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: colorIndex
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3829458100372691615, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_RootOrder

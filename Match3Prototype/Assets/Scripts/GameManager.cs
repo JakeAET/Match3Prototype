@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Diagnostics;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,8 +17,12 @@ public class GameManager : MonoBehaviour
     public float baseElementValue = 0;
     public float streakValue = 1;
 
-    [SerializeField] int maxTurns = 0;
+    public int maxTurns = 0;
     public int currentTurn = 0;
+
+    public int maxUndos = 0;
+    public int currentUndos = 0;
+    public bool undoAllowed = false;
 
     public int currentRound = 0;
 
@@ -25,11 +31,12 @@ public class GameManager : MonoBehaviour
     private BoardManager board;
     private UIManager ui;
 
-    [SerializeField] TMP_Text scoreText;
-    [SerializeField] TMP_Text streakText;
-    [SerializeField] TMP_Text turnsText;
-    [SerializeField] TMP_Text roundsText;
-    [SerializeField] TMP_Text targetScoreText;
+    //[SerializeField] TMP_Text scoreText;
+    //[SerializeField] TMP_Text streakText;
+    //[SerializeField] TMP_Text turnsText;
+    //[SerializeField] TMP_Text roundsText;
+    //[SerializeField] TMP_Text targetScoreText;
+
 
     // Start is called before the first frame update
     void Start()
@@ -60,8 +67,9 @@ public class GameManager : MonoBehaviour
     {
         if (turnActive)
         {
-            UnityEngine.Debug.Log("turn ended - current score: " + currentScore);
+            UnityEngine.Debug.Log("turn " + (maxTurns - currentTurn) +  " ended - current score:  " + currentScore);
             board.currentState = GameState.move;
+            board.reassignTileIDs();
             if (currentScore >= currentTargetScore) // game ends, won
             {
                 roundEnded(true);
@@ -70,12 +78,22 @@ public class GameManager : MonoBehaviour
             {
                 roundEnded(false);
             }
+
+            if (!undoAllowed && currentUndos > 0)
+            {
+                undoAllowed = true;
+                ui.checkToEnableUndo();
+            }
+
             turnActive = false;
         }
     }
 
     private void roundEnded(bool roundWon)
     {
+        undoAllowed = false;
+        ui.disableUndo();
+
         if (roundWon)
         {
             UnityEngine.Debug.Log("Round Won");
@@ -96,14 +114,20 @@ public class GameManager : MonoBehaviour
     {
         currentScore = 0;
         currentTurn = maxTurns;
+        currentUndos = maxUndos;
         currentRound++;
 
         currentTargetScore = baseTargetScore * targetScoreIncMult * currentRound;
 
-        ui.updateScore(currentScore);
+        //ui.updateScore(currentScore);
         ui.updateTurns(currentTurn);
         ui.updateRounds(currentRound);
-        ui.updateTargetScore(currentTargetScore);
+        //ui.updateTargetScore(currentTargetScore);
+        ui.updateScoreProgress( currentScore, currentTargetScore);
+        ui.undoCountUpdate(currentUndos);
+
+        undoAllowed = false;
+        ui.disableUndo();
 
         //scoreText.text = "Score: " + currentScore;
         //streakText.text = "Streak: " + streakValue;
@@ -122,7 +146,7 @@ public class GameManager : MonoBehaviour
     public void IncreaseScore(float increaseAmount)
     {
         currentScore += increaseAmount;
-        ui.updateScore(currentScore);
+        ui.updateScoreProgress(currentScore, currentTargetScore);
     }
 
     public void increaseStreak()
@@ -131,12 +155,34 @@ public class GameManager : MonoBehaviour
         //streakText.text = "Streak: " + streakValue;
     }
 
-    private void updateUI()
+    public void increaseMaxTurns(int num)
     {
-        scoreText.text = "Score: " + currentScore;
-        //streakText.text = "Streak: " + streakValue;
-        turnsText.text = "Turns Left: " + currentTurn;
-        roundsText.text = "Round: " + currentRound;
-        targetScoreText.text = "Target Score: " + currentTargetScore;
+        maxTurns += num;
+        ui.updateTurns(currentTurn);
     }
+
+    public void increaseMaxUndos(int num)
+    {
+        maxUndos += num;
+        currentUndos = maxUndos;
+        ui.undoCountUpdate(currentUndos);
+    }
+
+    public void useUndoMove()
+    {
+        currentUndos--;
+        board.undoLastMove();
+        ui.undoCountUpdate(currentUndos);
+        undoAllowed = false;
+        ui.disableUndo();
+    }
+
+    //private void updateUI()
+    //{
+    //    scoreText.text = "Score: " + currentScore;
+    //    //streakText.text = "Streak: " + streakValue;
+    //    turnsText.text = "Turns Left: " + currentTurn;
+    //    roundsText.text = "Round: " + currentRound;
+    //    targetScoreText.text = "Target Score: " + currentTargetScore;
+    //}
 }

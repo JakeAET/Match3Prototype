@@ -6,14 +6,15 @@ public class Element : MonoBehaviour
     [SerializeField] private float swapSpeed;
     [SerializeField] private GameObject matchedIcon;
     public string colorName;
+    public int colorIndex;
 
     [Header("Board Variables")]
     public int column;
     //public int prevColumn;
     public int row;
     //public int prevRow;
-    public int targetX;
-    public int targetY;
+    public float targetX;
+    public float targetY;
     public bool isMatched = false;
 
     private BoardManager board;
@@ -46,8 +47,8 @@ public class Element : MonoBehaviour
             //mySprite.color = new Color(1f, 1f, 1f, 0.5f);
         }
 
-        targetX = column;
-        targetY = row;
+        targetX = column * board.xSpawnOffsetMult;
+        targetY = row * board.ySpawnOffsetMult;
         if (Mathf.Abs(targetX - transform.position.x) > 0.1)
         {
             // move towards target
@@ -57,7 +58,7 @@ public class Element : MonoBehaviour
             {
                 board.allElements[column, row] = this.gameObject;
             }
-            findMatches.FindAllMatchesStart();
+            //findMatches.FindAllMatchesStart();
         }
         else
         {
@@ -75,7 +76,7 @@ public class Element : MonoBehaviour
             {
                 board.allElements[column, row] = this.gameObject;
             }
-            findMatches.FindAllMatchesStart();
+            //findMatches.FindAllMatchesStart();
         }
         else
         {
@@ -91,7 +92,7 @@ public class Element : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         if (otherElement != null)
         {
-            if (isMatched)
+            if (isMatched || otherElement.GetComponent<Element>().isMatched)
             {
                 board.DestroyMatches();
             }
@@ -166,6 +167,7 @@ public class Element : MonoBehaviour
             row -= 1;
         }
         StartCoroutine(CheckMove());
+        findMatches.FindAllMatchesStart();
         gameManager.turnStarted();
     } 
 

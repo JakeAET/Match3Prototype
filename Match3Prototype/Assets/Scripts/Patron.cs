@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable] public class Patron
+public abstract class Patron : MonoBehaviour
 {
     public string title;
     public string effectDescription;
@@ -9,6 +11,7 @@ using UnityEngine;
     public int level = 1;
     public int maxLevel = 5;
     public Sprite sprite;
+    public Color color;
 
     public virtual bool conditionMet()
     {
