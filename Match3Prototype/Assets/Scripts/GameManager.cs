@@ -14,8 +14,10 @@ public class GameManager : MonoBehaviour
     public float currentScore = 0;
     public float currentTargetScore = 0;
 
-    public float baseElementValue = 0;
+    public float baseElementValue;
+    public float largeMatchBonus;
     public float streakValue = 1;
+    public float enchantedTileMulti;
 
     public int maxTurns = 0;
     public int currentTurn = 0;
@@ -26,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     public int currentRound = 0;
 
-    private bool turnActive = false;
+    public bool roundActive = false;
 
     private BoardManager board;
     private UIManager ui;
@@ -54,43 +56,33 @@ public class GameManager : MonoBehaviour
 
     public void turnStarted()
     {
-        UnityEngine.Debug.Log("turn started");
-        if (!turnActive)
-        {
-            currentTurn--;
-            ui.updateTurns(currentTurn);
-            turnActive = true;
-        }
+        currentTurn--;
+        ui.updateTurns(currentTurn);
     }
 
     public void turnEnded()
     {
-        if (turnActive)
+        UnityEngine.Debug.Log("turn " + (maxTurns - currentTurn) + " ended - current score:  " + currentScore);
+        board.reassignTileIDs();
+        if (currentScore >= currentTargetScore) // game ends, won
         {
-            UnityEngine.Debug.Log("turn " + (maxTurns - currentTurn) +  " ended - current score:  " + currentScore);
-            board.currentState = GameState.move;
-            board.reassignTileIDs();
-            if (currentScore >= currentTargetScore) // game ends, won
-            {
-                roundEnded(true);
-            }
-            else if (currentTurn == 0) // game ends, lost
-            {
-                roundEnded(false);
-            }
+            roundEnded(true);
+        }
+        else if (currentTurn == 0) // game ends, lost
+        {
+            roundEnded(false);
+        }
 
-            if (!undoAllowed && currentUndos > 0)
-            {
-                undoAllowed = true;
-                ui.checkToEnableUndo();
-            }
-
-            turnActive = false;
+        if (!undoAllowed && currentUndos > 0)
+        {
+            undoAllowed = true;
+            ui.checkToEnableUndo();
         }
     }
 
     private void roundEnded(bool roundWon)
     {
+        roundActive = false;
         undoAllowed = false;
         ui.disableUndo();
 
@@ -98,7 +90,6 @@ public class GameManager : MonoBehaviour
         {
             UnityEngine.Debug.Log("Round Won");
             board.clearBoard();
-            board.ResetBoard();
             ui.displayWinScreen();
             //startRound();
         }
@@ -112,6 +103,8 @@ public class GameManager : MonoBehaviour
 
     public void startRound()
     {
+        board.currentState = GameState.SettingBoard;
+        roundActive = true;
         currentScore = 0;
         currentTurn = maxTurns;
         currentUndos = maxUndos;

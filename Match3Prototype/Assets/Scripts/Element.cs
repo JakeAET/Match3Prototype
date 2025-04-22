@@ -3,10 +3,16 @@ using UnityEngine;
 
 public class Element : MonoBehaviour
 {
+    [Header("Element Variables")]
     [SerializeField] private float swapSpeed;
     [SerializeField] private GameObject matchedIcon;
+    [SerializeField] private GameObject enchantedEffect;
+    [SerializeField] private GameObject frozenEffect;
     public string colorName;
     public int colorIndex;
+    public bool isFrozen = false;
+    public bool isEnchanted = false;
+
 
     [Header("Board Variables")]
     public int column;
@@ -43,6 +49,10 @@ public class Element : MonoBehaviour
         if (isMatched)
         {
             matchedIcon.SetActive(true);
+            if (isEnchanted)
+            {
+                matchedIcon.GetComponent<SpriteRenderer>().color = Color.green;
+            }
             //SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
             //mySprite.color = new Color(1f, 1f, 1f, 0.5f);
         }
@@ -58,7 +68,6 @@ public class Element : MonoBehaviour
             {
                 board.allElements[column, row] = this.gameObject;
             }
-            //findMatches.FindAllMatchesStart();
         }
         else
         {
@@ -76,7 +85,6 @@ public class Element : MonoBehaviour
             {
                 board.allElements[column, row] = this.gameObject;
             }
-            //findMatches.FindAllMatchesStart();
         }
         else
         {
@@ -89,31 +97,13 @@ public class Element : MonoBehaviour
 
     public IEnumerator CheckMove()
     {
-        yield return new WaitForSeconds(0.5f);
-        if (otherElement != null)
-        {
-            if (isMatched || otherElement.GetComponent<Element>().isMatched)
-            {
-                board.DestroyMatches();
-            }
-            else if(!isMatched && !otherElement.GetComponent<Element>().isMatched)
-            {
-                Debug.Log("no matches created by move");
-                //board.currentState = GameState.move;
-                gameManager.turnEnded();
-            }
-        }
-        else
-        {
-            //Debug.Log(gameObject.name + " triggered turn end");
-            //board.currentState = GameState.move;
-            //gameManager.turnEnded();
-        }
+        yield return new WaitForSeconds(0f);
+        board.startFindingMatches();
     }
 
     private void OnMouseDown()
     {
-        if (board.currentState == GameState.move)
+        if (board.currentState == GameState.Waiting)
         {
             firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
@@ -121,7 +111,7 @@ public class Element : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (board.currentState == GameState.move)
+        if (board.currentState == GameState.Waiting)
         {
             finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             CalculateAngle();
@@ -136,12 +126,14 @@ public class Element : MonoBehaviour
             swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
             //Debug.Log(swipeAngle);
             MovePieces();
-            board.currentState = GameState.wait;
+            //board.currentState = GameState.wait;
         }
     }
 
     void MovePieces()
     {
+        Debug.Log("Waiting -> Moving Tiles");
+        board.currentState = GameState.MovingTiles;
         if(swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1) // right swipe
         {
             otherElement = board.allElements[column + 1, row];
@@ -167,9 +159,21 @@ public class Element : MonoBehaviour
             row -= 1;
         }
         StartCoroutine(CheckMove());
-        findMatches.FindAllMatchesStart();
+        //findMatches.FindAllMatchesStart();
         gameManager.turnStarted();
     } 
+
+    public void freezeElement()
+    {
+        isFrozen = true;
+        frozenEffect.SetActive(true);
+    }
+
+    public void enchantElement()
+    {
+        isEnchanted = true;
+        enchantedEffect.SetActive(true);
+    }
 
 
     //void FindMatches()

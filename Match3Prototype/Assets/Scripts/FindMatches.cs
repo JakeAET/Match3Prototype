@@ -22,7 +22,7 @@ public class FindMatches : MonoBehaviour
 
     private IEnumerator FindAllMatches()
     {
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0.2f);
         for (int i = 0; i < board.width; i++)
         {
             for (int j = 0; j < board.height; j++)
@@ -51,8 +51,12 @@ public class FindMatches : MonoBehaviour
                                     currentMatches.Add(currentElement);
                                 }
                                 leftElement.GetComponent<Element>().isMatched = true;
+                                checkAdjacentForFrozen(i - 1, j);
                                 rightElement.GetComponent<Element>().isMatched = true;
+                                checkAdjacentForFrozen(i, j);
                                 currentElement.GetComponent<Element>().isMatched = true;
+                                checkAdjacentForFrozen(i + 1, j);
+
                             }
                         }
                     }
@@ -77,18 +81,85 @@ public class FindMatches : MonoBehaviour
                                     currentMatches.Add(currentElement);
                                 }
                                 upElement.GetComponent<Element>().isMatched = true;
+                                checkAdjacentForFrozen(i , j + 1);
                                 downElement.GetComponent<Element>().isMatched = true;
+                                checkAdjacentForFrozen(i, j - 1);
                                 currentElement.GetComponent<Element>().isMatched = true;
+                                checkAdjacentForFrozen(i, j);
                             }
                         } 
                     }
                 }
             }
         }
-        if (currentMatches.Count == 0)
+        Debug.Log("Count: " + currentMatches.Count);
+        bool matchesFound = (currentMatches.Count > 0);
+
+        if (matchesFound)
         {
-            //board.currentState = GameState.move;
-            //gameManager.turnEnded();
+            yield return new WaitForSeconds(1f);
+        }
+        else
+        {
+            yield return null;
+        }
+        board.allMatchesFound(matchesFound);
+    }
+
+    private void checkAdjacentForFrozen(int i, int j)
+    {
+
+        GameObject upElement = null;
+        GameObject downElement = null;
+        GameObject leftElement = null;
+        GameObject rightElement = null;
+
+        if (j > 0 && j < board.height - 1)
+        {
+             upElement = board.allElements[i, j + 1];
+             downElement = board.allElements[i, j - 1];
+        }
+
+        if (i > 0 && i < board.width - 1)
+        {
+             leftElement = board.allElements[i - 1, j];
+             rightElement = board.allElements[i + 1, j];
+        }
+
+        if (upElement != null)
+        {
+            if (upElement.GetComponent<Element>().isFrozen && !upElement.GetComponent<Element>().isMatched)
+            {
+                upElement.GetComponent<Element>().isMatched = true;
+                checkAdjacentForFrozen(i, j + 1);
+            }
+        }
+
+        if (downElement != null)
+        {
+            if (downElement.GetComponent<Element>().isFrozen && !downElement.GetComponent<Element>().isMatched)
+            {
+                downElement.GetComponent<Element>().isMatched = true;
+                checkAdjacentForFrozen(i, j - 1);
+            }
+        }
+
+        if (leftElement != null)
+        {
+            if (leftElement.GetComponent<Element>().isFrozen && !leftElement.GetComponent<Element>().isMatched)
+            {
+                leftElement.GetComponent<Element>().isMatched = true;
+                checkAdjacentForFrozen(i - 1, j);
+            }
+        }
+
+        if (rightElement != null)
+        {
+            if (rightElement.GetComponent<Element>().isFrozen && !rightElement.GetComponent<Element>().isMatched)
+            {
+                rightElement.GetComponent<Element>().isMatched = true;
+                checkAdjacentForFrozen(i + 1, j);
+            }
         }
     }
 }

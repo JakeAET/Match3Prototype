@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 856392069984648321, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1164743867104141105, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1203373384818866496, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -23,6 +31,14 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1402681285403700429, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1402681285403700429, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1
+      objectReference: {fileID: 0}
     - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: colorName
       value: Blue
@@ -30,6 +46,10 @@ PrefabInstance:
     - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: colorIndex
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3107803706883179975, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3829458100372691615, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_RootOrder
@@ -75,6 +95,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7181196654974063726, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7181196654974063726, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7225419870597372579, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_Name
       value: Tile Element Blue
@@ -82,6 +110,14 @@ PrefabInstance:
     - target: {fileID: 7225419870597372579, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_TagString
       value: blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 8575645243131144497, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_MaskAlphaCutoff
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 9128513561127785624, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}

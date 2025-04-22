@@ -32,7 +32,7 @@ public class PatronManager : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
-            Patron selectedPatron = possiblePatrons[Random.Range(0, possiblePatrons.Count - 1)];
+            Patron selectedPatron = possiblePatrons[Random.Range(0, possiblePatrons.Count)];
             chosenPatrons.Add(selectedPatron);
             possiblePatrons.Remove(selectedPatron);
             //Debug.Log(selectedPatron.title);
