@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -51,6 +53,7 @@ public class BoardManager : MonoBehaviour
     private bool matchesToDestroy = false;
     private bool destroyingMatches = false;
     private bool refillingBoard = false;
+    private bool roundEnded = false;
 
     private bool checkMatchesInitialized = false;
     private bool destroyMatchesInitialized = false;
@@ -68,8 +71,9 @@ public class BoardManager : MonoBehaviour
     private GameManager gameManager;
     private List<Element> roundMatches = new List<Element>();
     [SerializeField] GameObject textPopup;
-    [SerializeField] GameObject worldspaceCanvas;
+    [SerializeField] Color[] popUpColors;
 
+    private int matchStreak = 1;
     public int redSpawnRate = 1;
     public int blueSpawnRate = 1;
     public int greenSpawnRate = 1;
@@ -105,7 +109,7 @@ public class BoardManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            undoLastMove();
+            //undoLastMove();
         }
 
         #region State Actions
@@ -249,27 +253,111 @@ public class BoardManager : MonoBehaviour
         Element targetElement = allElements[column, row].GetComponent<Element>();
         if (targetElement.isMatched)
         {
-            float scoreIncrease = gameManager.baseElementValue;
-            float scoreMulti = 1;
-            Color targetColor = Color.white;
-
-            roundMatches.Add(allElements[column, row].GetComponent<Element>());
-
-            // Large Match Bonus
-            if (findMatches.currentMatches.Count >= 4)
+            if (!targetElement.isScored)
             {
-                scoreIncrease += gameManager.largeMatchBonus;
-                //Debug.Log("biggg match made of size: " + findMatches.currentMatches.Count);
+                float finalScore = 0;
+                float scoreIncrease = gameManager.baseElementValue;
+                Color targetColor = popUpColors[0];
+
+                int horizMatchLength = targetElement.horizMatchLength;
+                int vertMatchLength = targetElement.vertMatchLength;
+
+                float spawnX = column;
+                float spawnY = row;
+
+                if (!targetElement.isFrozen)
+                {
+                    if (vertMatchLength > horizMatchLength)
+                    {
+                        float minRow = targetElement.vertMatchedElements[0].row;
+                        float maxRow = targetElement.vertMatchedElements[0].row;
+
+                        foreach (Element e in targetElement.vertMatchedElements)
+                        {
+                            if (!e.isScored)
+                            {
+                                finalScore += scoreOfTile(e.column, e.row);
+                                e.isScored = true;
+                            }
+
+                            if (e.row < minRow)
+                            {
+                                minRow = e.row;
+                            }
+
+                            if (e.row > maxRow)
+                            {
+                                maxRow = e.row;
+                            }
+                        }
+
+                        spawnY = ((maxRow - minRow) / 2) + minRow;
+                    }
+                    else
+                    {
+                        float minColumn = targetElement.horizMatchedElements[0].column;
+                        float maxColumn = targetElement.horizMatchedElements[0].column;
+
+                        foreach (Element e in targetElement.horizMatchedElements)
+                        {
+                            if (!e.isScored)
+                            {
+                                finalScore += scoreOfTile(e.column, e.row);
+                                e.isScored = true;
+                            }
+
+                            if (e.column < minColumn)
+                            {
+                                minColumn = e.column;
+                            }
+
+                            if (e.column > maxColumn)
+                            {
+                                maxColumn = e.column;
+                            }
+                        }
+
+                        spawnX = ((maxColumn - minColumn) / 2) + minColumn;
+                    }
+                }
+                else
+                {
+                    finalScore = scoreOfTile(column, row);
+                    targetElement.isScored = true;
+                }
+
+                if(finalScore >= 100)
+                {
+                    targetColor = popUpColors[1];
+                }
+
+                if(finalScore >= 300)
+                {
+                    targetColor = popUpColors[2];
+                }
+
+                if (finalScore >= 500)
+                {
+                    targetColor = popUpColors[3];
+                }
+
+                if (finalScore >= 1000)
+                {
+                    targetColor = popUpColors[4];
+                }
+
+                Vector2 targetPos = new Vector2(spawnX * xSpawnOffsetMult, spawnY * ySpawnOffsetMult);
+                GameObject newPopup = Instantiate(textPopup, targetPos, Quaternion.identity);
+                newPopup.transform.parent = transform;
+                newPopup.GetComponent<ScorePopup>().initialize(finalScore, targetColor);
+
+                gameManager.IncreaseScore(finalScore);
             }
+            
 
-            //Debug.Log("match length: " + findMatches.currentMatches.Count);
-
-            // Enchanted Tiles
             if (targetElement.isEnchanted)
             {
-                scoreMulti += gameManager.enchantedTileMulti;
                 currentEnchantedTiles--;
-                targetColor = Color.green;
             }
 
             if (targetElement.isFrozen)
@@ -277,24 +365,8 @@ public class BoardManager : MonoBehaviour
                 currentFrozenTiles--;
             }
 
-            if(scoreIncrease * scoreMulti >= 100)
-            {
-                targetColor = Color.red;
-            }
-
-            float targetX = column * xSpawnOffsetMult;
-            float targetY = row * ySpawnOffsetMult;
-            Vector2 targetPos = new Vector2(targetX, targetY);
-            //Debug.Log("Tile Pos: " + targetPos + "Coord: " + column + ", " + row);
             findMatches.currentMatches.Remove(allElements[column, row]);
-            GameObject newPopup = Instantiate(textPopup, targetPos, Quaternion.identity);
-            newPopup.transform.parent = transform;
-            newPopup.GetComponent<ScorePopup>().initialize(scoreIncrease * scoreMulti, targetColor);
-            //newPopup.transform.parent = worldspaceCanvas.transform;
             Destroy(allElements[column, row]);
-
-            // Increase Score
-            gameManager.IncreaseScore(scoreIncrease * scoreMulti);
             allElements[column, row] = null;
         }
     }
@@ -316,6 +388,7 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator DecreaseRow()
     {
+        yield return new WaitForSeconds(0.3f);
         //collapsingActive = true;
         int nullCount = 0;
         for (int i = 0; i < width; i++)
@@ -335,7 +408,7 @@ public class BoardManager : MonoBehaviour
             nullCount = 0;
         }
 
-        yield return new WaitForSeconds(0f);
+        //yield return new WaitForSeconds(0f);
 
         destroyingMatches = false;
         //StartCoroutine(FillBoard());
@@ -494,6 +567,7 @@ public class BoardManager : MonoBehaviour
     private void turnEnded()
     {
         turnStarted = false;
+        matchStreak = 1;
         //int red = 0;
         //int blue = 0;
         //int orange = 0;
@@ -674,6 +748,53 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public void roundOver(bool isOver)
+    {
+        roundEnded = isOver;
+    }
+
+    private float scoreOfTile(int column, int row)
+    {
+        Element targetElement = allElements[column, row].GetComponent<Element>();
+
+        float scoreIncrease = gameManager.baseElementValue;
+        float scoreMulti = 0;
+
+        int horizMatchLength = targetElement.horizMatchLength;
+        int vertMatchLength = targetElement.vertMatchLength;
+
+        // Large Match Bonus
+        if (horizMatchLength > 3 || vertMatchLength > 3)
+        {
+            int matchSize = 0;
+            if (vertMatchLength > horizMatchLength)
+            {
+                matchSize = vertMatchLength;
+            }
+            else
+            {
+                matchSize = horizMatchLength;
+            }
+
+            scoreIncrease += (gameManager.largeMatchBonus * (matchSize - 3));
+        }
+
+
+        // Enchanted Tiles
+        if (targetElement.isEnchanted)
+        {
+            scoreMulti += gameManager.enchantedTileMulti;
+        }
+
+        // only after all multis are considered
+        if (scoreMulti == 0)
+        {
+            scoreMulti = 1;
+        }
+
+        return scoreIncrease * scoreMulti * matchStreak;
+    }
+
     public void allMatchesFound(bool matchesFound)
     {
         matchesToDestroy = matchesFound;
@@ -686,7 +807,10 @@ public class BoardManager : MonoBehaviour
         switch (currentState)
         {
             case GameState.Waiting:
-
+                if (roundEnded)
+                {
+                    currentState = GameState.RoundEnded;
+                }
                 break;
 
             case GameState.SettingBoard:
@@ -699,7 +823,7 @@ public class BoardManager : MonoBehaviour
             case GameState.MovingTiles:
                 if (findingMatches)
                 {
-                    Debug.Log("Moving Tiles -> Check Matches");
+                    //Debug.Log("Moving Tiles -> Check Matches");
                     currentState = GameState.CheckMatches;
                 }
                 break;
@@ -707,14 +831,14 @@ public class BoardManager : MonoBehaviour
             case GameState.CheckMatches:
                 if (!findingMatches && matchesToDestroy)
                 {
-                    Debug.Log("Check Matches -> Destroy Matches");
+                    //Debug.Log("Check Matches -> Destroy Matches");
                     destroyingMatches = true;
                     currentState = GameState.DestroyMatches;
                 }
                 if (!findingMatches && !matchesToDestroy)
                 {
                     turnOver = true;
-                    Debug.Log("Check Matches -> Create Elemental Tiles");
+                    //Debug.Log("Check Matches -> Create Elemental Tiles");
                     currentState = GameState.CreateElementalTiles;
                 }
                 break;
@@ -724,7 +848,8 @@ public class BoardManager : MonoBehaviour
                 {
                     destroyMatchesInitialized = false;
                     refillingBoard = true;
-                    Debug.Log("Destroy Matches -> Refill Board");
+                    matchStreak++;
+                    //Debug.Log("Destroy Matches -> Refill Board");
                     currentState = GameState.RefillBoard;
                 }
                 break;
@@ -732,7 +857,7 @@ public class BoardManager : MonoBehaviour
             case GameState.RefillBoard:
                 if (!refillingBoard)
                 {
-                    Debug.Log("Refill Board -> Check Matches");
+                    //Debug.Log("Refill Board -> Check Matches");
                     findingMatches = true;
                     checkMatchesInitialized = false;
                     currentState = GameState.CheckMatches;
@@ -742,7 +867,7 @@ public class BoardManager : MonoBehaviour
             case GameState.CreateElementalTiles:
                 if (enchantedTilesCreated && frozenTilesCreated)
                 {
-                    Debug.Log("Create Elemental Tiles -> Waiting");
+                    //Debug.Log("Create Elemental Tiles -> Waiting");
                     if (turnOver && turnStarted)
                     {
                         turnEnded();

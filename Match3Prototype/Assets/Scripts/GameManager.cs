@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void turnEnded()
     {
-        UnityEngine.Debug.Log("turn " + (maxTurns - currentTurn) + " ended - current score:  " + currentScore);
+        //UnityEngine.Debug.Log("turn " + (maxTurns - currentTurn) + " ended - current score:  " + currentScore);
         board.reassignTileIDs();
         if (currentScore >= currentTargetScore) // game ends, won
         {
@@ -82,20 +82,21 @@ public class GameManager : MonoBehaviour
 
     private void roundEnded(bool roundWon)
     {
+        board.roundOver(true);
         roundActive = false;
         undoAllowed = false;
         ui.disableUndo();
 
         if (roundWon)
         {
-            UnityEngine.Debug.Log("Round Won");
+            //UnityEngine.Debug.Log("Round Won");
             board.clearBoard();
             ui.displayWinScreen();
             //startRound();
         }
         else
         {
-            UnityEngine.Debug.Log("Round Lost");
+            //UnityEngine.Debug.Log("Round Lost");
             ui.displayLoseScreen();
             gameOver();
         }
@@ -103,6 +104,7 @@ public class GameManager : MonoBehaviour
 
     public void startRound()
     {
+        board.roundOver(false);
         board.currentState = GameState.SettingBoard;
         roundActive = true;
         currentScore = 0;

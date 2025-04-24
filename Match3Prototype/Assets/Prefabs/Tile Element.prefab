@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15062faa7e79ad448b1500c0b2d3a99b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swapSpeed: 0.05
+  swapSpeed: 0.03
   matchedIcon: {fileID: 3107803706883179975}
   enchantedEffect: {fileID: 856392069984648321}
   frozenEffect: {fileID: 1164743867104141105}
@@ -430,6 +430,8 @@ MonoBehaviour:
   row: 0
   targetX: 0
   targetY: 0
-  isMatched: 0
   swipeAngle: 0
   swipeResist: 1
+  isMatched: 0
+  horizMatchLength: 0
+  vertMatchLength: 0

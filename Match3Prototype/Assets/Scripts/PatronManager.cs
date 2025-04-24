@@ -27,7 +27,22 @@ public class PatronManager : MonoBehaviour
 
         foreach (Patron p in potentialPatrons)
         {
-            possiblePatrons.Add(p);
+            bool canAdd = true;
+            for (int i = 0; activePatrons.Count > i; i++)
+            {
+                if(activePatrons[i].title == p.title)
+                {
+                    if (activePatrons[i].level == activePatrons[i].maxLevel)
+                    {
+                        canAdd = false;
+                    }
+                }
+            }
+
+            if (canAdd)
+            {
+                possiblePatrons.Add(p);
+            }
         }
 
         for (int i = 0; i < 3; i++)

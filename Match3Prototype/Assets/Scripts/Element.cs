@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Element : MonoBehaviour
@@ -21,7 +22,6 @@ public class Element : MonoBehaviour
     //public int prevRow;
     public float targetX;
     public float targetY;
-    public bool isMatched = false;
 
     private BoardManager board;
     private FindMatches findMatches;
@@ -32,6 +32,14 @@ public class Element : MonoBehaviour
     private Vector2 tempPosition;
     public float swipeAngle = 0;
     public float swipeResist = 1f;
+
+    // Match variables
+    public bool isMatched = false;
+    public bool isScored = false;
+    public int horizMatchLength = 0;
+    public int vertMatchLength = 0;
+    public List<Element> horizMatchedElements = new List<Element>();
+    public List<Element> vertMatchedElements = new List<Element>();
 
     // Start is called before the first frame update
     void Start()
@@ -132,7 +140,7 @@ public class Element : MonoBehaviour
 
     void MovePieces()
     {
-        Debug.Log("Waiting -> Moving Tiles");
+        //Debug.Log("Waiting -> Moving Tiles");
         board.currentState = GameState.MovingTiles;
         if(swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1) // right swipe
         {

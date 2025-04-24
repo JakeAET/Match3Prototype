@@ -54,5 +54,5 @@ MonoBehaviour:
   color: {r: 1, g: 1, b: 1, a: 1}
   spawnElement: 1
   effectTriggered: 0
-  initialTileIncrease: 4
-  lvlUpTileIncrease: 2
+  initialTileIncrease: 1
+  lvlUpTileIncrease: 1
