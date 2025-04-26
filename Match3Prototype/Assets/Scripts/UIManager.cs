@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text streakText;
     [SerializeField] TMP_Text turnsText;
     [SerializeField] TMP_Text roundsText;
+    [SerializeField] TMP_Text gamesText;
     [SerializeField] TMP_Text progressText;
 
     [SerializeField] TMP_Text undoCountText;
@@ -24,18 +27,34 @@ public class UIManager : MonoBehaviour
     [Header("Win Screen")]
     [SerializeField] GameObject winPanel;
     [SerializeField] TMP_Text winRoundText;
-    [SerializeField] Image patronImg1;
-    [SerializeField] Image patronImg2;
-    [SerializeField] Image patronImg3;
-    private Patron patronOption1;
-    private Patron patronOption2;
-    private Patron patronOption3;
-    [SerializeField] TMP_Text patron1Title;
-    [SerializeField] TMP_Text patron2Title;
-    [SerializeField] TMP_Text patron3Title;
-    [SerializeField] TMP_Text patron1Desc;
-    [SerializeField] TMP_Text patron2Desc;
-    [SerializeField] TMP_Text patron3Desc;
+    [SerializeField] GameObject patronChoicePanel;
+    [SerializeField] GameObject patronChoicePrefab;
+    public List<GameObject> currentChoicePrefabs;
+    public List<Patron> selectedPatrons;
+    public List<patronChoiceUI> patronUIRefs;
+    public List<patronChoiceUI> selectedPatronUIRefs;
+    [SerializeField] Button confirmPatronsButton;
+    [SerializeField] TMP_Text confirmPatronsBttnText;
+    private string confirmPatronsText;
+    public int patronChoiceLimit;
+
+    //[SerializeField] Image patronImg1;
+    //[SerializeField] Image patronImg2;
+    //[SerializeField] Image patronImg3;
+    //private Patron patronOption1;
+    //private Patron patronOption2;
+    //private Patron patronOption3;
+    //[SerializeField] TMP_Text patron1Title;
+    //[SerializeField] TMP_Text patron2Title;
+    //[SerializeField] TMP_Text patron3Title;
+    //[SerializeField] TMP_Text patron1Desc;
+    //[SerializeField] TMP_Text patron2Desc;
+    //[SerializeField] TMP_Text patron3Desc;
+
+    [Header("Boss Info Screen")]
+    [SerializeField] GameObject bossInfoPanel;
+    [SerializeField] TMP_Text bossTitleText;
+    [SerializeField] TMP_Text bossDescriptionText;
 
     [Header("Lose Screen")]
     [SerializeField] GameObject losePanel;
@@ -94,64 +113,116 @@ public class UIManager : MonoBehaviour
         roundsText.text = "" + num;
     }
 
+    public void updateGames(int num)
+    {
+        gamesText.text = "" + num;
+    }
+
+    public void displayBossInfoPanel(BossRound br)
+    {
+        bossInfoPanel.GetComponent<RectTransform>().localScale = Vector3.zero;
+        bossInfoPanel.SetActive(true);
+        bossInfoPanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
+        bossTitleText.text = br.title;
+        bossDescriptionText.text = br.description;
+        bossTitleText.color = br.titleTextColor;
+    }
+
     //public void updateTargetScore(float num)
     //{
     //    targetScoreText.text = "Target Score: " + num;
     //}
 
-    public void displayWinScreen()
+    public void displayWinScreen(bool isBossRound)
     {
-        List<Patron> patronOptions = patronManager.select3Patrons();
-        patronOption1 = patronOptions[0];
-        patronOption2 = patronOptions[1];
-        patronOption3 = patronOptions[2];
+        confirmPatronsButton.interactable = false;
+        int patronsToChoose = 0;
 
-        patronImg1.sprite = patronOption1.sprite;
-        patronImg1.color = patronOption1.color;
-        patron1Desc.text = patronOption1.effectDescription;
-        patron1Title.text = patronOption1.title;
+        if (isBossRound)
+        {
+            patronsToChoose = 5;
+            patronChoiceLimit = 2;
+            confirmPatronsText = "Choose two patrons";
+        }
+        else
+        {
+            patronsToChoose = 3;
+            patronChoiceLimit = 1;
+            confirmPatronsText = "Choose one patron";
+        }
 
-        patronImg2.sprite = patronOption2.sprite;
-        patronImg2.color = patronOption2.color;
-        patron2Desc.text = patronOption2.effectDescription;
-        patron2Title.text = patronOption2.title;
+        confirmPatronsBttnText.text = confirmPatronsText;
 
-        patronImg3.sprite = patronOption3.sprite;
-        patronImg3.color = patronOption3.color;
-        patron3Desc.text = patronOption3.effectDescription;
-        patron3Title.text = patronOption3.title;
+        List<Patron> patronOptions = patronManager.selectPatrons(patronsToChoose);
 
+        foreach (Patron p in patronOptions)
+        {
+            GameObject newPatronChoice = Instantiate(patronChoicePrefab, patronChoicePanel.transform);
+            newPatronChoice.GetComponent<patronChoiceUI>().initialize(p);
+        }
+
+        winPanel.GetComponent<RectTransform>().localScale = Vector3.zero;
         winPanel.SetActive(true);
+        winPanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
+
         winRoundText.text = "Round " + gameManager.currentRound + " Complete";
     }
 
     public void displayLoseScreen()
     {
         losePanel.SetActive(true);
-        loseRoundText.text = "Round " + gameManager.currentRound + " Failed";
+        loseRoundText.text = "Defeated on\nGame " + gameManager.currentGame + " - Round " + gameManager.currentRound;
     }
 
-    public void patronBttn1()
+    public void patronToggle(patronChoiceUI thisPatronChoice, bool toggleOn)
     {
-        patronManager.selectNewPatron(patronOption1);
-        
-        winPanel.SetActive(false);
-        gameManager.startRound();
+        if (toggleOn)
+        {
+            if(selectedPatronUIRefs.Count == patronChoiceLimit) // already at limit
+            {
+                selectedPatronUIRefs.Add(thisPatronChoice);
+                selectedPatronUIRefs[0].patronToggle.isOn = false;
+            }
+            else
+            {
+                selectedPatronUIRefs.Add(thisPatronChoice);
+            }
+        }
+        else
+        {
+            selectedPatronUIRefs.Remove(thisPatronChoice);
+            if(selectedPatronUIRefs.Count < patronChoiceLimit)
+            {
+                confirmPatronsButton.interactable = false;
+                confirmPatronsBttnText.text = confirmPatronsText;
+            }
+        }
+
+        if(selectedPatronUIRefs.Count == patronChoiceLimit)
+        {
+            confirmPatronsButton.interactable = true;
+            confirmPatronsBttnText.text = "confirm";
+        }
     }
 
-    public void patronBttn2()
+    public void confirmPatronSelect()
     {
-        patronManager.selectNewPatron(patronOption2);
-
         winPanel.SetActive(false);
-        gameManager.startRound();
-    }
 
-    public void patronBttn3()
-    {
-        patronManager.selectNewPatron(patronOption3);
+        foreach (patronChoiceUI patronUI in selectedPatronUIRefs)
+        {
+            patronManager.selectNewPatron(patronUI.patronRef);
+        }
 
-        winPanel.SetActive(false);
+        for (int i = 0; i < currentChoicePrefabs.Count; i++)
+        {
+            GameObject objToDestroy = currentChoicePrefabs[i];
+            Destroy(objToDestroy);
+        }
+        currentChoicePrefabs.Clear();
+        patronUIRefs.Clear();
+        selectedPatronUIRefs.Clear();
+
         gameManager.startRound();
     }
 

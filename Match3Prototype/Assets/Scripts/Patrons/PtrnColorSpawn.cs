@@ -2,15 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TargetColor
-{
-    red,
-    blue,
-    green,
-    purple,
-    yellow
-}
-
 public class PtrnColorSpawn : Patron
 {
     public TargetColor targetColor;

@@ -27,11 +27,17 @@ public class GameManager : MonoBehaviour
     public bool undoAllowed = false;
 
     public int currentRound = 0;
+    public int currentGame = 1;
 
     public bool roundActive = false;
+    public bool bossRound = false;
 
     private BoardManager board;
     private UIManager ui;
+
+    [SerializeField] BossRound[] bossRounds;
+    private List<BossRound> availableBossRounds = new List<BossRound>();
+    public BossRound currentBossRound;
 
     //[SerializeField] TMP_Text scoreText;
     //[SerializeField] TMP_Text streakText;
@@ -43,8 +49,14 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        foreach (BossRound br in bossRounds)
+        {
+            availableBossRounds.Add(br);
+        }
+
         board = FindObjectOfType<BoardManager>();
         ui = FindObjectOfType<UIManager>();
+
         startRound();
     }
 
@@ -66,11 +78,11 @@ public class GameManager : MonoBehaviour
         board.reassignTileIDs();
         if (currentScore >= currentTargetScore) // game ends, won
         {
-            roundEnded(true);
+            StartCoroutine(roundEnded(true));
         }
         else if (currentTurn == 0) // game ends, lost
         {
-            roundEnded(false);
+            StartCoroutine(roundEnded(false));
         }
 
         if (!undoAllowed && currentUndos > 0)
@@ -80,18 +92,51 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void roundEnded(bool roundWon)
+    private IEnumerator roundEnded(bool roundWon)
     {
         board.roundOver(true);
         roundActive = false;
         undoAllowed = false;
         ui.disableUndo();
+        yield return new WaitForSeconds(0.5f);
 
         if (roundWon)
         {
             //UnityEngine.Debug.Log("Round Won");
             board.clearBoard();
-            ui.displayWinScreen();
+
+            if(currentRound == 4) // Boss Round
+            {
+                // determine which boss round (change to find this out at the start of the game instead later)
+                determineBossCondition();
+                // tell UI manager which boss round
+                ui.displayBossInfoPanel(currentBossRound);
+
+                bossRound = true;
+
+                if (currentBossRound.constantEffect)
+                {
+                    currentBossRound.activateConstraint();
+                }
+            }
+            else if (currentRound == 5)
+            {
+                // show boss win screen with stats
+                // select from 5 patrons now
+
+                bossRound = false;
+                ui.displayWinScreen(true);
+
+                if (currentBossRound.constantEffect)
+                {
+                    currentBossRound.deactivateConstraint();
+                }
+            }
+            else
+            {
+                ui.displayWinScreen(false);
+            }
+
             //startRound();
         }
         else
@@ -110,13 +155,23 @@ public class GameManager : MonoBehaviour
         currentScore = 0;
         currentTurn = maxTurns;
         currentUndos = maxUndos;
-        currentRound++;
 
-        currentTargetScore = baseTargetScore * targetScoreIncMult * currentRound;
+        if(currentRound == 5)
+        {
+            currentRound = 1;
+            currentGame++;
+        }
+        else
+        {
+            currentRound++;
+        }
+
+        currentTargetScore = (baseTargetScore + (baseTargetScore * targetScoreIncMult * 5 * (currentGame - 1))) * targetScoreIncMult * currentRound;
 
         //ui.updateScore(currentScore);
         ui.updateTurns(currentTurn);
         ui.updateRounds(currentRound);
+        ui.updateGames(currentGame);
         //ui.updateTargetScore(currentTargetScore);
         ui.updateScoreProgress( currentScore, currentTargetScore);
         ui.undoCountUpdate(currentUndos);
@@ -170,6 +225,12 @@ public class GameManager : MonoBehaviour
         ui.undoCountUpdate(currentUndos);
         undoAllowed = false;
         ui.disableUndo();
+    }
+
+    private void determineBossCondition()
+    {
+        currentBossRound = availableBossRounds[Random.Range(0, availableBossRounds.Count - 1)];
+        availableBossRounds.Remove(currentBossRound);
     }
 
     //private void updateUI()

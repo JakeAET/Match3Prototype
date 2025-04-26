@@ -92,6 +92,9 @@ public class BoardManager : MonoBehaviour
     int[,] prevBoardTilesGrid;
     int[,] boardTilesGrid;
 
+    // Boss Round
+    public TargetColor banishedType;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -430,11 +433,17 @@ public class BoardManager : MonoBehaviour
 
 
                     GameObject element = Instantiate(tileElements[elementToUse], tempPos, Quaternion.identity);
-                    element.name = element.GetComponent<Element>().colorName + " Element";
+                    Element targetElement = element.GetComponent<Element>();
+                    element.name = targetElement.colorName + " Element";
                     allElements[i,j] = element;
-                    element.GetComponent<Element>().row = j;
-                    element.GetComponent<Element>().column = i;
+                    targetElement.row = j;
+                    targetElement.column = i;
                     element.transform.parent = transform;
+                    targetElement.pointValue = gameManager.baseElementValue;
+                    if (targetElement.color == banishedType)
+                    {
+                        targetElement.banish();
+                    }
                 }
             }
         }
@@ -475,9 +484,16 @@ public class BoardManager : MonoBehaviour
                     GameObject element = Instantiate(tileElements[elementToUse], tempPos, Quaternion.identity);
                     element.name = element.GetComponent<Element>().colorName + " Element";
                     allElements[i, j] = element;
-                    element.GetComponent<Element>().row = j;
-                    element.GetComponent<Element>().column = i;
+                    Element targetElement = element.GetComponent<Element>();
+                    targetElement.row = j;
+                    targetElement.column = i;
                     element.transform.parent = transform;
+                    targetElement.pointValue = gameManager.baseElementValue;
+
+                    if(targetElement.color == banishedType)
+                    {
+                        targetElement.banish();
+                    }
                 }
             }
         }
@@ -757,7 +773,7 @@ public class BoardManager : MonoBehaviour
     {
         Element targetElement = allElements[column, row].GetComponent<Element>();
 
-        float scoreIncrease = gameManager.baseElementValue;
+        float scoreIncrease = targetElement.pointValue;
         float scoreMulti = 0;
 
         int horizMatchLength = targetElement.horizMatchLength;

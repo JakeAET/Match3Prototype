@@ -2,17 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TargetColor
+{
+    none,
+    red,
+    blue,
+    green,
+    purple,
+    yellow
+}
+
 public class Element : MonoBehaviour
 {
     [Header("Element Variables")]
     [SerializeField] private float swapSpeed;
+    [SerializeField] private float fallSpeed;
+    public bool beingSwiped = false;
     [SerializeField] private GameObject matchedIcon;
     [SerializeField] private GameObject enchantedEffect;
     [SerializeField] private GameObject frozenEffect;
+    [SerializeField] private GameObject banishedIcon;
     public string colorName;
     public int colorIndex;
+    public TargetColor color;
     public bool isFrozen = false;
     public bool isEnchanted = false;
+    public float pointValue = 0;
 
 
     [Header("Board Variables")]
@@ -67,39 +82,82 @@ public class Element : MonoBehaviour
 
         targetX = column * board.xSpawnOffsetMult;
         targetY = row * board.ySpawnOffsetMult;
-        if (Mathf.Abs(targetX - transform.position.x) > 0.1)
+
+        if (beingSwiped)
         {
-            // move towards target
-            tempPosition = new Vector2(targetX, transform.position.y);
-            transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
-            if (board.allElements[column, row] != this.gameObject)
+            if (Mathf.Abs(targetX - transform.position.x) > 0.1)
             {
-                board.allElements[column, row] = this.gameObject;
+                // move towards target
+                tempPosition = new Vector2(targetX, transform.position.y);
+                transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
+                if (board.allElements[column, row] != this.gameObject)
+                {
+                    board.allElements[column, row] = this.gameObject;
+                }
+            }
+            else
+            {
+                // set pos
+                tempPosition = new Vector2(targetX, transform.position.y);
+                transform.position = tempPosition;
+                beingSwiped = false;
+                //board.allElements[column, row] = this.gameObject;
+            }
+            if (Mathf.Abs(targetY - transform.position.y) > 0.1)
+            {
+                // move towards target
+                tempPosition = new Vector2(transform.position.x, targetY);
+                transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
+                if (board.allElements[column, row] != this.gameObject)
+                {
+                    board.allElements[column, row] = this.gameObject;
+                }
+            }
+            else
+            {
+                // set pos
+                tempPosition = new Vector2(transform.position.x, targetY);
+                transform.position = tempPosition;
+                beingSwiped = false;
+                //board.allElements[column, row] = this.gameObject;
             }
         }
-        else
+        else // falling
         {
-            // set pos
-            tempPosition = new Vector2(targetX, transform.position.y);
-            transform.position = tempPosition;
-            //board.allElements[column, row] = this.gameObject;
-        }
-        if (Mathf.Abs(targetY - transform.position.y) > 0.1)
-        {
-            // move towards target
-            tempPosition = new Vector2(transform.position.x, targetY);
-            transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
-            if (board.allElements[column, row] != this.gameObject)
+            if (Mathf.Abs(targetX - transform.position.x) > 0.1)
             {
-                board.allElements[column, row] = this.gameObject;
+                // move towards target
+                tempPosition = new Vector2(targetX, transform.position.y);
+                transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
+                if (board.allElements[column, row] != this.gameObject)
+                {
+                    board.allElements[column, row] = this.gameObject;
+                }
             }
-        }
-        else
-        {
-            // set pos
-            tempPosition = new Vector2(transform.position.x, targetY);
-            transform.position = tempPosition;
-            //board.allElements[column, row] = this.gameObject;
+            else
+            {
+                // set pos
+                tempPosition = new Vector2(targetX, transform.position.y);
+                transform.position = tempPosition;
+                //board.allElements[column, row] = this.gameObject;
+            }
+            if (Mathf.Abs(targetY - transform.position.y) > 0.1)
+            {
+                // move towards target
+                tempPosition = new Vector2(transform.position.x, targetY);
+                transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
+                if (board.allElements[column, row] != this.gameObject)
+                {
+                    board.allElements[column, row] = this.gameObject;
+                }
+            }
+            else
+            {
+                // set pos
+                tempPosition = new Vector2(transform.position.x, targetY);
+                transform.position = tempPosition;
+                //board.allElements[column, row] = this.gameObject;
+            }
         }
     }
 
@@ -126,7 +184,7 @@ public class Element : MonoBehaviour
         }
     }
 
-    void CalculateAngle()
+    void CalculateAngle() 
     {
         if(Mathf.Abs(finalTouchPosition.y - firstTouchPosition.y) > swipeResist ||
             Mathf.Abs(finalTouchPosition.x - firstTouchPosition.x) > swipeResist)
@@ -166,6 +224,8 @@ public class Element : MonoBehaviour
             otherElement.GetComponent<Element>().row += 1;
             row -= 1;
         }
+        beingSwiped = true;
+        otherElement.GetComponent<Element>().beingSwiped = true;
         StartCoroutine(CheckMove());
         //findMatches.FindAllMatchesStart();
         gameManager.turnStarted();
@@ -181,6 +241,12 @@ public class Element : MonoBehaviour
     {
         isEnchanted = true;
         enchantedEffect.SetActive(true);
+    }
+
+    public void banish()
+    {
+        pointValue = 0;
+        banishedIcon.SetActive(true);
     }
 
 

@@ -20,7 +20,7 @@ public class PatronManager : MonoBehaviour
         
     }
 
-    public List<Patron> select3Patrons()
+    public List<Patron> selectPatrons(int numPatrons)
     {
         List<Patron> chosenPatrons = new List<Patron>();
         List<Patron> possiblePatrons = new List<Patron>();
@@ -45,11 +45,19 @@ public class PatronManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < numPatrons; i++)
         {
-            Patron selectedPatron = possiblePatrons[Random.Range(0, possiblePatrons.Count)];
-            chosenPatrons.Add(selectedPatron);
-            possiblePatrons.Remove(selectedPatron);
+            if(possiblePatrons.Count != 0)
+            {
+                Patron selectedPatron = possiblePatrons[Random.Range(0, possiblePatrons.Count)];
+                chosenPatrons.Add(selectedPatron);
+                possiblePatrons.Remove(selectedPatron);
+            }
+            else
+            {
+                Debug.Log("Ran out of possible patrons, only " + chosenPatrons.Count + " were selected");
+                break;
+            }
             //Debug.Log(selectedPatron.title);
         }
 
@@ -98,7 +106,7 @@ public class PatronManager : MonoBehaviour
             activePatrons.Add(targetPatron);
             uiManager.patronSlots[activePatrons.Count - 1].SetActive(true);
             uiManager.patronUpperImgs[activePatrons.Count - 1].sprite = targetPatron.sprite;
-            uiManager.patronUpperImgs[activePatrons.Count - 1].color = targetPatron.color;
+            //uiManager.patronUpperImgs[activePatrons.Count - 1].color = targetPatron.color;
             uiManager.patronUpperImgs[activePatrons.Count - 1].gameObject.SetActive(true);
             uiManager.patronLvls[activePatrons.Count - 1].gameObject.SetActive(true);
 

@@ -50,8 +50,8 @@ MonoBehaviour:
   constantEffect: 1
   level: 1
   maxLevel: 5
-  sprite: {fileID: 21300000, guid: 2f908da9153c7c44ab26b43937508d90, type: 3}
-  color: {r: 1, g: 1, b: 1, a: 1}
+  sprite: {fileID: 21300000, guid: c56bf305b66902042a00158c9bf3e7de, type: 3}
+  color: {r: 1, g: 0, b: 0.5504589, a: 1}
   spawnElement: 0
   effectTriggered: 0
   initialTileIncrease: 1

@@ -50,7 +50,7 @@ MonoBehaviour:
   constantEffect: 1
   level: 1
   maxLevel: 5
-  sprite: {fileID: 21300000, guid: ac3da8b57f3f5284c9429e42c7e95aae, type: 3}
-  color: {r: 1, g: 1, b: 1, a: 1}
+  sprite: {fileID: 21300000, guid: 9f22860daf4b6fb429c8fb451673bfbe, type: 3}
+  color: {r: 1, g: 0.5319149, b: 0.37765956, a: 1}
   effectTriggered: 0
   turnIncrease: 2
