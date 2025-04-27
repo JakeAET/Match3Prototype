@@ -9,7 +9,9 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] float baseTargetScore = 0;
-    [SerializeField] float targetScoreIncMult = 0;
+    [SerializeField] float roundScoreIncMult = 0;
+    [SerializeField] float gameScoreIncMult = 0;
+    public float extraHighPointMulti = 1;
 
     public float currentScore = 0;
     public float currentTargetScore = 0;
@@ -124,12 +126,19 @@ public class GameManager : MonoBehaviour
                 // show boss win screen with stats
                 // select from 5 patrons now
 
-                bossRound = false;
-                ui.displayWinScreen(true);
-
-                if (currentBossRound.constantEffect)
+                if(currentGame == 10)
                 {
-                    currentBossRound.deactivateConstraint();
+                    ui.displayRunComplete();
+                }
+                else
+                {
+                    bossRound = false;
+                    ui.displayWinScreen(true);
+
+                    if (currentBossRound.constantEffect)
+                    {
+                        currentBossRound.deactivateConstraint();
+                    }
                 }
             }
             else
@@ -166,7 +175,7 @@ public class GameManager : MonoBehaviour
             currentRound++;
         }
 
-        currentTargetScore = (baseTargetScore + (baseTargetScore * targetScoreIncMult * 5 * (currentGame - 1))) * targetScoreIncMult * currentRound;
+        currentTargetScore = (baseTargetScore * (currentGame * (gameScoreIncMult - 1))) * (1 + (roundScoreIncMult * (currentRound - 1))) * extraHighPointMulti;
 
         //ui.updateScore(currentScore);
         ui.updateTurns(currentTurn);
@@ -229,7 +238,7 @@ public class GameManager : MonoBehaviour
 
     private void determineBossCondition()
     {
-        currentBossRound = availableBossRounds[Random.Range(0, availableBossRounds.Count - 1)];
+        currentBossRound = availableBossRounds[Random.Range(0, availableBossRounds.Count)];
         availableBossRounds.Remove(currentBossRound);
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -72,6 +73,7 @@ public class BoardManager : MonoBehaviour
     private List<Element> roundMatches = new List<Element>();
     [SerializeField] GameObject textPopup;
     [SerializeField] Color[] popUpColors;
+    [SerializeField] GameObject frozenBurstPrefab;
 
     private int matchStreak = 1;
     public int redSpawnRate = 1;
@@ -94,6 +96,7 @@ public class BoardManager : MonoBehaviour
 
     // Boss Round
     public TargetColor banishedType;
+    public float basePointDebuff = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -349,10 +352,11 @@ public class BoardManager : MonoBehaviour
                     targetColor = popUpColors[4];
                 }
 
-                Vector2 targetPos = new Vector2(spawnX * xSpawnOffsetMult, spawnY * ySpawnOffsetMult);
-                GameObject newPopup = Instantiate(textPopup, targetPos, Quaternion.identity);
-                newPopup.transform.parent = transform;
-                newPopup.GetComponent<ScorePopup>().initialize(finalScore, targetColor);
+                Vector2 targetPos = new Vector2(spawnX * xSpawnOffsetMult, (spawnY * ySpawnOffsetMult * 1.1f));
+                StartCoroutine(spawnPopUpScore(targetPos, finalScore, targetColor));
+                //GameObject newPopup = Instantiate(textPopup, targetPos, Quaternion.identity);
+                //newPopup.transform.parent = transform;
+                //newPopup.GetComponent<ScorePopup>().initialize(finalScore, targetColor);
 
                 gameManager.IncreaseScore(finalScore);
             }
@@ -366,6 +370,13 @@ public class BoardManager : MonoBehaviour
             if (targetElement.isFrozen)
             {
                 currentFrozenTiles--;
+                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+                Instantiate(frozenBurstPrefab, targetPos, Quaternion.identity);
+            }
+            else
+            {
+                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+                Instantiate(targetElement.burstEffectPrefab, targetPos, Quaternion.identity);
             }
 
             findMatches.currentMatches.Remove(allElements[column, row]);
@@ -391,7 +402,7 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator DecreaseRow()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         //collapsingActive = true;
         int nullCount = 0;
         for (int i = 0; i < width; i++)
@@ -653,7 +664,7 @@ public class BoardManager : MonoBehaviour
             elementInts.Add(4);
         }
 
-        return elementInts[Random.Range(0, elementInts.Count)];
+        return elementInts[UnityEngine.Random.Range(0, elementInts.Count)];
     }
 
     public void reassignTileIDs()
@@ -715,10 +726,10 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < numToSpawn; i++)
         {
             // pick an unenchanted element
-            Element targetElement = allElements[Random.Range(0, width - 1), Random.Range(0, height - 1)].GetComponent<Element>();
+            Element targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
             while (targetElement.isEnchanted)
             {
-                targetElement = allElements[Random.Range(0, width - 1), Random.Range(0, height - 1)].GetComponent<Element>();
+                targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
             }
             targetElement.enchantElement();
             currentEnchantedTiles++;
@@ -734,10 +745,10 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < numToSpawn; i++)
         {
             // pick an unenchanted element
-            Element targetElement = allElements[Random.Range(0, width - 1), Random.Range(0, height - 1)].GetComponent<Element>();
+            Element targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
             while (targetElement.isFrozen)
             {
-                targetElement = allElements[Random.Range(0, width - 1), Random.Range(0, height - 1)].GetComponent<Element>();
+                targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
             }
             targetElement.freezeElement();
             currentFrozenTiles++;
@@ -773,7 +784,7 @@ public class BoardManager : MonoBehaviour
     {
         Element targetElement = allElements[column, row].GetComponent<Element>();
 
-        float scoreIncrease = targetElement.pointValue;
+        float scoreIncrease = targetElement.pointValue * basePointDebuff;
         float scoreMulti = 0;
 
         int horizMatchLength = targetElement.horizMatchLength;
@@ -809,6 +820,15 @@ public class BoardManager : MonoBehaviour
         }
 
         return scoreIncrease * scoreMulti * matchStreak;
+    }
+
+    private IEnumerator spawnPopUpScore(Vector3 pos, float score, Color color)
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        GameObject newPopup = Instantiate(textPopup, pos, Quaternion.identity);
+        newPopup.transform.parent = transform;
+        newPopup.GetComponent<ScorePopup>().initialize(score, color);
     }
 
     public void allMatchesFound(bool matchesFound)

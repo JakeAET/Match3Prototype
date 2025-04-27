@@ -38,6 +38,9 @@ public class UIManager : MonoBehaviour
     private string confirmPatronsText;
     public int patronChoiceLimit;
 
+    [Header("Run Completion Screen")]
+    [SerializeField] GameObject runCompletePanel;
+
     //[SerializeField] Image patronImg1;
     //[SerializeField] Image patronImg2;
     //[SerializeField] Image patronImg3;
@@ -166,6 +169,13 @@ public class UIManager : MonoBehaviour
         winPanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
 
         winRoundText.text = "Round " + gameManager.currentRound + " Complete";
+    }
+
+    public void displayRunComplete()
+    {
+        runCompletePanel.GetComponent<RectTransform>().localScale = Vector3.zero;
+        runCompletePanel.SetActive(true);
+        runCompletePanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
     }
 
     public void displayLoseScreen()

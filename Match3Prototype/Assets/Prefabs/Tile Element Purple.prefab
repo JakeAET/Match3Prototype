@@ -35,6 +35,10 @@ PrefabInstance:
       propertyPath: colorIndex
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: burstEffectPrefab
+      value: 
+      objectReference: {fileID: 9155609258856990873, guid: c9c515ca4a2fa6d4eb65d63abaa4161b, type: 3}
     - target: {fileID: 3829458100372691615, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_RootOrder
       value: 0

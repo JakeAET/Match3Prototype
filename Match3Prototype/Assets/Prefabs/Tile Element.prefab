@@ -765,6 +765,7 @@ MonoBehaviour:
   enchantedEffect: {fileID: 856392069984648321}
   frozenEffect: {fileID: 1164743867104141105}
   banishedIcon: {fileID: 2323246821102994651}
+  burstEffectPrefab: {fileID: 0}
   colorName: 
   colorIndex: 0
   color: 0

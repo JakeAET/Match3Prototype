@@ -22,6 +22,7 @@ public class Element : MonoBehaviour
     [SerializeField] private GameObject enchantedEffect;
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject banishedIcon;
+    public GameObject burstEffectPrefab;
     public string colorName;
     public int colorIndex;
     public TargetColor color;
@@ -71,7 +72,7 @@ public class Element : MonoBehaviour
 
         if (isMatched)
         {
-            matchedIcon.SetActive(true);
+            //matchedIcon.SetActive(true);
             if (isEnchanted)
             {
                 matchedIcon.GetComponent<SpriteRenderer>().color = Color.green;
