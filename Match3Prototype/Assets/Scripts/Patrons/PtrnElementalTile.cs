@@ -26,18 +26,18 @@ public class PtrnElementalTile : Patron
     {
         if (!effectTriggered)
         {
-            Debug.Log(spawnElement + " Elemental Tile Spawn Effect Triggered");
+            //Debug.Log(spawnElement + " Elemental Tile Spawn Effect Triggered");
             board = FindObjectOfType<BoardManager>();
 
             if (spawnElement == ElementType.Frozen)
             {
                 if (level == 1)
                 {
-                    board.increaseMaxFrozenTiles(initialTileIncrease);
+                    board.maxFrozenTiles += initialTileIncrease;
                 }
                 else
                 {
-                    board.increaseMaxFrozenTiles(lvlUpTileIncrease);
+                    board.maxFrozenTiles += lvlUpTileIncrease;
                 }
             }
 
@@ -45,11 +45,11 @@ public class PtrnElementalTile : Patron
             {
                 if (level == 1)
                 {
-                    board.increaseMaxEnchantedTiles(initialTileIncrease);
+                    board.maxEnchantedTiles += initialTileIncrease;
                 }
                 else
                 {
-                    board.increaseMaxEnchantedTiles(lvlUpTileIncrease);
+                    board.maxEnchantedTiles += lvlUpTileIncrease;
                 }
             }
 
@@ -62,9 +62,51 @@ public class PtrnElementalTile : Patron
         if (level < maxLevel)
         {
             level++;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
 
             effectTriggered = false;
             triggerEffect();
+        }
+    }
+
+    public override void reduceLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+            level--;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
+
+            if (spawnElement == ElementType.Frozen)
+            {
+                if (level == 1)
+                {
+                    board.maxFrozenTiles -= initialTileIncrease;
+                }
+                else
+                {
+                    board.maxFrozenTiles -= lvlUpTileIncrease;
+                }
+            }
+
+            if (spawnElement == ElementType.Enchanted)
+            {
+                if (level == 1)
+                {
+                    board.maxEnchantedTiles -= initialTileIncrease;
+                }
+                else
+                {
+                    board.maxEnchantedTiles -= lvlUpTileIncrease;
+                }
+            }
+        }
+    }
+
+    public override void restoreLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+            levelUp();
         }
     }
 }

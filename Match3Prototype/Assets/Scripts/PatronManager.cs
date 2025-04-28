@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,7 +50,7 @@ public class PatronManager : MonoBehaviour
         {
             if(possiblePatrons.Count != 0)
             {
-                Patron selectedPatron = possiblePatrons[Random.Range(0, possiblePatrons.Count)];
+                Patron selectedPatron = possiblePatrons[UnityEngine.Random.Range(0, possiblePatrons.Count)];
                 chosenPatrons.Add(selectedPatron);
                 possiblePatrons.Remove(selectedPatron);
             }
@@ -85,15 +86,9 @@ public class PatronManager : MonoBehaviour
 
         if (preExisting)
         {
-            Debug.Log("patron " + index + " upgraded");
+            //Debug.Log("patron " + index + " upgraded");
+            targetPatron.index = index;
             targetPatron.levelUp();
-            uiManager.patronLvls[index].text = "" + targetPatron.level;
-
-            if(targetPatron.level == targetPatron.maxLevel)
-            {
-                // Remove patron from selection list
-            }
-
         }
         else
         {
@@ -104,17 +99,21 @@ public class PatronManager : MonoBehaviour
 
             targetPatron = newPatron;
             activePatrons.Add(targetPatron);
+            targetPatron.index = activePatrons.Count - 1;
             uiManager.patronSlots[activePatrons.Count - 1].SetActive(true);
-            uiManager.patronUpperImgs[activePatrons.Count - 1].sprite = targetPatron.sprite;
+            uiManager.patronSlotUIRefs[activePatrons.Count - 1].ptrnSprite.sprite = targetPatron.sprite;
             //uiManager.patronUpperImgs[activePatrons.Count - 1].color = targetPatron.color;
-            uiManager.patronUpperImgs[activePatrons.Count - 1].gameObject.SetActive(true);
-            uiManager.patronLvls[activePatrons.Count - 1].gameObject.SetActive(true);
 
             if (targetPatron.constantEffect && targetPatron.conditionMet()) //activate constant effect immediately
             {
                 targetPatron.triggerEffect();
             }
         }
+    }
+
+    public void updatePatronLvl(int ptrnIndex, int lvl)
+    {
+        uiManager.patronSlotUIRefs[ptrnIndex].lvlText.text = "" + lvl;
     }
 
     //private Patron copyPatron(Patron patronRef)

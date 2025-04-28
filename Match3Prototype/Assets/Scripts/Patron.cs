@@ -10,6 +10,7 @@ public abstract class Patron : MonoBehaviour
     public bool constantEffect;
     public int level = 1;
     public int maxLevel = 5;
+    public int index = 0;
     public Sprite sprite;
     public Color color;
 
@@ -28,6 +29,17 @@ public abstract class Patron : MonoBehaviour
         if(level < maxLevel)
         {
             level++;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
         }
+    }
+
+    public virtual void reduceLevel(int levelNum)
+    {
+
+    }
+
+    public virtual void restoreLevel(int levelNum)
+    {
+
     }
 }

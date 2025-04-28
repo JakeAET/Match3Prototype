@@ -19,7 +19,7 @@ public class PtrnColorSpawn : Patron
     {
         if (!effectTriggered)
         {
-            Debug.Log(targetColor + " spawn rate effect Triggered");
+            //Debug.Log(targetColor + " spawn rate effect Triggered");
             board = FindObjectOfType<BoardManager>();
             if (targetColor == TargetColor.red)
             {
@@ -51,9 +51,31 @@ public class PtrnColorSpawn : Patron
         if (level < maxLevel)
         {
             level++;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
 
             effectTriggered = false;
             triggerEffect();
+        }
+    }
+
+    public override void reduceLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+
+            level--;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
+
+            effectTriggered = false;
+            triggerEffect();
+        }
+    }
+
+    public override void restoreLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+            levelUp();
         }
     }
 }

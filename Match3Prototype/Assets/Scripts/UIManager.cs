@@ -64,9 +64,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text loseRoundText;
 
     [Header("Patron Panel")]
-    public Image[] patronUpperImgs;
     public GameObject[] patronSlots;
-    public TMP_Text[] patronLvls;
+    public List<PatronTopUI> patronSlotUIRefs;
     [SerializeField] Slider progressSlider;
 
     // Start is called before the first frame update
@@ -78,6 +77,11 @@ public class UIManager : MonoBehaviour
         if(gameManager.currentUndos == 0)
         {
             undoButton.interactable = false;
+        }
+
+        foreach (GameObject slot in patronSlots)
+        {
+            patronSlotUIRefs.Add(slot.GetComponent<PatronTopUI>());
         }
     }
 

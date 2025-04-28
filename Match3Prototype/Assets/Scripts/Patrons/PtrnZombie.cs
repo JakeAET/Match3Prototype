@@ -18,7 +18,7 @@ public class PtrnZombie : Patron
     {
         if (!effectTriggered)
         {
-            Debug.Log("Zombie (undo increase) effect Triggered");
+            //Debug.Log("Zombie (undo increase) effect Triggered");
             gm = FindObjectOfType<GameManager>();
             gm.increaseMaxUndos(undoIncrease);
 
@@ -31,9 +31,28 @@ public class PtrnZombie : Patron
         if (level < maxLevel)
         {
             level++;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
 
             effectTriggered = false;
             triggerEffect();
+        }
+    }
+
+    public override void reduceLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+            gm.increaseMaxUndos(undoIncrease * -1);
+            level--;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
+        }
+    }
+
+    public override void restoreLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+            levelUp();
         }
     }
 }

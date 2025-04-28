@@ -18,7 +18,7 @@ public class PtrnOldWoman : Patron
     {
         if (!effectTriggered)
         {
-            Debug.Log("Old Woman (turn increase) effect Triggered");
+            //Debug.Log("Old Woman (turn increase) effect Triggered");
             gm = FindObjectOfType<GameManager>();
             gm.increaseMaxTurns(turnIncrease);
 
@@ -31,9 +31,28 @@ public class PtrnOldWoman : Patron
         if (level < maxLevel)
         {
             level++;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
 
             effectTriggered = false;
             triggerEffect();
+        }
+    }
+
+    public override void reduceLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+            gm.increaseMaxTurns(turnIncrease * -1);
+            level--;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
+        }
+    }
+
+    public override void restoreLevel(int levelNum)
+    {
+        for (int i = 0; i < levelNum; i++)
+        {
+            levelUp();
         }
     }
 }

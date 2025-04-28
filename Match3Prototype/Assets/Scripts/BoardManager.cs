@@ -756,16 +756,6 @@ public class BoardManager : MonoBehaviour
         frozenTilesCreated = true;
     }
 
-    public void increaseMaxFrozenTiles(int num)
-    {
-        maxFrozenTiles += num;
-    }
-
-    public void increaseMaxEnchantedTiles(int num)
-    {
-        maxEnchantedTiles += num;
-    }
-
     public void startFindingMatches()
     {
         if(currentState == GameState.MovingTiles || currentState == GameState.RefillBoard)
