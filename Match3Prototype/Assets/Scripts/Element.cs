@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum TargetColor
@@ -22,6 +24,7 @@ public class Element : MonoBehaviour
     [SerializeField] private GameObject enchantedEffect;
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject banishedIcon;
+    [SerializeField] private GameObject lightFlash;
     public GameObject burstEffectPrefab;
     public string colorName;
     public int colorIndex;
@@ -105,6 +108,7 @@ public class Element : MonoBehaviour
                 transform.position = tempPosition;
                 beingSwiped = false;
                 //board.allElements[column, row] = this.gameObject;
+                //lightFlash.SetActive(false);
             }
             if (Mathf.Abs(targetY - transform.position.y) > 0.1)
             {
@@ -123,6 +127,7 @@ public class Element : MonoBehaviour
                 transform.position = tempPosition;
                 beingSwiped = false;
                 //board.allElements[column, row] = this.gameObject;
+                //lightFlash.SetActive(false);
             }
         }
         else // falling
@@ -215,6 +220,8 @@ public class Element : MonoBehaviour
 
     void MovePieces()
     {
+        float animDuration = 0.2f;
+
         //Debug.Log("Waiting -> Moving Tiles");
         FindObjectOfType<AudioManager>().Play("tile swap");
         board.currentState = GameState.MovingTiles;
@@ -223,31 +230,86 @@ public class Element : MonoBehaviour
             otherElement = board.allElements[column + 1, row];
             otherElement.GetComponent<Element>().column -= 1;
             column += 1;
+
+            StartCoroutine(flashSequence("right", animDuration));
+            transform.DOPunchScale(new Vector3(0.6f, 0.9f, 1), animDuration, 0, 0);
         }
         else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1) // up swipe
         {
             otherElement = board.allElements[column, row + 1];
             otherElement.GetComponent<Element>().row -= 1;
             row += 1;
+
+            StartCoroutine(flashSequence("up", animDuration));
+            transform.DOPunchScale(new Vector3(0.9f, 0.6f, 1), animDuration, 0, 0);
         }
         else if ((swipeAngle > 135 || swipeAngle <= -135) && column > 0) // left swipe
         {
             otherElement = board.allElements[column - 1, row];
             otherElement.GetComponent<Element>().column += 1;
             column -= 1;
+
+            StartCoroutine(flashSequence("left",animDuration));
+            transform.DOPunchScale(new Vector3(0.6f, 0.9f, 1), animDuration, 0, 0);
         }
         else if (swipeAngle < -45 && swipeAngle >= -135 && row > 0) // dowm swipe
         {
             otherElement = board.allElements[column, row - 1];
             otherElement.GetComponent<Element>().row += 1;
             row -= 1;
+
+            StartCoroutine(flashSequence("down", animDuration));
+            transform.DOPunchScale(new Vector3(0.9f, 0.6f, 1), animDuration, 0, 0);
         }
+
         beingSwiped = true;
         otherElement.GetComponent<Element>().beingSwiped = true;
         StartCoroutine(CheckMove());
         //findMatches.FindAllMatchesStart();
         gameManager.turnStarted();
     } 
+
+    IEnumerator flashSequence(string direction, float duration)
+    {
+        //DG.Tweening.Sequence fadeSequence = DOTween.Sequence();
+        //fadeSequence.Append(lightFlash.GetComponent<SpriteRenderer>().DOFade(0.5f, duration / 2));
+        //fadeSequence.Append(lightFlash.GetComponent<SpriteRenderer>().DOFade(0, duration / 2));
+        //fadeSequence.Play();
+
+        //lightFlash.SetActive(true);
+        if (direction == "up" || direction == "down")
+        {
+            //if (direction == "up")
+            //{
+            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x, lightFlash.transform.localPosition.y - 0.5f, lightFlash.transform.localPosition.z), duration);
+            //}
+            //else
+            //{
+            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x, lightFlash.transform.localPosition.y + 0.5f, lightFlash.transform.localPosition.z), duration);
+            //}
+            //lightFlash.transform.DOPunchScale(new Vector3(0.1f, 1f, 1), duration, 0, 0);
+            GetComponent<SpriteRenderer>().sortingOrder++;
+
+            yield return new WaitForSeconds(duration);
+        }
+        else if (direction == "left" || direction == "right")
+        {
+            //if (direction == "left")
+            //{
+            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x + 0.5f, lightFlash.transform.localPosition.y, lightFlash.transform.localPosition.z), duration);
+            //}
+            //else
+            //{
+            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x - 0.5f, lightFlash.transform.localPosition.y, lightFlash.transform.localPosition.z), duration);
+            //}
+            //lightFlash.transform.DOPunchScale(new Vector3(1f, 0.1f, 1), duration, 0, 0);
+            GetComponent<SpriteRenderer>().sortingOrder++;
+
+            yield return new WaitForSeconds(duration);
+        }
+        GetComponent<SpriteRenderer>().sortingOrder--;
+        //lightFlash.SetActive(false);
+    }
 
     public void freezeElement()
     {
