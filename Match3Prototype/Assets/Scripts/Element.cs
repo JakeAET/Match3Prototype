@@ -38,6 +38,8 @@ public class Element : MonoBehaviour
     //public int prevRow;
     public float targetX;
     public float targetY;
+    public bool isFalling = false;
+    private bool playedFallSound = true;
 
     private BoardManager board;
     private FindMatches findMatches;
@@ -144,6 +146,7 @@ public class Element : MonoBehaviour
             }
             if (Mathf.Abs(targetY - transform.position.y) > 0.1)
             {
+                isFalling = true;
                 // move towards target
                 tempPosition = new Vector2(transform.position.x, targetY);
                 transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
@@ -151,13 +154,26 @@ public class Element : MonoBehaviour
                 {
                     board.allElements[column, row] = this.gameObject;
                 }
+                if (playedFallSound && board.currentState != GameState.SettingBoard)
+                {
+                    playedFallSound = false;
+                }
             }
             else
             {
                 // set pos
+                isFalling = false;
                 tempPosition = new Vector2(transform.position.x, targetY);
                 transform.position = tempPosition;
                 //board.allElements[column, row] = this.gameObject;
+                if(!playedFallSound && board.currentState != GameState.SettingBoard)
+                {
+                    Debug.Log("sound");
+                    FindObjectOfType<AudioManager>().Play("tile fall");
+                    playedFallSound = true;
+                }
+
+                //row == board.height - 1 &&
             }
         }
     }
@@ -200,6 +216,7 @@ public class Element : MonoBehaviour
     void MovePieces()
     {
         //Debug.Log("Waiting -> Moving Tiles");
+        FindObjectOfType<AudioManager>().Play("tile swap");
         board.currentState = GameState.MovingTiles;
         if(swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1) // right swipe
         {

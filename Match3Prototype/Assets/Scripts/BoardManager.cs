@@ -54,7 +54,10 @@ public class BoardManager : MonoBehaviour
     private bool matchesToDestroy = false;
     private bool destroyingMatches = false;
     private bool refillingBoard = false;
+    private bool boardRefilled = false;
+    private bool boardReset = false;
     private bool roundEnded = false;
+    private bool iceBreakPlayed = false;
 
     private bool checkMatchesInitialized = false;
     private bool destroyMatchesInitialized = false;
@@ -130,9 +133,9 @@ public class BoardManager : MonoBehaviour
                 {
                     Setup();
                 }
-                else
+                else if(!boardReset)
                 {
-                    ResetBoard();
+                    StartCoroutine(ResetBoard());
                 }
 
                 break;
@@ -160,7 +163,10 @@ public class BoardManager : MonoBehaviour
                 break;
 
             case GameState.RefillBoard:
-                StartCoroutine(RefillBoard());
+                if (!boardRefilled)
+                {
+                    StartCoroutine(RefillBoard());
+                }
                 break;
 
             case GameState.CreateElementalTiles:
@@ -372,6 +378,11 @@ public class BoardManager : MonoBehaviour
                 currentFrozenTiles--;
                 Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
                 Instantiate(frozenBurstPrefab, targetPos, Quaternion.identity);
+                if (!iceBreakPlayed)
+                {
+                    FindObjectOfType<AudioManager>().Play("ice break");
+                    iceBreakPlayed = true;
+                }
             }
             else
             {
@@ -396,6 +407,9 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        iceBreakPlayed = false;
+
+        FindObjectOfType<AudioManager>().PlayCustomPitch("tile break", 0.9f * (1f + (0.06f * matchStreak)));
 
         StartCoroutine(DecreaseRow());
     }
@@ -431,12 +445,14 @@ public class BoardManager : MonoBehaviour
 
     public IEnumerator RefillBoard()
     {
+        boardRefilled = true;
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
                 if(allElements[i,j] == null)
                 {
+                    yield return new WaitForSeconds(0.07f);
                     Vector2 tempPos = new Vector2(i, j + offsetHeight);
 
 
@@ -458,12 +474,13 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
-        yield return new WaitForSeconds(0.3f);
+        //yield return new WaitForSeconds(0.3f);
         refillingBoard = false;
     }
 
-    public void ResetBoard()
+    public IEnumerator ResetBoard()
     {
+        boardReset = true;
         // Fill board with elements
         for (int i = 0; i < width; i++)
         {
@@ -471,6 +488,8 @@ public class BoardManager : MonoBehaviour
             {
                 if (allElements[i, j] == null)
                 {
+                    yield return new WaitForSeconds(0.001f);
+
                     Vector2 tempPos = new Vector2(i * xSpawnOffsetMult, j * ySpawnOffsetMult);
 
                     int elementToUse = weightedElementToUse();
@@ -508,7 +527,10 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        FindObjectOfType<AudioManager>().Play("tile setting");
+        yield return new WaitForSeconds(0.5f);
         tilesInitialized = true;
+
     }
 
     private bool MatchesOnBoard()
@@ -842,6 +864,8 @@ public class BoardManager : MonoBehaviour
             case GameState.SettingBoard:
                 if (boardInitialized && tilesInitialized)
                 {
+                    boardReset = false;
+                    tilesInitialized = false;
                     currentState = GameState.CreateElementalTiles;
                 }
                 break;
@@ -884,6 +908,7 @@ public class BoardManager : MonoBehaviour
                 if (!refillingBoard)
                 {
                     //Debug.Log("Refill Board -> Check Matches");
+                    boardRefilled = false;
                     findingMatches = true;
                     checkMatchesInitialized = false;
                     currentState = GameState.CheckMatches;

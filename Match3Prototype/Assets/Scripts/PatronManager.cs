@@ -100,7 +100,7 @@ public class PatronManager : MonoBehaviour
             targetPatron = newPatron;
             activePatrons.Add(targetPatron);
             targetPatron.index = activePatrons.Count - 1;
-            uiManager.patronSlots[activePatrons.Count - 1].SetActive(true);
+            uiManager.patronSlots[activePatrons.Count - 1].SetActive(true); 
             uiManager.patronSlotUIRefs[activePatrons.Count - 1].ptrnSprite.sprite = targetPatron.sprite;
             //uiManager.patronUpperImgs[activePatrons.Count - 1].color = targetPatron.color;
 

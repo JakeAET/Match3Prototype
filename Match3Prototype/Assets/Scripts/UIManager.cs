@@ -190,6 +190,7 @@ public class UIManager : MonoBehaviour
 
     public void patronToggle(patronChoiceUI thisPatronChoice, bool toggleOn)
     {
+        FindObjectOfType<AudioManager>().Play("ui click");
         if (toggleOn)
         {
             if(selectedPatronUIRefs.Count == patronChoiceLimit) // already at limit
@@ -275,5 +276,10 @@ public class UIManager : MonoBehaviour
     public void startAfterLoss()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void playSound(string soundName)
+    {
+        FindObjectOfType<AudioManager>().Play(soundName);
     }
 }

@@ -284,7 +284,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 137.2
+  m_fontSize: 150
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -570,6 +570,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &932209394
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 480017195009369866, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_Name
+      value: Audio Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
 --- !u!1 &1122390219
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +640,7 @@ GameObject:
   - component: {fileID: 1122390223}
   - component: {fileID: 1122390222}
   - component: {fileID: 1122390221}
+  - component: {fileID: 1122390225}
   m_Layer: 5
   m_Name: Next Round Button
   m_TagString: Untagged
@@ -680,6 +738,18 @@ MonoBehaviour:
           m_StringArgument: GameScreen
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1122390225}
+        m_TargetAssemblyTypeName: uiPlaySound, Assembly-CSharp
+        m_MethodName: playSound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ui pop
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1122390223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,6 +788,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1122390219}
   m_CullTransparentMesh: 1
+--- !u!114 &1122390225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122390219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ee632817f0cc147be65574dbd52ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1244565084
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,7 +1026,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 118.8
+  m_fontSize: 168.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1079,7 +1161,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 71.4
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

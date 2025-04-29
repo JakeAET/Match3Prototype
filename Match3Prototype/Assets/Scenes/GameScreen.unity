@@ -1220,6 +1220,18 @@ MonoBehaviour:
           m_StringArgument: MainMenuScene
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 728624340}
+        m_TargetAssemblyTypeName: uiPlaySound, Assembly-CSharp
+        m_MethodName: playSound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ui pop
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &286427580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2204,6 +2216,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 728624340}
+        m_TargetAssemblyTypeName: uiPlaySound, Assembly-CSharp
+        m_MethodName: playSound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ui pop
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &481490096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2972,6 +2996,7 @@ GameObject:
   - component: {fileID: 728624339}
   - component: {fileID: 728624338}
   - component: {fileID: 728624337}
+  - component: {fileID: 728624340}
   m_Layer: 5
   m_Name: Overlay Canvas
   m_TagString: Untagged
@@ -3064,6 +3089,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 5
   m_TargetDisplay: 0
+--- !u!114 &728624340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728624335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ee632817f0cc147be65574dbd52ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &752345913
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,6 +3657,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 728624340}
+        m_TargetAssemblyTypeName: uiPlaySound, Assembly-CSharp
+        m_MethodName: playSound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ui pop
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &877721836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4131,6 +4180,7 @@ GameObject:
   - component: {fileID: 1003202616}
   - component: {fileID: 1003202615}
   - component: {fileID: 1003202619}
+  - component: {fileID: 1003202620}
   m_Layer: 5
   m_Name: Board Canvas
   m_TagString: Untagged
@@ -4265,6 +4315,18 @@ MonoBehaviour:
   - {fileID: 1723457283}
   patronSlotUIRefs: []
   progressSlider: {fileID: 524711895}
+--- !u!114 &1003202620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003202614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ee632817f0cc147be65574dbd52ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1042151466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7855,6 +7917,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1003202620}
+        m_TargetAssemblyTypeName: uiPlaySound, Assembly-CSharp
+        m_MethodName: playSound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ui click
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2105161169
 GameObject:
   m_ObjectHideFlags: 0
@@ -8034,6 +8108,71 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2015799235301440344
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 480017195009369866, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_Name
+      value: Audio Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877089789689005519, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2405138769311814502, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: sounds.Array.data[6].pitch
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2405138769311814502, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
+      propertyPath: sounds.Array.data[6].volume
+      value: 0.3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b2e55251c86188b45a6263fadf7c2aeb, type: 3}
 --- !u!1001 &2177797647323096192
 PrefabInstance:
   m_ObjectHideFlags: 0
