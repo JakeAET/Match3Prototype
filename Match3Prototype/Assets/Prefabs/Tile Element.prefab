@@ -759,8 +759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15062faa7e79ad448b1500c0b2d3a99b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swapSpeed: 0.001
-  fallSpeed: 0.03
+  swapSpeed: 1
+  fallSpeed: 40
   beingSwiped: 0
   matchedIcon: {fileID: 3107803706883179975}
   enchantedEffect: {fileID: 856392069984648321}

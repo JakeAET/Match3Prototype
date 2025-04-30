@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public enum TargetColor
 {
@@ -91,11 +92,13 @@ public class Element : MonoBehaviour
 
         if (beingSwiped)
         {
+            float step = swapSpeed * Time.deltaTime;
             if (Mathf.Abs(targetX - transform.position.x) > 0.1)
             {
                 // move towards target
                 tempPosition = new Vector2(targetX, transform.position.y);
-                transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
+                //transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
+                transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
                 if (board.allElements[column, row] != this.gameObject)
                 {
                     board.allElements[column, row] = this.gameObject;
@@ -114,7 +117,8 @@ public class Element : MonoBehaviour
             {
                 // move towards target
                 tempPosition = new Vector2(transform.position.x, targetY);
-                transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
+                //transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
+                transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
                 if (board.allElements[column, row] != this.gameObject)
                 {
                     board.allElements[column, row] = this.gameObject;
@@ -132,11 +136,13 @@ public class Element : MonoBehaviour
         }
         else // falling
         {
+            float step = fallSpeed * Time.deltaTime;
             if (Mathf.Abs(targetX - transform.position.x) > 0.1)
             {
                 // move towards target
                 tempPosition = new Vector2(targetX, transform.position.y);
-                transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
+                //transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
+                transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
                 if (board.allElements[column, row] != this.gameObject)
                 {
                     board.allElements[column, row] = this.gameObject;
@@ -154,7 +160,9 @@ public class Element : MonoBehaviour
                 isFalling = true;
                 // move towards target
                 tempPosition = new Vector2(transform.position.x, targetY);
-                transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
+                //transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
+                transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
+
                 if (board.allElements[column, row] != this.gameObject)
                 {
                     board.allElements[column, row] = this.gameObject;

@@ -488,7 +488,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (allElements[i, j] == null)
                 {
-                    yield return new WaitForSeconds(0.001f);
+                    yield return new WaitForSecondsRealtime(0.001f);
 
                     Vector2 tempPos = new Vector2(i * xSpawnOffsetMult, j * ySpawnOffsetMult);
 
