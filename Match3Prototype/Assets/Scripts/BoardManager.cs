@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using System.Xml.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.PackageManager.UI;
@@ -77,6 +78,10 @@ public class BoardManager : MonoBehaviour
     [SerializeField] GameObject textPopup;
     [SerializeField] Color[] popUpColors;
     [SerializeField] GameObject frozenBurstPrefab;
+    [SerializeField] GameObject bombExplosionPrefab;
+    [SerializeField] GameObject highlightRailPrefab;
+    [SerializeField] GameObject rocketPrefab;
+    [SerializeField] GameObject bombPrefab;
 
     private int matchStreak = 1;
     public int redSpawnRate = 1;
@@ -118,7 +123,14 @@ public class BoardManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //undoLastMove();
+            if(Time.timeScale != 1f)
+            {
+                Time.timeScale = 1f;
+            }
+            else
+            {
+                Time.timeScale = 0.2f;
+            }
         }
 
         #region State Actions
@@ -204,6 +216,8 @@ public class BoardManager : MonoBehaviour
                 Vector2 tempPos = new Vector2(i * xSpawnOffsetMult, j * ySpawnOffsetMult);
                 GameObject thisTile = Instantiate(tilePrefab, tempPos, Quaternion.identity) as GameObject;
                 thisTile.transform.parent = transform;
+                thisTile.GetComponent<Tile>().column = i;
+                thisTile.GetComponent<Tile>().row = j;
                 thisTile.name = "Tile ( " + i + "," + j + " )";
             }
         }
@@ -279,8 +293,43 @@ public class BoardManager : MonoBehaviour
 
                 if (!targetElement.isFrozen)
                 {
-                    if (vertMatchLength > horizMatchLength)
+                    if (targetElement.isBombMatch)
                     {
+                        foreach (Element e in targetElement.specialMatchedElements)
+                        {
+                            if(e.tileType == TileType.Bomb)
+                            {
+                                spawnX = e.column;
+                                spawnY = e.row;
+                            }
+
+                            if (!e.isScored)
+                            {
+                                finalScore += scoreOfTile(e.column, e.row);
+                                e.isScored = true;
+                            }
+                        }
+                    }
+                    else if (targetElement.isRocketMatch)
+                    {
+                        foreach (Element e in targetElement.specialMatchedElements)
+                        {
+                            if (e.tileType == TileType.Rocket)
+                            {
+                                spawnX = e.column;
+                                spawnY = e.row;
+                            }
+
+                            if (!e.isScored)
+                            {
+                                finalScore += scoreOfTile(e.column, e.row);
+                                e.isScored = true;
+                            }
+                        }
+                    }
+                    else if (vertMatchLength > horizMatchLength) // vert match
+                    {
+                        bool crossMatchFound = false;
                         float minRow = targetElement.vertMatchedElements[0].row;
                         float maxRow = targetElement.vertMatchedElements[0].row;
 
@@ -301,12 +350,30 @@ public class BoardManager : MonoBehaviour
                             {
                                 maxRow = e.row;
                             }
+
+                            if (e.vertMatchLength == e.horizMatchLength)
+                            {
+                                foreach (Element e2 in targetElement.horizMatchedElements)
+                                {
+                                    if (!e2.isScored)
+                                    {
+                                        finalScore += scoreOfTile(e2.column, e2.row);
+                                        e2.isScored = true;
+                                    }
+                                }
+                                spawnY = e.column;
+                                crossMatchFound = true;
+                            }
                         }
 
-                        spawnY = ((maxRow - minRow) / 2) + minRow;
+                        if (!crossMatchFound)
+                        {
+                            spawnY = ((maxRow - minRow) / 2) + minRow;
+                        }
                     }
-                    else
+                    else if (vertMatchLength < horizMatchLength) // horiz match
                     {
+                        bool crossMatchFound= false;
                         float minColumn = targetElement.horizMatchedElements[0].column;
                         float maxColumn = targetElement.horizMatchedElements[0].column;
 
@@ -327,9 +394,46 @@ public class BoardManager : MonoBehaviour
                             {
                                 maxColumn = e.column;
                             }
+
+                            if(e.vertMatchLength == e.horizMatchLength)
+                            {
+                                foreach (Element e2 in targetElement.vertMatchedElements)
+                                {
+                                    if (!e2.isScored)
+                                    {
+                                        finalScore += scoreOfTile(e2.column, e2.row);
+                                        e2.isScored = true;
+                                    }
+                                }
+                                spawnX = e.column;
+                                crossMatchFound = true;
+                            }
                         }
 
-                        spawnX = ((maxColumn - minColumn) / 2) + minColumn;
+                        if (!crossMatchFound)
+                        {
+                            spawnX = ((maxColumn - minColumn) / 2) + minColumn;
+                        }
+                    }
+                    else if (vertMatchLength == horizMatchLength)
+                    {
+                        foreach (Element e in targetElement.horizMatchedElements)
+                        {
+                            if (!e.isScored)
+                            {
+                                finalScore += scoreOfTile(e.column, e.row);
+                                e.isScored = true;
+                            }
+                        }
+
+                        foreach (Element e in targetElement.vertMatchedElements)
+                        {
+                            if (!e.isScored)
+                            {
+                                finalScore += scoreOfTile(e.column, e.row);
+                                e.isScored = true;
+                            }
+                        }
                     }
                 }
                 else
@@ -360,9 +464,6 @@ public class BoardManager : MonoBehaviour
 
                 Vector2 targetPos = new Vector2(spawnX * xSpawnOffsetMult, (spawnY * ySpawnOffsetMult * 1.1f));
                 StartCoroutine(spawnPopUpScore(targetPos, finalScore, targetColor));
-                //GameObject newPopup = Instantiate(textPopup, targetPos, Quaternion.identity);
-                //newPopup.transform.parent = transform;
-                //newPopup.GetComponent<ScorePopup>().initialize(finalScore, targetColor);
 
                 gameManager.IncreaseScore(finalScore);
             }
@@ -390,9 +491,107 @@ public class BoardManager : MonoBehaviour
                 Instantiate(targetElement.burstEffectPrefab, targetPos, Quaternion.identity);
             }
 
+            if(targetElement.tileType == TileType.Bomb)
+            {
+                Vector2 targetPosHoriz = new Vector2(width/2 * xSpawnOffsetMult,row * ySpawnOffsetMult);
+                GameObject horizExplosion = Instantiate(bombExplosionPrefab, targetPosHoriz, Quaternion.identity);
+                horizExplosion.transform.eulerAngles = new Vector3(0, 0, 90);
+                Vector2 targetPosVert = new Vector2(column * xSpawnOffsetMult, height / 2 * ySpawnOffsetMult);
+                Instantiate(bombExplosionPrefab, targetPosVert, Quaternion.identity);
+            }
+            else if (targetElement.tileType == TileType.Rocket)
+            {
+                if (targetElement.isHorizRocket)
+                {
+                    Vector2 targetPosHoriz = new Vector2(width / 2 * xSpawnOffsetMult, row * ySpawnOffsetMult);
+                    GameObject horizTrail = Instantiate(highlightRailPrefab, targetPosHoriz, Quaternion.identity);
+                    horizTrail.transform.eulerAngles = new Vector3(0, 0, 90);
+                }
+
+                if (targetElement.isVertRocket)
+                {
+                    Vector2 targetPosVert = new Vector2(column * xSpawnOffsetMult, height / 2 * ySpawnOffsetMult);
+                    Instantiate(highlightRailPrefab, targetPosVert, Quaternion.identity);
+                }
+            }
+
+                SpawnOnDestroy spawn = targetElement.spawnType;
+            TargetColor colorRef = targetElement.color;
+            int colorIndexRef = targetElement.colorIndex;
+            string tagNameRef = targetElement.colorName;
+            GameObject tileToDestroy = allElements[column, row];
+
             findMatches.currentMatches.Remove(allElements[column, row]);
-            Destroy(allElements[column, row]);
             allElements[column, row] = null;
+
+            if (targetElement.tileType == TileType.Rocket)
+            {
+                StartCoroutine(DestroyTile(tileToDestroy, 0.5f));
+            }
+            else if(targetElement.tileType == TileType.Bomb)
+            {
+                StartCoroutine(DestroyTile(tileToDestroy, 0.1f));
+            }
+            else
+            {
+                StartCoroutine(DestroyTile(tileToDestroy, 0f));
+            }
+
+            if(spawn == SpawnOnDestroy.Bomb)
+            {
+                Debug.Log("spawn bomb at " + column + " , " + row);
+                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+                GameObject newBomb = Instantiate(bombPrefab, targetPos, Quaternion.identity);
+                Element targetSpawned = newBomb.GetComponent<Element>();
+                newBomb.GetComponent<Element>().initializeBomb(colorRef, colorIndexRef, tagNameRef);
+                newBomb.name = targetSpawned.colorName + " Bomb";
+                allElements[column, row] = newBomb;
+                targetSpawned.row = row;
+                targetSpawned.column = column;
+                newBomb.transform.parent = transform;
+                targetSpawned.pointValue = gameManager.baseElementValue;
+                if (targetSpawned.color == banishedType)
+                {
+                    targetSpawned.banish();
+                }
+            }
+            else if (spawn == SpawnOnDestroy.VertRocket)
+            {
+                Debug.Log("spawn vert rocket at " + column + " , " + row);
+                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+                GameObject newRocket = Instantiate(rocketPrefab, targetPos, Quaternion.identity);
+                Element targetSpawned = newRocket.GetComponent<Element>();
+                newRocket.GetComponent<Element>().initializeRocket(colorRef, colorIndexRef, tagNameRef, true, false);
+                newRocket.name = targetSpawned.colorName + " Vert Rocket";
+                allElements[column, row] = newRocket;
+                targetSpawned.row = row;
+                targetSpawned.column = column;
+                newRocket.transform.parent = transform;
+                targetSpawned.pointValue = gameManager.baseElementValue;
+                if (targetSpawned.color == banishedType)
+                {
+                    targetSpawned.banish();
+                }
+
+            }
+            else if (spawn == SpawnOnDestroy.HorizRocket)
+            {
+                Debug.Log("spawn horiz rocket at " + column + " , " + row);
+                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+                GameObject newRocket = Instantiate(rocketPrefab, targetPos, Quaternion.identity);
+                Element targetSpawned = newRocket.GetComponent<Element>();
+                newRocket.GetComponent<Element>().initializeRocket(colorRef, colorIndexRef, tagNameRef, false, true);
+                newRocket.name = targetSpawned.colorName + " Vert Rocket";
+                allElements[column, row] = newRocket;
+                targetSpawned.row = row;
+                targetSpawned.column = column;
+                newRocket.transform.parent = transform;
+                targetSpawned.pointValue = gameManager.baseElementValue;
+                if (targetSpawned.color == banishedType)
+                {
+                    targetSpawned.banish();
+                }
+            }
         }
     }
 
@@ -412,6 +611,12 @@ public class BoardManager : MonoBehaviour
         FindObjectOfType<AudioManager>().PlayCustomPitch("tile break", 0.9f * (1f + (0.06f * matchStreak)));
 
         StartCoroutine(DecreaseRow());
+    }
+
+    private IEnumerator DestroyTile(GameObject target, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        Destroy(target);
     }
 
     private IEnumerator DecreaseRow()
@@ -452,7 +657,7 @@ public class BoardManager : MonoBehaviour
             {
                 if(allElements[i,j] == null)
                 {
-                    yield return new WaitForSeconds(0.07f);
+                    //yield return new WaitForSeconds(0.07f);
                     Vector2 tempPos = new Vector2(i, j + offsetHeight);
 
 
@@ -474,7 +679,8 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
-        //yield return new WaitForSeconds(0.3f);
+        //yield return null;
+        yield return new WaitForSeconds(0.2f);
         refillingBoard = false;
     }
 
@@ -569,49 +775,6 @@ public class BoardManager : MonoBehaviour
         //yield return new WaitForSeconds(0.5f);
         //gameManager.streakValue = 1;
     }
-
-    //private IEnumerator checkTurnEnd()
-    //{
-    //    //yield return new WaitForSeconds(0.6f);
-    //    yield return null;
-    //    if (!MatchesOnBoard() && !collapsingActive)
-    //    {
-    //        int red = 0;
-    //        int blue = 0;
-    //        int orange = 0;
-    //        int yellow = 0;
-    //        int green = 0;
-    //        foreach (Element element in roundMatches)
-    //        {
-    //            if(element.colorName == "Red")
-    //            {
-    //                red++;
-    //            }
-    //            if (element.colorName == "Blue")
-    //            {
-    //                blue++;
-    //            }
-    //            if (element.colorName == "Orange")
-    //            {
-    //                orange++;
-    //            }
-    //            if (element.colorName == "Yellow")
-    //            {
-    //                yellow++;
-    //            }
-    //            if (element.colorName == "Green")
-    //            {
-    //                green++;
-    //            }
-    //        }
-    //        Debug.Log("turn " + (gameManager.maxTurns - gameManager.currentTurn) + " - red: " + red + " , blue: " + blue + " , orange: " + orange + " , yellow: " + yellow + " , green: " + green);
-    //        roundMatches.Clear();
-    //        Debug.Log("all matches collapsed");
-    //        StartCoroutine(checkToSpawnFrozen(0f));
-    //        StartCoroutine(checkToSpawnEnchanted(0f));
-    //        gameManager.turnEnded();
-    //    }
-    //}
 
     private void turnEnded()
     {
@@ -747,9 +910,9 @@ public class BoardManager : MonoBehaviour
         int numToSpawn = maxEnchantedTiles - currentEnchantedTiles;
         for (int i = 0; i < numToSpawn; i++)
         {
-            // pick an unenchanted element
+            // pick an unenchanted gem element
             Element targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
-            while (targetElement.isEnchanted)
+            while (targetElement.isEnchanted || targetElement.tileType == TileType.Bomb || targetElement.tileType == TileType.Rocket)
             {
                 targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
             }
@@ -809,10 +972,28 @@ public class BoardManager : MonoBehaviour
             if (vertMatchLength > horizMatchLength)
             {
                 matchSize = vertMatchLength;
+
+                if (matchSize > 4 && targetElement.vertMatchedElements[0] == targetElement)
+                {
+                    targetElement.spawnType = SpawnOnDestroy.Bomb;
+                }
+                else if (matchSize == 4 && targetElement.vertMatchedElements[0] == targetElement)
+                {
+                    targetElement.spawnType = SpawnOnDestroy.VertRocket;
+                }
             }
             else
             {
                 matchSize = horizMatchLength;
+
+                if (matchSize > 4 && targetElement.horizMatchedElements[0] == targetElement)
+                {
+                    targetElement.spawnType = SpawnOnDestroy.Bomb;
+                }
+                else if (matchSize == 4 && targetElement.horizMatchedElements[0] == targetElement)
+                {
+                    targetElement.spawnType = SpawnOnDestroy.HorizRocket;
+                }
             }
 
             scoreIncrease += (gameManager.largeMatchBonus * (matchSize - 3));

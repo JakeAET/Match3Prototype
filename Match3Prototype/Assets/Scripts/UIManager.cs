@@ -37,6 +37,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text confirmPatronsBttnText;
     private string confirmPatronsText;
     public int patronChoiceLimit;
+    [SerializeField] TMP_Text skipCountText;
+    [SerializeField] Button skipButton;
+    [SerializeField] TMP_Text refreshCountText;
+    [SerializeField] Button refreshButton;
 
     [Header("Run Completion Screen")]
     [SerializeField] GameObject runCompletePanel;
@@ -241,6 +245,43 @@ public class UIManager : MonoBehaviour
         gameManager.startRound();
     }
 
+    public void refreshPatronSelect()
+    {
+        int patronsToChoose = currentChoicePrefabs.Count;
+
+        for (int i = 0; i < currentChoicePrefabs.Count; i++)
+        {
+            GameObject objToDestroy = currentChoicePrefabs[i];
+            Destroy(objToDestroy);
+        }
+        currentChoicePrefabs.Clear();
+        patronUIRefs.Clear();
+        selectedPatronUIRefs.Clear();
+
+        List<Patron> patronOptions = patronManager.selectPatrons(patronsToChoose);
+
+        foreach (Patron p in patronOptions)
+        {
+            GameObject newPatronChoice = Instantiate(patronChoicePrefab, patronChoicePanel.transform);
+            newPatronChoice.GetComponent<patronChoiceUI>().initialize(p);
+        }
+    }
+
+    public void skipPatronSelect()
+    {
+        winPanel.SetActive(false);
+        for (int i = 0; i < currentChoicePrefabs.Count; i++)
+        {
+            GameObject objToDestroy = currentChoicePrefabs[i];
+            Destroy(objToDestroy);
+        }
+        currentChoicePrefabs.Clear();
+        patronUIRefs.Clear();
+        selectedPatronUIRefs.Clear();
+
+        gameManager.startRound();
+    }
+
     public void undoButtonPress()
     {
         if(gameManager.currentUndos > 0)
@@ -254,6 +295,16 @@ public class UIManager : MonoBehaviour
         undoCountText.text = "" + count;
     }
 
+    public void refreshCountUpdate(int count)
+    {
+        refreshCountText.text = "" + count;
+    }
+
+    public void skipCountUpdate(int count)
+    {
+        skipCountText.text = "" + count;
+    }
+
     public void checkToEnableUndo()
     {
         if (gameManager.currentUndos > 0 && !undoButton.IsInteractable())
@@ -262,9 +313,37 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void disableUndo()
+    public void toggleUndoInteract(bool canInteract)
     {
-        undoButton.interactable = false;
+        undoButton.interactable = canInteract;
+    }
+
+    public void toggleSkipInteract(bool canInteract)
+    {
+        skipButton.interactable = canInteract;
+    }
+
+    public void toggleRefreshInteract(bool canInteract)
+    {
+        refreshButton.interactable = canInteract;
+    }
+
+    public void refreshButtonPress()
+    {
+        if(gameManager.currentRefreshes > 0)
+        {
+            refreshPatronSelect();
+            gameManager.useRefresh();
+        }
+    }
+
+    public void skipButtonPress()
+    {
+        if (gameManager.currentSkips > 0)
+        {
+            skipPatronSelect();
+            gameManager.useSkip();
+        }
     }
 
     //public void startNextRound()

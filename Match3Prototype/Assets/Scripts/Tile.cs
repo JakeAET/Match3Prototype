@@ -13,11 +13,19 @@ public class Tile : MonoBehaviour
     //4 = yellow
 
     //public int colorIndex = -1;
-    //public Vector2 coord = new Vector2 (0, 0);
+    public int column;
+    public int row;
+    public GameObject assignedElement;
+    private BoardManager boardManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        boardManager = FindObjectOfType<BoardManager>();
+    }
 
+    void Update()
+    {
+        assignedElement = boardManager.allElements[column,row];
     }
 }

@@ -22,6 +22,7 @@ public class FindMatches : MonoBehaviour
 
     private IEnumerator FindAllMatches()
     {
+        float waitTime = 0.1f;
         //yield return new WaitForSeconds(0.2f);
         for (int i = 0; i < board.width; i++)
         {
@@ -114,6 +115,18 @@ public class FindMatches : MonoBehaviour
                                     foreach (Element e in allElementsInMatch)
                                     {
                                         targetElement.horizMatchedElements.Add(e);
+                                    }
+
+                                    if (targetElement.tileType == TileType.Rocket)
+                                    {
+                                        FindObjectOfType<AudioManager>().Play("firework");
+                                        waitTime = 0.2f;
+                                    }
+
+                                    if (targetElement.tileType == TileType.Bomb)
+                                    {
+                                        FindObjectOfType<AudioManager>().Play("bomb");
+                                        waitTime = 0.2f;
                                     }
                                 }
 
@@ -208,6 +221,18 @@ public class FindMatches : MonoBehaviour
                                     {
                                         targetElement.vertMatchedElements.Add(e);
                                     }
+
+                                    if(targetElement.tileType == TileType.Rocket)
+                                    {
+                                        FindObjectOfType<AudioManager>().Play("firework");
+                                        //waitTime = 0.3f;
+                                    }
+
+                                    if (targetElement.tileType == TileType.Bomb)
+                                    {
+                                        FindObjectOfType<AudioManager>().Play("bomb");
+                                        //waitTime = 0.3f;
+                                    }
                                 }
 
                                 Debug.Log("Vertical match made: " +  allElementsInMatch.Count + " tiles long");
@@ -217,12 +242,12 @@ public class FindMatches : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Count: " + currentMatches.Count);
+        //Debug.Log("Count: " + currentMatches.Count);
         bool matchesFound = (currentMatches.Count > 0);
 
         if (matchesFound)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(waitTime);
         }
         else
         {

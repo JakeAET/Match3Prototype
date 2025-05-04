@@ -28,6 +28,14 @@ public class GameManager : MonoBehaviour
     public int currentUndos = 0;
     public bool undoAllowed = false;
 
+    public int maxRefreshes = 0;
+    public int currentRefreshes = 0;
+    public bool refreshAllowed = false;
+
+    public int maxSkips = 0;
+    public int currentSkips= 0;
+    public bool skipAllowed = false;
+
     public int currentRound = 0;
     public int currentGame = 1;
 
@@ -36,19 +44,19 @@ public class GameManager : MonoBehaviour
 
     private BoardManager board;
     private UIManager ui;
+    private PatronManager patronManager;
 
     [SerializeField] BossRound[] bossRounds;
     private List<BossRound> availableBossRounds = new List<BossRound>();
     public BossRound currentBossRound;
 
-    //[SerializeField] TMP_Text scoreText;
-    //[SerializeField] TMP_Text streakText;
-    //[SerializeField] TMP_Text turnsText;
-    //[SerializeField] TMP_Text roundsText;
-    //[SerializeField] TMP_Text targetScoreText;
+    public Color[] tileColors;
+    //0 = red
+    //1 = blue
+    //2 = green
+    //3 = purple
+    //4 = yellow
 
-
-    // Start is called before the first frame update
     void Start()
     {
 
@@ -61,6 +69,23 @@ public class GameManager : MonoBehaviour
 
         board = FindObjectOfType<BoardManager>();
         ui = FindObjectOfType<UIManager>();
+
+        if (maxSkips > 0)
+        {
+            currentSkips = maxSkips;
+            skipAllowed = true;
+            ui.toggleSkipInteract(skipAllowed);
+            ui.skipCountUpdate(currentSkips);
+
+        }
+
+        if (maxRefreshes > 0)
+        {
+            currentRefreshes = maxRefreshes;
+            refreshAllowed = true;
+            ui.toggleRefreshInteract(refreshAllowed);
+            ui.refreshCountUpdate(currentRefreshes);
+        }
 
         startRound();
     }
@@ -102,7 +127,7 @@ public class GameManager : MonoBehaviour
         board.roundOver(true);
         roundActive = false;
         undoAllowed = false;
-        ui.disableUndo();
+        ui.toggleUndoInteract(false);
         yield return new WaitForSeconds(0.5f);
 
         if (roundWon)
@@ -189,7 +214,7 @@ public class GameManager : MonoBehaviour
         ui.undoCountUpdate(currentUndos);
 
         undoAllowed = false;
-        ui.disableUndo();
+        ui.toggleUndoInteract(false);
 
         //scoreText.text = "Score: " + currentScore;
         //streakText.text = "Streak: " + streakValue;
@@ -236,7 +261,29 @@ public class GameManager : MonoBehaviour
         board.undoLastMove();
         ui.undoCountUpdate(currentUndos);
         undoAllowed = false;
-        ui.disableUndo();
+        ui.toggleUndoInteract(false);
+    }
+
+    public void useSkip()
+    {
+        --currentSkips;
+        if (currentSkips == 0)
+        {
+            skipAllowed = false;
+        }
+        ui.toggleSkipInteract(skipAllowed);
+        ui.skipCountUpdate(currentSkips);
+    }
+
+    public void useRefresh()
+    {
+        --currentRefreshes;
+        if (currentRefreshes == 0)
+        {
+            refreshAllowed = false;
+        }
+        ui.toggleRefreshInteract(refreshAllowed);
+        ui.refreshCountUpdate(currentRefreshes);
     }
 
     private void determineBossCondition()

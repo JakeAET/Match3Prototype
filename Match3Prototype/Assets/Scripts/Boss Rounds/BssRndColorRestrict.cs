@@ -16,6 +16,6 @@ public class BssRndColorRestrict : BossRound
     public override void deactivateConstraint()
     {
         board = FindObjectOfType<BoardManager>();
-        board.banishedType = TargetColor.none;
+        board.banishedType = TargetColor.None;
     }
 }

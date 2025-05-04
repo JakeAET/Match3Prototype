@@ -1,18 +1,42 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public enum TargetColor
 {
-    none,
-    red,
-    blue,
-    green,
-    purple,
-    yellow
+    None,
+    Red,
+    Blue,
+    Green,
+    Purple,
+    Yellow
+}
+
+public enum TileType
+{
+    Gem,
+    Bomb,
+    Rocket,
+}
+
+public enum SpawnOnDestroy
+{
+    None,
+    Bomb,
+    VertRocket,
+    HorizRocket
+}
+
+public enum RocketFacing
+{
+    Left,
+    Right,
+    Up,
+    Down
 }
 
 public class Element : MonoBehaviour
@@ -26,13 +50,19 @@ public class Element : MonoBehaviour
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject banishedIcon;
     [SerializeField] private GameObject lightFlash;
+    [SerializeField] private GameObject rocketTrail;
     public GameObject burstEffectPrefab;
     public string colorName;
     public int colorIndex;
     public TargetColor color;
+    public TileType tileType;
+    public SpawnOnDestroy spawnType;
     public bool isFrozen = false;
     public bool isEnchanted = false;
     public float pointValue = 0;
+    public bool isVertRocket = false;
+    public bool isHorizRocket = false;
+    private RocketFacing rocketFacing;
 
 
     [Header("Board Variables")]
@@ -44,6 +74,7 @@ public class Element : MonoBehaviour
     public float targetY;
     public bool isFalling = false;
     private bool playedFallSound = true;
+    private bool triggeredMatchEffect = false;
 
     private BoardManager board;
     private FindMatches findMatches;
@@ -58,10 +89,13 @@ public class Element : MonoBehaviour
     // Match variables
     public bool isMatched = false;
     public bool isScored = false;
+    public bool isBombMatch = false;
+    public bool isRocketMatch = false;
     public int horizMatchLength = 0;
     public int vertMatchLength = 0;
     public List<Element> horizMatchedElements = new List<Element>();
     public List<Element> vertMatchedElements = new List<Element>();
+    public List<Element> specialMatchedElements = new List<Element>();
 
     // Start is called before the first frame update
     void Start()
@@ -83,12 +117,139 @@ public class Element : MonoBehaviour
             {
                 matchedIcon.GetComponent<SpriteRenderer>().color = Color.green;
             }
-            //SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
-            //mySprite.color = new Color(1f, 1f, 1f, 0.5f);
-        }
 
-        targetX = column * board.xSpawnOffsetMult;
-        targetY = row * board.ySpawnOffsetMult;
+            if(tileType != TileType.Gem && !triggeredMatchEffect)
+            {
+                if(tileType == TileType.Bomb)
+                {
+                    Debug.Log("Bomb SPLODED");
+                    // bomb effect
+
+                    //for (int i1 = column - 1; i1 < column + 2; i1++)
+                    //{
+                    //    for (int j1 = row - 1; j1 < row + 2; j1++)
+                    //    {
+                    //        if(i1 >= 0 && i1 < board.width - 1 && j1 > 0 && j1 < board.height - 1)
+                    //        {
+                    //            for (int i2 = column - 1; i2 < column + 2; i2++)
+                    //            {
+                    //                for (int j2 = row - 1; j2 < row + 2; j2++)
+                    //                {
+                    //                    if (i2 >= 0 && i2 < board.width - 1 && j2 > 0 && j2 < board.height - 1)
+                    //                    {
+
+                    //                    }
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+                    for (int i = 0; i < board.height; i++)
+                    {
+                        Element elementRef = board.allElements[column, i].GetComponent<Element>();
+                        elementRef.isMatched = true;
+                        elementRef.isBombMatch = true;
+
+                        for (int j = 0; j < board.height; j++)
+                        {
+                            elementRef.specialMatchedElements.Add(board.allElements[column, j].GetComponent<Element>());
+                        }
+                    }
+
+                    for (int i = 0; i < board.width; i++)
+                    {
+                        Element elementRef = board.allElements[i, row].GetComponent<Element>();
+                        elementRef.isMatched = true;
+                        elementRef.isBombMatch = true;
+
+                        for (int j = 0; j < board.width; j++)
+                        {
+                            if(j != elementRef.column)
+                            {
+                                elementRef.specialMatchedElements.Add(board.allElements[j, row].GetComponent<Element>());
+                            }
+                        }
+                    }
+
+                    transform.DOPunchScale(new Vector3(2, 2, 2), 0.3f);
+                    triggeredMatchEffect = true;
+                }
+                else if (tileType == TileType.Rocket && isVertRocket)
+                {
+                    //Debug.Log("Vert Rocket SPLODED");
+                    // vert rocket effect
+
+                    transform.DOScale(new Vector3(2, 2, 2), 0.2f);
+
+                    for (int i = 0; i < board.height; i++)
+                    {
+                        Element elementRef = board.allElements[column, i].GetComponent<Element>();
+                        elementRef.isMatched = true;
+                        elementRef.isRocketMatch = true;
+
+                        for (int j = 0; j < board.height; j++)
+                        {
+                            elementRef.specialMatchedElements.Add(board.allElements[column, j].GetComponent<Element>());
+                        }
+                    }
+
+                    if (rocketFacing == RocketFacing.Down) // face down
+                    {
+                        Debug.Log("rocket sploded down");
+                        targetY = board.height * -3f * board.ySpawnOffsetMult;
+                    }
+                    else if (rocketFacing == RocketFacing.Up) // face up
+                    {
+                        Debug.Log("rocket sploded up");
+                        targetY = board.height * 3f * board.ySpawnOffsetMult;
+                    }
+
+                    rocketTrail.SetActive(true);
+                    //fallSpeed *= 2f;
+                    triggeredMatchEffect = true;
+                }
+                else if (tileType == TileType.Rocket && isHorizRocket)
+                {
+                    //Debug.Log("Horiz Rocket SPLODED");
+                    // horiz rocket effect
+
+                    transform.DOScale(new Vector3(2, 2, 2), 0.2f);
+
+                    for (int i = 0; i < board.width; i++)
+                    {
+                        Element elementRef = board.allElements[i, row].GetComponent<Element>();
+                        elementRef.isMatched = true;
+                        elementRef.isRocketMatch = true;
+
+                        for (int j = 0; j < board.width; j++)
+                        {
+                            elementRef.specialMatchedElements.Add(board.allElements[j, row].GetComponent<Element>());
+                        }
+                    }
+
+                    if (rocketFacing == RocketFacing.Left) // face left
+                    {
+                        Debug.Log("rocket sploded left");
+                        targetX = board.width * -3f;
+                    }
+                    else if(rocketFacing == RocketFacing.Right) // face right
+                    {
+                        Debug.Log("rocket sploded right");
+                        targetX = board.width + (board.width * 3f);
+                    }
+
+                    rocketTrail.SetActive(true);
+                    //fallSpeed *= 2f;
+                    triggeredMatchEffect = true;
+                }
+            }
+        }
+        else
+        {
+            targetX = column * board.xSpawnOffsetMult;
+            targetY = row * board.ySpawnOffsetMult;
+        }
 
         if (beingSwiped)
         {
@@ -99,7 +260,7 @@ public class Element : MonoBehaviour
                 tempPosition = new Vector2(targetX, transform.position.y);
                 //transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
                 transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
-                if (board.allElements[column, row] != this.gameObject)
+                if (board.allElements[column, row] != this.gameObject && !triggeredMatchEffect)
                 {
                     board.allElements[column, row] = this.gameObject;
                 }
@@ -119,7 +280,7 @@ public class Element : MonoBehaviour
                 tempPosition = new Vector2(transform.position.x, targetY);
                 //transform.position = Vector2.Lerp(transform.position, tempPosition, swapSpeed);
                 transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
-                if (board.allElements[column, row] != this.gameObject)
+                if (board.allElements[column, row] != this.gameObject && !triggeredMatchEffect)
                 {
                     board.allElements[column, row] = this.gameObject;
                 }
@@ -143,7 +304,7 @@ public class Element : MonoBehaviour
                 tempPosition = new Vector2(targetX, transform.position.y);
                 //transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
                 transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
-                if (board.allElements[column, row] != this.gameObject)
+                if (board.allElements[column, row] != this.gameObject && !triggeredMatchEffect)
                 {
                     board.allElements[column, row] = this.gameObject;
                 }
@@ -163,7 +324,7 @@ public class Element : MonoBehaviour
                 //transform.position = Vector2.Lerp(transform.position, tempPosition, fallSpeed);
                 transform.position = Vector2.MoveTowards(transform.position, tempPosition, step);
 
-                if (board.allElements[column, row] != this.gameObject)
+                if (board.allElements[column, row] != this.gameObject && !triggeredMatchEffect)
                 {
                     board.allElements[column, row] = this.gameObject;
                 }
@@ -181,7 +342,7 @@ public class Element : MonoBehaviour
                 //board.allElements[column, row] = this.gameObject;
                 if(!playedFallSound && board.currentState != GameState.SettingBoard)
                 {
-                    Debug.Log("sound");
+                    //Debug.Log("sound");
                     FindObjectOfType<AudioManager>().Play("tile fall");
                     playedFallSound = true;
                 }
@@ -228,7 +389,7 @@ public class Element : MonoBehaviour
 
     void MovePieces()
     {
-        float animDuration = 0.2f;
+        float animDuration = 0.1f;
 
         //Debug.Log("Waiting -> Moving Tiles");
         FindObjectOfType<AudioManager>().Play("tile swap");
@@ -240,7 +401,7 @@ public class Element : MonoBehaviour
             column += 1;
 
             StartCoroutine(flashSequence("right", animDuration));
-            transform.DOPunchScale(new Vector3(0.6f, 0.9f, 1), animDuration, 0, 0);
+            transform.DOPunchScale(new Vector3(0.3f, 0.9f, 1), animDuration, 0, 0);
         }
         else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1) // up swipe
         {
@@ -249,7 +410,7 @@ public class Element : MonoBehaviour
             row += 1;
 
             StartCoroutine(flashSequence("up", animDuration));
-            transform.DOPunchScale(new Vector3(0.9f, 0.6f, 1), animDuration, 0, 0);
+            transform.DOPunchScale(new Vector3(0.9f, 0.3f, 1), animDuration, 0, 0);
         }
         else if ((swipeAngle > 135 || swipeAngle <= -135) && column > 0) // left swipe
         {
@@ -258,7 +419,7 @@ public class Element : MonoBehaviour
             column -= 1;
 
             StartCoroutine(flashSequence("left",animDuration));
-            transform.DOPunchScale(new Vector3(0.6f, 0.9f, 1), animDuration, 0, 0);
+            transform.DOPunchScale(new Vector3(0.3f, 0.9f, 1), animDuration, 0, 0);
         }
         else if (swipeAngle < -45 && swipeAngle >= -135 && row > 0) // dowm swipe
         {
@@ -267,7 +428,7 @@ public class Element : MonoBehaviour
             row -= 1;
 
             StartCoroutine(flashSequence("down", animDuration));
-            transform.DOPunchScale(new Vector3(0.9f, 0.6f, 1), animDuration, 0, 0);
+            transform.DOPunchScale(new Vector3(0.3f, 0.6f, 1), animDuration, 0, 0);
         }
 
         beingSwiped = true;
@@ -337,36 +498,60 @@ public class Element : MonoBehaviour
         banishedIcon.SetActive(true);
     }
 
+    public void initializeBomb(TargetColor colorRef, int colorIndexRef, string tagName)
+    {
+        color = colorRef;
+        GetComponent<SpriteRenderer>().color = FindObjectOfType<GameManager>().tileColors[colorIndexRef];
+        colorIndex = colorIndexRef;
+        colorName = tagName;
+        gameObject.tag = tagName;
 
-    //void FindMatches()
-    //{
-    //    if(column > 0 && column < board.width - 1)
-    //    {
-    //        GameObject leftElement1 = board.allElements[column - 1, row];
-    //        GameObject rightElement1 = board.allElements[column + 1, row];
-    //        if (leftElement1 != null && rightElement1 != null && leftElement1 != this.gameObject && rightElement1 != this.gameObject)
-    //        {
-    //            if (leftElement1.tag == this.gameObject.tag && rightElement1.tag == this.gameObject.tag)
-    //            {
-    //                leftElement1.GetComponent<Element>().isMatched = true;
-    //                rightElement1.GetComponent<Element>().isMatched = true;
-    //                isMatched = true;
-    //            }
-    //        }
-    //    }
-    //    if (row > 0 && row < board.height - 1)
-    //    {
-    //        GameObject upElement1 = board.allElements[column, row + 1];
-    //        GameObject downElement1 = board.allElements[column, row - 1];
-    //        if (upElement1 != null && downElement1 != null && upElement1 != this.gameObject && downElement1 != this.gameObject)
-    //        {
-    //            if (upElement1.tag == this.gameObject.tag && downElement1.tag == this.gameObject.tag)
-    //            {
-    //                upElement1.GetComponent<Element>().isMatched = true;
-    //                downElement1.GetComponent<Element>().isMatched = true;
-    //                isMatched = true;
-    //            }
-    //        }
-    //    }
-    //}
+        transform.DOPunchScale(new Vector3(1.2f, 1.2f, 1), 0.3f, 0, 0);
+    }
+
+    public void initializeRocket(TargetColor colorRef,int colorIndexRef, string tagName, bool isVert, bool isHoriz)
+    {
+        isVertRocket = isVert;
+        isHorizRocket = isHoriz;
+        color = colorRef;
+        Color elemColor = FindObjectOfType<GameManager>().tileColors[colorIndexRef];
+        GetComponent<SpriteRenderer>().color = elemColor;
+        rocketTrail.GetComponent<TrailRenderer>().startColor = elemColor;
+        elemColor.a = 0f;
+        rocketTrail.GetComponent<TrailRenderer>().endColor = elemColor;
+        colorIndex = colorIndexRef;
+        colorName = tagName;
+        gameObject.tag = tagName;
+
+
+        if (isVert)
+        {
+            if (column >= FindObjectOfType<BoardManager>().height / 2) // face down
+            {
+                transform.eulerAngles = new Vector3(0, 0, 180);
+                rocketFacing = RocketFacing.Down;
+            }
+            else // face up
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+                rocketFacing = RocketFacing.Up;
+            }
+        }
+
+        if (isHoriz)
+        {
+            if (column >= FindObjectOfType<BoardManager>().width / 2) // face left
+            {
+                transform.eulerAngles = new Vector3(0, 0, 90);
+                rocketFacing = RocketFacing.Left;
+            }
+            else // face right
+            {
+                transform.eulerAngles = new Vector3(0, 0, -90);
+                rocketFacing = RocketFacing.Right;
+            }
+        }
+
+        transform.DOPunchScale(new Vector3(1.2f, 1.2f, 1), 0.3f, 0, 0);
+    }
 }

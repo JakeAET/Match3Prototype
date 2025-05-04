@@ -21,23 +21,23 @@ public class PtrnColorSpawn : Patron
         {
             //Debug.Log(targetColor + " spawn rate effect Triggered");
             board = FindObjectOfType<BoardManager>();
-            if (targetColor == TargetColor.red)
+            if (targetColor == TargetColor.Red)
             {
                 board.redSpawnRate = level * spawnRateIncrease;
             }
-            if (targetColor == TargetColor.blue)
+            if (targetColor == TargetColor.Blue)
             {
                 board.blueSpawnRate = level * spawnRateIncrease;
             }
-            if (targetColor == TargetColor.green)
+            if (targetColor == TargetColor.Green)
             {
                 board.greenSpawnRate = level * spawnRateIncrease;
             }
-            if (targetColor == TargetColor.purple)
+            if (targetColor == TargetColor.Purple)
             {
                 board.purpleSpawnRate = level * spawnRateIncrease;
             }
-            if (targetColor == TargetColor.yellow)
+            if (targetColor == TargetColor.Yellow)
             {
                 board.yellowSpawnRate = level * spawnRateIncrease;
             }

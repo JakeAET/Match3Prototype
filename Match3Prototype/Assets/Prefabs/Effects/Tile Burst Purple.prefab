@@ -63,6 +63,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile Burst Purple
       objectReference: {fileID: 0}
+    - target: {fileID: 4189236677478267888, guid: 2a240d67b4b791444830babddd11978e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4228524542538313712, guid: 2a240d67b4b791444830babddd11978e, type: 3}
       propertyPath: UVModule.sprites.Array.data[0].sprite
       value: 
