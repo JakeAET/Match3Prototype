@@ -435,6 +435,7 @@ public class BoardManager : MonoBehaviour
                             }
                         }
                     }
+                    gameManager.matchesMade++;
                 }
                 else
                 {
@@ -615,6 +616,12 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator DestroyTile(GameObject target, float waitTime)
     {
+        Element targetElement = target.GetComponent<Element>();
+
+        gameManager.colorTilesCleared[targetElement.colorName]++;
+
+        gameManager.tilesCleared++;
+
         yield return new WaitForSeconds(waitTime);
         Destroy(target);
     }

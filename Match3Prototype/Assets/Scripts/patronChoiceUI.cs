@@ -13,12 +13,14 @@ public class patronChoiceUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] TMP_Text description;
     [SerializeField] Image patronImg;
     [SerializeField] GameObject patronImgObj;
+    [SerializeField] GameObject disabledCover;
     private Vector3 startScaleSize;
     [SerializeField] Vector3 largeScaleSize;
     [SerializeField] Image backgroundImg;
     public Patron patronRef;
     public Toggle patronToggle;
     private UIManager ui;
+    public int patronChoiceListIndex;
 
     public void initialize(Patron patron)
     {
@@ -35,6 +37,7 @@ public class patronChoiceUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         ui = FindObjectOfType<UIManager>();
         ui.currentChoicePrefabs.Add(gameObject);
         ui.patronUIRefs.Add(this);
+        patronChoiceListIndex = ui.patronUIRefs.Count - 1;
         //patronToggle.onValueChanged.AddListener(() => ui.patronBttn(patron));
     }
     public void OnPointerEnter(PointerEventData eventData)
@@ -49,5 +52,25 @@ public class patronChoiceUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void toggledPatron()
     {
         ui.patronToggle(this, patronToggle.isOn);
+    }
+
+    public void toggleDisable(bool isInteractable)
+    {
+        if (isInteractable)
+        {
+            disabledCover.SetActive(false);
+            patronToggle.interactable = true;
+        }
+        else
+        {
+            disabledCover.SetActive(true);
+            patronToggle.interactable = false;
+
+            if (patronToggle.isOn)
+            {
+                patronToggle.isOn = false;
+                ui.patronToggle(this, patronToggle.isOn);
+            }
+        }
     }
 }

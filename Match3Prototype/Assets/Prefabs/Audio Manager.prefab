@@ -72,16 +72,16 @@ MonoBehaviour:
   - name: tile fall
     clip: {fileID: 8300000, guid: 7b09ea257a3e22b4b8813bebb12fbc09, type: 3}
     priority: 1
-    volume: 0.3
-    pitch: 0.9
+    volume: 0.1
+    pitch: 0.8
     loop: 0
     soundType: 1
     source: {fileID: 0}
   - name: tile setting
     clip: {fileID: 8300000, guid: e3138e042793bc44bb74b77f1c4d27e1, type: 3}
     priority: 1
-    volume: 0.5
-    pitch: 1
+    volume: 0.3
+    pitch: 0.9
     loop: 0
     soundType: 1
     source: {fileID: 0}
@@ -96,7 +96,23 @@ MonoBehaviour:
   - name: ui click
     clip: {fileID: 8300000, guid: e68ba9ed22313064ab9d28e84ba80d78, type: 3}
     priority: 1
+    volume: 0.3
+    pitch: 0.7
+    loop: 0
+    soundType: 1
+    source: {fileID: 0}
+  - name: firework
+    clip: {fileID: 8300000, guid: 1bb8a9031c4c94b46a566b077630a61b, type: 3}
+    priority: 1
     volume: 1
+    pitch: 1
+    loop: 0
+    soundType: 1
+    source: {fileID: 0}
+  - name: bomb
+    clip: {fileID: 8300000, guid: b1bde9355a242c0418ba30c17f875c61, type: 3}
+    priority: 1
+    volume: 0.1
     pitch: 1
     loop: 0
     soundType: 1

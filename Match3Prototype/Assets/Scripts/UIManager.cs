@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Run Completion Screen")]
     [SerializeField] GameObject runCompletePanel;
+    [SerializeField] TMP_Text winStatsText;
 
     //[SerializeField] Image patronImg1;
     //[SerializeField] Image patronImg2;
@@ -66,6 +67,7 @@ public class UIManager : MonoBehaviour
     [Header("Lose Screen")]
     [SerializeField] GameObject losePanel;
     [SerializeField] TMP_Text loseRoundText;
+    [SerializeField] TMP_Text lossStatsText;
 
     [Header("Patron Panel")]
     public GameObject[] patronSlots;
@@ -172,6 +174,13 @@ public class UIManager : MonoBehaviour
             newPatronChoice.GetComponent<patronChoiceUI>().initialize(p);
         }
 
+        foreach (PatronTopUI patronUI in patronSlotUIRefs)
+        {
+            patronUI.removeButtonPanel.SetActive(true);
+        }
+
+        checkPatronSelections();
+
         winPanel.GetComponent<RectTransform>().localScale = Vector3.zero;
         winPanel.SetActive(true);
         winPanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
@@ -181,6 +190,12 @@ public class UIManager : MonoBehaviour
 
     public void displayRunComplete()
     {
+        winStatsText.text =
+            gameManager.bestScore + "\r\n" +
+            gameManager.matchesMade + "\r\n" +
+            gameManager.tilesCleared + "\r\n" +
+            "<color=\"" + gameManager.mostMatchedTile() + "\">" + gameManager.mostMatchedTile();
+
         runCompletePanel.GetComponent<RectTransform>().localScale = Vector3.zero;
         runCompletePanel.SetActive(true);
         runCompletePanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
@@ -188,8 +203,16 @@ public class UIManager : MonoBehaviour
 
     public void displayLoseScreen()
     {
-        losePanel.SetActive(true);
         loseRoundText.text = "Defeated on\nGame " + gameManager.currentGame + " - Round " + gameManager.currentRound;
+        lossStatsText.text = 
+            gameManager.bestScore +"\r\n" +
+            gameManager.matchesMade + "\r\n" +
+            gameManager.tilesCleared + "\r\n" +
+            "<color=\"" + gameManager.mostMatchedTile() + "\">" + gameManager.mostMatchedTile();
+
+        losePanel.GetComponent<RectTransform>().localScale = Vector3.zero;
+        losePanel.SetActive(true);
+        losePanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
     }
 
     public void patronToggle(patronChoiceUI thisPatronChoice, bool toggleOn)
@@ -222,6 +245,8 @@ public class UIManager : MonoBehaviour
             confirmPatronsButton.interactable = true;
             confirmPatronsBttnText.text = "confirm";
         }
+
+        checkPatronSelections();
     }
 
     public void confirmPatronSelect()
@@ -241,6 +266,11 @@ public class UIManager : MonoBehaviour
         currentChoicePrefabs.Clear();
         patronUIRefs.Clear();
         selectedPatronUIRefs.Clear();
+
+        foreach (PatronTopUI patronUI in patronSlotUIRefs)
+        {
+            patronUI.removeButtonPanel.SetActive(false);
+        }
 
         gameManager.startRound();
     }
@@ -265,6 +295,8 @@ public class UIManager : MonoBehaviour
             GameObject newPatronChoice = Instantiate(patronChoicePrefab, patronChoicePanel.transform);
             newPatronChoice.GetComponent<patronChoiceUI>().initialize(p);
         }
+
+        checkPatronSelections();
     }
 
     public void skipPatronSelect()
@@ -278,6 +310,11 @@ public class UIManager : MonoBehaviour
         currentChoicePrefabs.Clear();
         patronUIRefs.Clear();
         selectedPatronUIRefs.Clear();
+
+        foreach (PatronTopUI patronUI in patronSlotUIRefs)
+        {
+            patronUI.removeButtonPanel.SetActive(false);
+        }
 
         gameManager.startRound();
     }
@@ -346,6 +383,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void removePatronButtonPress(int ptrnIndex)
+    {
+        patronManager.removePatron(ptrnIndex);
+        checkPatronSelections();
+    }
+
     //public void startNextRound()
     //{
     //    winPanel.SetActive(false);
@@ -360,5 +403,22 @@ public class UIManager : MonoBehaviour
     public void playSound(string soundName)
     {
         FindObjectOfType<AudioManager>().Play(soundName);
+    }
+
+    private void checkPatronSelections()
+    {
+
+        List<patronChoiceUI> tempList = new List<patronChoiceUI>();
+
+        foreach (patronChoiceUI patronUI in patronUIRefs)
+        {
+            tempList.Add(patronUI);
+        }
+
+
+        foreach (patronChoiceUI patronUI in tempList)
+        {
+            patronUI.toggleDisable(patronManager.canPatronBeChosen(patronUI.patronRef.index, patronUI.patronChoiceListIndex));
+        }
     }
 }

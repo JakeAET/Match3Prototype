@@ -57,8 +57,19 @@ public class GameManager : MonoBehaviour
     //3 = purple
     //4 = yellow
 
+    //Stats
+    public float bestScore;
+    public int matchesMade;
+    public int tilesCleared;
+    public Dictionary<string, int> colorTilesCleared = new Dictionary<string, int>();
+
     void Start()
     {
+        colorTilesCleared.Add("red", 0);
+        colorTilesCleared.Add("blue", 0);
+        colorTilesCleared.Add("green", 0);
+        colorTilesCleared.Add("purple", 0);
+        colorTilesCleared.Add("yellow", 0);
 
         //Application.targetFrameRate = 24;
 
@@ -108,10 +119,20 @@ public class GameManager : MonoBehaviour
         board.reassignTileIDs();
         if (currentScore >= currentTargetScore) // game ends, won
         {
+            if(currentScore > bestScore)
+            {
+                bestScore = currentScore;
+            }
+
             StartCoroutine(roundEnded(true));
         }
         else if (currentTurn == 0) // game ends, lost
         {
+            if(bestScore == 0)
+            {
+                bestScore = currentScore;
+            }
+
             StartCoroutine(roundEnded(false));
         }
 
@@ -292,12 +313,18 @@ public class GameManager : MonoBehaviour
         availableBossRounds.Remove(currentBossRound);
     }
 
-    //private void updateUI()
-    //{
-    //    scoreText.text = "Score: " + currentScore;
-    //    //streakText.text = "Streak: " + streakValue;
-    //    turnsText.text = "Turns Left: " + currentTurn;
-    //    roundsText.text = "Round: " + currentRound;
-    //    targetScoreText.text = "Target Score: " + currentTargetScore;
-    //}
+    public string mostMatchedTile()
+    {
+        int mostMatchedNum = 0;
+        string mostMatchedColor = "";
+        foreach (KeyValuePair<string, int> kvp in colorTilesCleared)
+        {
+            if(kvp.Value > mostMatchedNum)
+            {
+                mostMatchedNum = kvp.Value;
+                mostMatchedColor = kvp.Key;
+            }
+        }
+        return mostMatchedColor;
+    }
 }
