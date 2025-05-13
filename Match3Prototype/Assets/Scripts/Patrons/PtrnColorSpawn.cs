@@ -78,4 +78,32 @@ public class PtrnColorSpawn : Patron
             levelUp();
         }
     }
+
+    public override string currentDescription()
+    {
+        string desc = "";
+
+        if (targetColor == TargetColor.Red)
+        {
+            desc = "Increase chance of red tiles by " + "<color=\"green\">" + board.redSpawnRate + "x" + "</color>";
+        }
+        if (targetColor == TargetColor.Blue)
+        {
+            desc = "Increase chance of blue tiles by " + "<color=\"green\">" + board.blueSpawnRate + "x" + "</color>";
+        }
+        if (targetColor == TargetColor.Green)
+        {
+            desc = "Increase chance of green tiles by " + "<color=\"green\">" + board.greenSpawnRate + "x" + "</color>";
+        }
+        if (targetColor == TargetColor.Purple)
+        {
+            desc = "Increase chance of purple tiles by " + "<color=\"green\">" + board.purpleSpawnRate + "x" + "</color>";
+        }
+        if (targetColor == TargetColor.Yellow)
+        {
+            desc = "Increase chance of yellow tiles by " + "<color=\"green\">" + board.yellowSpawnRate + "x" + "</color>";
+        }
+
+        return desc;
+    }
 }

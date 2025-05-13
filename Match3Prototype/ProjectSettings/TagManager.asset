@@ -9,6 +9,9 @@ TagManager:
   - red
   - yellow
   - purple
+  - master volume
+  - sfx toggle
+  - music toggle
   layers:
   - Default
   - TransparentFX

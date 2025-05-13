@@ -45,13 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Ranger
-  effectDescription: Increase spawn rate of red tiles
+  effectDescriptions:
+  - + increase spawn rate of red tiles
+  - + increase spawn rate of red tiles
+  - + increase spawn rate of red tiles
+  - + increase spawn rate of red tiles
+  - + increase spawn rate of red tiles
   conditionalEffect: 0
   constantEffect: 1
-  level: 1
+  level: 0
   maxLevel: 5
+  index: 0
   sprite: {fileID: 21300000, guid: 2fe37882a35724642a7d1b446c87d5da, type: 3}
   color: {r: 0.882353, g: 0.15294118, b: 0.27450982, a: 1}
+  patronChoiceUIPrefab: {fileID: 4722271872743335245, guid: 5f7dcdf342e75bd42ba128ab00f3e0ce, type: 3}
   targetColor: 1
   effectTriggered: 1
   spawnRateIncrease: 2

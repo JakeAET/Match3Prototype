@@ -55,4 +55,11 @@ public class PtrnOldWoman : Patron
             levelUp();
         }
     }
+
+    public override string currentDescription()
+    {
+        string desc = "Grants " + "<color=\"green\">" + (level * turnIncrease) + "</color>" + " additional turns per round";
+
+        return desc;
+    }
 }

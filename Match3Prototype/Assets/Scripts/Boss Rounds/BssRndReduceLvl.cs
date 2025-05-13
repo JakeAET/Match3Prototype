@@ -25,7 +25,7 @@ public class BssRndReduceLvl : BossRound
                     actualReduced = p.level - 1;
                 }
 
-                ui.patronSlotUIRefs[p.index].levelDownIcon.SetActive(true);
+                //ui.patronSlotUIRefs[p.index].levelDownIcon.SetActive(true);
 
                 affectedPatrons.Add(p);
                 levelsReducedRef.Add(actualReduced);
@@ -41,7 +41,7 @@ public class BssRndReduceLvl : BossRound
         for (int i = 0; i < affectedPatrons.Count; i++)
         {
             affectedPatrons[i].restoreLevel(levelsReducedRef[i]);
-            ui.patronSlotUIRefs[affectedPatrons[i].index].levelDownIcon.SetActive(false);
+            //ui.patronSlotUIRefs[affectedPatrons[i].index].levelDownIcon.SetActive(false);
         }
         affectedPatrons.Clear();
         levelsReducedRef.Clear();

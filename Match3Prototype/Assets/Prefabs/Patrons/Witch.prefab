@@ -45,13 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Witch
-  effectDescription: A set number of tiles are enchanted each turn
+  effectDescriptions:
+  - + 1 enchanted tile per turn
+  - + 1 enchanted tile per turn
+  - + 1 enchanted tile per turn
+  - + 1 enchanted tile per turn
+  - + 1 enchanted tile per turn
   conditionalEffect: 0
   constantEffect: 1
-  level: 1
+  level: 0
   maxLevel: 5
+  index: 0
   sprite: {fileID: 21300000, guid: c56bf305b66902042a00158c9bf3e7de, type: 3}
   color: {r: 1, g: 0, b: 0.5504589, a: 1}
+  patronChoiceUIPrefab: {fileID: 8781500226177999709, guid: 4558233be1fc543418d160b5265755dd, type: 3}
   spawnElement: 0
   effectTriggered: 0
   initialTileIncrease: 1

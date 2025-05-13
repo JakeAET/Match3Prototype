@@ -45,13 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Wizard
-  effectDescription: A set number of tiles are frozen each turn
+  effectDescriptions:
+  - + 1 ice tile per turn
+  - + 1 ice tile per turn
+  - + 1 ice tile per turn
+  - + 1 ice tile per turn
+  - + 1 ice tile per turn
   conditionalEffect: 0
   constantEffect: 1
-  level: 1
+  level: 0
   maxLevel: 5
+  index: 0
   sprite: {fileID: 21300000, guid: de20d6035a9f339469296be7e00250f7, type: 3}
   color: {r: 0.04545456, g: 0.86363643, b: 1, a: 1}
+  patronChoiceUIPrefab: {fileID: 1816452266360296659, guid: 78493af9f1c9a3d4b8baac52b1bbc152, type: 3}
   spawnElement: 1
   effectTriggered: 0
   initialTileIncrease: 1

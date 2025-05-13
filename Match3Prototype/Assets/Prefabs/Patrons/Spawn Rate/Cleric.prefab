@@ -45,13 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Cleric
-  effectDescription: Increase spawn rate of blue tiles
+  effectDescriptions:
+  - + increase spawn rate of blue tiles
+  - + increase spawn rate of blue tiles
+  - + increase spawn rate of blue tiles
+  - + increase spawn rate of blue tiles
+  - + increase spawn rate of blue tiles
   conditionalEffect: 0
   constantEffect: 1
-  level: 1
+  level: 0
   maxLevel: 5
+  index: 0
   sprite: {fileID: 21300000, guid: 1d702c2b83b6b204089c32f6bda0242f, type: 3}
   color: {r: 0.15294118, g: 0.18823531, b: 0.8980393, a: 1}
+  patronChoiceUIPrefab: {fileID: 7260738392682891224, guid: c14bb6a9803c9ee4f83ecd6ee23d7acb, type: 3}
   targetColor: 2
   effectTriggered: 1
   spawnRateIncrease: 2

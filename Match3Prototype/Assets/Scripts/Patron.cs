@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Patron : MonoBehaviour
 {
     public string title;
-    public string effectDescription;
+    public string[] effectDescriptions;
     public bool conditionalEffect;
     public bool constantEffect;
     public int level = 1;
@@ -13,6 +13,7 @@ public abstract class Patron : MonoBehaviour
     public int index = 0;
     public Sprite sprite;
     public Color color;
+    public GameObject patronChoiceUIPrefab;
 
     public virtual bool conditionMet()
     {
@@ -41,5 +42,10 @@ public abstract class Patron : MonoBehaviour
     public virtual void restoreLevel(int levelNum)
     {
 
+    }
+
+    public virtual string currentDescription()
+    {
+        return "";
     }
 }

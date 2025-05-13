@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 {
     private GameManager gameManager;
     private PatronManager patronManager;
+    private AudioManager audioManager;
 
     [Header("Top Panel")]
     //[SerializeField] TMP_Text scoreText;
@@ -27,6 +28,7 @@ public class UIManager : MonoBehaviour
     [Header("Win Screen")]
     [SerializeField] GameObject winPanel;
     [SerializeField] TMP_Text winRoundText;
+    [SerializeField] TMP_Text choosePatronText;
     [SerializeField] GameObject patronChoicePanel;
     [SerializeField] GameObject patronChoicePrefab;
     public List<GameObject> currentChoicePrefabs;
@@ -35,7 +37,7 @@ public class UIManager : MonoBehaviour
     public List<patronChoiceUI> selectedPatronUIRefs;
     [SerializeField] Button confirmPatronsButton;
     [SerializeField] TMP_Text confirmPatronsBttnText;
-    private string confirmPatronsText;
+    //private string confirmPatronsText;
     public int patronChoiceLimit;
     [SerializeField] TMP_Text skipCountText;
     [SerializeField] Button skipButton;
@@ -70,17 +72,35 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text lossStatsText;
 
     [Header("Patron Panel")]
+    [SerializeField] Slider progressSlider;
+
     public GameObject[] patronSlots;
     public List<PatronTopUI> patronSlotUIRefs;
-    [SerializeField] Slider progressSlider;
+
+    // Win Screen Patron Panel
+    public GameObject[] patronSlotsWS;
+    public List<PatronTopUI> patronSlotUIRefsWS;
+
+    [Header("Patron Info Popup")]
+    private Patron currentInfoPanelPatron;
+    [SerializeField] GameObject patronInfoPanel;
+    [SerializeField] TMP_Text infoPanelTitle;
+    [SerializeField] TMP_Text infoPanelDesc;
+    public GameObject removeButtonObj;
+
+    [Header("Settings Panel")]
+    [SerializeField] Slider masterVolumeSlider;
+    [SerializeField] Toggle musicToggle;
+    [SerializeField] Toggle sfxToggle;
 
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         patronManager = FindObjectOfType<PatronManager>();
+        audioManager = FindObjectOfType<AudioManager>();
 
-        if(gameManager.currentUndos == 0)
+        if (gameManager.currentUndos == 0)
         {
             undoButton.interactable = false;
         }
@@ -88,6 +108,11 @@ public class UIManager : MonoBehaviour
         foreach (GameObject slot in patronSlots)
         {
             patronSlotUIRefs.Add(slot.GetComponent<PatronTopUI>());
+        }
+
+        foreach (GameObject slot in patronSlotsWS)
+        {
+            patronSlotUIRefsWS.Add(slot.GetComponent<PatronTopUI>());
         }
     }
 
@@ -108,7 +133,9 @@ public class UIManager : MonoBehaviour
             sliderValue = 1;
         }
 
-        progressSlider.value = sliderValue;
+
+        DOTween.To(() => progressSlider.value, x => progressSlider.value = x, sliderValue, 0.3f);
+        //progressSlider.value = sliderValue;
     }
 
     public void updateStreak(float num)
@@ -148,36 +175,38 @@ public class UIManager : MonoBehaviour
 
     public void displayWinScreen(bool isBossRound)
     {
-        confirmPatronsButton.interactable = false;
+        //confirmPatronsButton.interactable = false;
         int patronsToChoose = 0;
 
         if (isBossRound)
         {
             patronsToChoose = 5;
             patronChoiceLimit = 2;
-            confirmPatronsText = "Choose two patrons";
+            choosePatronText.text = "Choose " + patronChoiceLimit + " patrons";
+            //confirmPatronsText = "Choose two patrons";
         }
         else
         {
             patronsToChoose = 3;
             patronChoiceLimit = 1;
-            confirmPatronsText = "Choose one patron";
+            choosePatronText.text = "Choose " + patronChoiceLimit + " patron";
+            //confirmPatronsText = "Choose one patron";
         }
 
-        confirmPatronsBttnText.text = confirmPatronsText;
+        //confirmPatronsBttnText.text = confirmPatronsText;
 
         List<Patron> patronOptions = patronManager.selectPatrons(patronsToChoose);
 
         foreach (Patron p in patronOptions)
         {
-            GameObject newPatronChoice = Instantiate(patronChoicePrefab, patronChoicePanel.transform);
+            GameObject newPatronChoice = Instantiate(p.patronChoiceUIPrefab, patronChoicePanel.transform);
             newPatronChoice.GetComponent<patronChoiceUI>().initialize(p);
         }
 
-        foreach (PatronTopUI patronUI in patronSlotUIRefs)
-        {
-            patronUI.removeButtonPanel.SetActive(true);
-        }
+        //foreach (PatronTopUI patronUI in patronSlotUIRefs)
+        //{
+        //    patronUI.removeButtonPanel.SetActive(true);
+        //}
 
         checkPatronSelections();
 
@@ -224,6 +253,7 @@ public class UIManager : MonoBehaviour
             {
                 selectedPatronUIRefs.Add(thisPatronChoice);
                 selectedPatronUIRefs[0].patronToggle.isOn = false;
+                selectedPatronUIRefs[0].patronToggleEffect();
             }
             else
             {
@@ -235,15 +265,15 @@ public class UIManager : MonoBehaviour
             selectedPatronUIRefs.Remove(thisPatronChoice);
             if(selectedPatronUIRefs.Count < patronChoiceLimit)
             {
-                confirmPatronsButton.interactable = false;
-                confirmPatronsBttnText.text = confirmPatronsText;
+                //confirmPatronsButton.interactable = false;
+                //confirmPatronsBttnText.text = confirmPatronsText;
             }
         }
 
         if(selectedPatronUIRefs.Count == patronChoiceLimit)
         {
-            confirmPatronsButton.interactable = true;
-            confirmPatronsBttnText.text = "confirm";
+            //confirmPatronsButton.interactable = true;
+            //confirmPatronsBttnText.text = "confirm";
         }
 
         checkPatronSelections();
@@ -267,12 +297,24 @@ public class UIManager : MonoBehaviour
         patronUIRefs.Clear();
         selectedPatronUIRefs.Clear();
 
-        foreach (PatronTopUI patronUI in patronSlotUIRefs)
-        {
-            patronUI.removeButtonPanel.SetActive(false);
-        }
+        //foreach (PatronTopUI patronUI in patronSlotUIRefs)
+        //{
+        //    patronUI.removeButtonPanel.SetActive(false);
+        //}
 
-        gameManager.startRound();
+        if(gameManager.currentRound == 4)
+        {
+            displayBossInfoPanel(gameManager.currentBossRound);
+
+            if (gameManager.currentBossRound.constantEffect)
+            {
+                gameManager.currentBossRound.activateConstraint();
+            }
+        }
+        else
+        {
+            gameManager.startRound();
+        }
     }
 
     public void refreshPatronSelect()
@@ -292,7 +334,7 @@ public class UIManager : MonoBehaviour
 
         foreach (Patron p in patronOptions)
         {
-            GameObject newPatronChoice = Instantiate(patronChoicePrefab, patronChoicePanel.transform);
+            GameObject newPatronChoice = Instantiate(p.patronChoiceUIPrefab, patronChoicePanel.transform);
             newPatronChoice.GetComponent<patronChoiceUI>().initialize(p);
         }
 
@@ -311,10 +353,10 @@ public class UIManager : MonoBehaviour
         patronUIRefs.Clear();
         selectedPatronUIRefs.Clear();
 
-        foreach (PatronTopUI patronUI in patronSlotUIRefs)
-        {
-            patronUI.removeButtonPanel.SetActive(false);
-        }
+        //foreach (PatronTopUI patronUI in patronSlotUIRefs)
+        //{
+        //    patronUI.removeButtonPanel.SetActive(false);
+        //}
 
         gameManager.startRound();
     }
@@ -383,10 +425,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void removePatronButtonPress(int ptrnIndex)
+    public void removePatronButtonPress()
     {
-        patronManager.removePatron(ptrnIndex);
+        //Debug.Log("removed");
+        patronManager.removePatron(currentInfoPanelPatron.index);
         checkPatronSelections();
+        currentInfoPanelPatron = null;
+        patronInfoPanelHide();
     }
 
     //public void startNextRound()
@@ -420,5 +465,36 @@ public class UIManager : MonoBehaviour
         {
             patronUI.toggleDisable(patronManager.canPatronBeChosen(patronUI.patronRef.index, patronUI.patronChoiceListIndex));
         }
+    }
+
+    public void patronInfoPanelShow(Patron patron)
+    {
+        currentInfoPanelPatron = patron;
+        infoPanelTitle.text = patron.title + " - Lvl " + patron.level;
+        infoPanelDesc.text = patron.currentDescription();
+        patronInfoPanel.GetComponent<RectTransform>().localScale = Vector3.zero;
+        patronInfoPanel.SetActive(true);
+        patronInfoPanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.2f);
+
+    }
+
+    public void patronInfoPanelHide()
+    {
+        patronInfoPanel.SetActive(false);
+    }
+
+    public void masterVolumeUpdate()
+    {
+        audioManager.changeMasterVolume(masterVolumeSlider.value);
+    }
+
+    public void sfxToggleUpdate()
+    {
+        audioManager.muteSFX(!sfxToggle.isOn);
+    }
+
+    public void musicToggleUpdate()
+    {
+        audioManager.muteMusic(!musicToggle.isOn);
     }
 }

@@ -160,15 +160,8 @@ public class GameManager : MonoBehaviour
             {
                 // determine which boss round (change to find this out at the start of the game instead later)
                 determineBossCondition();
-                // tell UI manager which boss round
-                ui.displayBossInfoPanel(currentBossRound);
-
                 bossRound = true;
-
-                if (currentBossRound.constantEffect)
-                {
-                    currentBossRound.activateConstraint();
-                }
+                ui.displayWinScreen(false);
             }
             else if (currentRound == 5)
             {

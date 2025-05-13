@@ -9,7 +9,6 @@ using DG.Tweening.Core.Easing;
 using Unity.VisualScripting;
 using System.Threading;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 public class AudioManager : MonoBehaviour
 {
@@ -19,9 +18,11 @@ public class AudioManager : MonoBehaviour
 
     public bool sfxMuted;
     public bool musicMuted;
+    public float masterVolume;
 
-    public UnityEngine.UI.Toggle sfxToggle;
-    public UnityEngine.UI.Toggle musicToggle;
+    public Toggle sfxToggle;
+    public Toggle musicToggle;
+    public Slider masterVolumeSlider;
 
     void Awake()
     {
@@ -92,6 +93,29 @@ public class AudioManager : MonoBehaviour
         //        GameObject.FindGameObjectWithTag("sfx toggle").GetComponent<AudioToggle>().toggleSetting(!sfxMuted);
         //    }
         //}
+
+        if (SceneManager.GetActiveScene().name == "GameScreen")
+        {
+            if (masterVolumeSlider != null)
+            {
+                masterVolumeSlider = GameObject.FindGameObjectWithTag("master volume").GetComponent<Slider>();
+                masterVolumeSlider.value = masterVolume;
+                AudioListener.volume = masterVolume;
+            }
+
+            if (sfxToggle != null)
+            {
+                sfxToggle = GameObject.FindGameObjectWithTag("sfx toggle").GetComponent<Toggle>();
+                sfxToggle.isOn = !sfxMuted;
+            }
+
+            if (musicToggle != null)
+            {
+                musicToggle = GameObject.FindGameObjectWithTag("music toggle").GetComponent<Toggle>();
+                musicToggle.isOn = !musicMuted;
+
+            }
+        }
     }
 
     public void Play(string name)
@@ -149,6 +173,12 @@ public class AudioManager : MonoBehaviour
         sfxMuted = mute;
 
         //GameObject.FindGameObjectWithTag("sfx toggle").GetComponent<AudioToggle>().toggleSetting(!sfxMuted);
+    }
+
+    public void changeMasterVolume(float volume)
+    {
+        masterVolume = volume;
+        AudioListener.volume = volume;
     }
 
     public void sceneChanged(string sceneName, bool continueMusic)

@@ -55,4 +55,11 @@ public class PtrnZombie : Patron
             levelUp();
         }
     }
+
+    public override string currentDescription()
+    {
+        string desc = "Grants " + "<color=\"green\">" + gm.maxUndos + "</color>" + " turn undos per round";
+
+        return desc;
+    }
 }

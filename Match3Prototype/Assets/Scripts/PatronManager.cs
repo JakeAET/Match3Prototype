@@ -96,17 +96,20 @@ public class PatronManager : MonoBehaviour
             activePatrons.Add(targetPatron);
             targetPatron.index = activePatrons.Count - 1;
             uiManager.patronSlotUIRefs[activePatrons.Count - 1].initialize(targetPatron);
+            uiManager.patronSlotUIRefsWS[activePatrons.Count - 1].initialize(targetPatron);
 
-            if (targetPatron.constantEffect && targetPatron.conditionMet()) //activate constant effect immediately
-            {
-                targetPatron.triggerEffect();
-            }
+            //if (targetPatron.constantEffect && targetPatron.conditionMet()) //activate constant effect immediately
+            //{
+            //    targetPatron.triggerEffect();
+            //}
+
+            targetPatron.levelUp();
         }
     }
 
     public void updatePatronLvl(int ptrnIndex, int lvl)
     {
-        uiManager.patronSlotUIRefs[ptrnIndex].lvlText.text = "" + lvl;
+        //uiManager.patronSlotUIRefs[ptrnIndex].lvlText.text = "" + lvl;
     }
 
     public void removePatron(int ptrnIndex)
@@ -196,10 +199,12 @@ public class PatronManager : MonoBehaviour
             {
                 activePatrons[i].index = i;
                 uiManager.patronSlotUIRefs[i].reassign(activePatrons[i]);
+                uiManager.patronSlotUIRefsWS[i].reassign(activePatrons[i]);
             }
             else
             {
                 uiManager.patronSlotUIRefs[i].clear();
+                uiManager.patronSlotUIRefsWS[i].clear();
             }
         }
     }

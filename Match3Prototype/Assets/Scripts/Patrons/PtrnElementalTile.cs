@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public enum ElementType
@@ -15,6 +16,7 @@ public class PtrnElementalTile : Patron
     public int initialTileIncrease;
     public int lvlUpTileIncrease;
     private BoardManager board;
+    private int currentElemTiles;
 
 
     public override bool conditionMet()
@@ -108,5 +110,22 @@ public class PtrnElementalTile : Patron
         {
             levelUp();
         }
+    }
+
+    public override string currentDescription()
+    {
+        string desc = "";
+
+        if (spawnElement == ElementType.Frozen)
+        {
+            desc = "Each turn, create " + "<color=\"green\">" + board.maxFrozenTiles + "</color>" + " frozen tiles that shatter when adjacent matches are made";
+        }
+
+        if (spawnElement == ElementType.Enchanted)
+        {
+            desc = "Each turn, create " + "<color=\"green\">" + board.maxEnchantedTiles + "</color>" + " enchanted tiles that score for double points";
+        }
+
+        return desc;
     }
 }
