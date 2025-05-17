@@ -62,7 +62,7 @@ public class Element : MonoBehaviour
     public float pointValue = 0;
     public bool isVertRocket = false;
     public bool isHorizRocket = false;
-    private RocketFacing rocketFacing;
+    public RocketFacing rocketFacing;
 
 
     [Header("Board Variables")]

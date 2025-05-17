@@ -99,8 +99,23 @@ public class BoardManager : MonoBehaviour
     public float xSpawnOffsetMult;
     public float ySpawnOffsetMult;
 
-    int[,] prevBoardTilesGrid;
-    int[,] boardTilesGrid;
+    ElementInfo[,] prevBoardTilesGrid;
+    ElementInfo[,] boardTilesGrid;
+
+    //0 = red
+    //1 = blue
+    //2 = green
+    //3 = purple
+    //4 = yellow
+
+    Dictionary<TargetColor, int> targetColorDict = new Dictionary<TargetColor, int>
+    {
+        {TargetColor.Red, 0},
+        {TargetColor.Blue, 1},
+        {TargetColor.Green, 2},
+        {TargetColor.Purple, 3},
+        {TargetColor.Yellow, 4},
+    };
 
     // Boss Round
     public TargetColor banishedType;
@@ -109,8 +124,18 @@ public class BoardManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        prevBoardTilesGrid = new int[width, height];
-        boardTilesGrid = new int[width, height];
+        prevBoardTilesGrid = new ElementInfo[width, height];
+        boardTilesGrid = new ElementInfo[width, height];
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                prevBoardTilesGrid[i,j] = new ElementInfo();
+                boardTilesGrid[i, j] = new ElementInfo();
+            }
+        }
+
         gameManager = FindObjectOfType<GameManager>();
         findMatches = FindObjectOfType<FindMatches>();
         //allTiles = new Tile[width, height];
@@ -129,7 +154,7 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
-                Time.timeScale = 0.2f;
+                Time.timeScale = 0.1f;
             }
         }
 
@@ -320,7 +345,7 @@ public class BoardManager : MonoBehaviour
                                 spawnY = e.row;
                             }
 
-                            if (!e.isScored)
+                            if (!e.isScored && allElements[e.column, e.row] != null)
                             {
                                 finalScore += scoreOfTile(e.column, e.row);
                                 e.isScored = true;
@@ -335,34 +360,37 @@ public class BoardManager : MonoBehaviour
 
                         foreach (Element e in targetElement.vertMatchedElements)
                         {
-                            if (!e.isScored)
+                            if (allElements[e.column, e.row] != null)
                             {
-                                finalScore += scoreOfTile(e.column, e.row);
-                                e.isScored = true;
-                            }
-
-                            if (e.row < minRow)
-                            {
-                                minRow = e.row;
-                            }
-
-                            if (e.row > maxRow)
-                            {
-                                maxRow = e.row;
-                            }
-
-                            if (e.vertMatchLength == e.horizMatchLength)
-                            {
-                                foreach (Element e2 in targetElement.horizMatchedElements)
+                                if (!e.isScored)
                                 {
-                                    if (!e2.isScored)
-                                    {
-                                        finalScore += scoreOfTile(e2.column, e2.row);
-                                        e2.isScored = true;
-                                    }
+                                    finalScore += scoreOfTile(e.column, e.row);
+                                    e.isScored = true;
                                 }
-                                spawnY = e.column;
-                                crossMatchFound = true;
+
+                                if (e.row < minRow)
+                                {
+                                    minRow = e.row;
+                                }
+
+                                if (e.row > maxRow)
+                                {
+                                    maxRow = e.row;
+                                }
+
+                                if (e.vertMatchLength == e.horizMatchLength)
+                                {
+                                    foreach (Element e2 in targetElement.horizMatchedElements)
+                                    {
+                                        if (!e2.isScored && allElements[e2.column, e2.row] != null)
+                                        {
+                                            finalScore += scoreOfTile(e2.column, e2.row);
+                                            e2.isScored = true;
+                                        }
+                                    }
+                                    spawnY = e.column;
+                                    crossMatchFound = true;
+                                }
                             }
                         }
 
@@ -379,34 +407,37 @@ public class BoardManager : MonoBehaviour
 
                         foreach (Element e in targetElement.horizMatchedElements)
                         {
-                            if (!e.isScored)
+                            if (allElements[e.column, e.row] != null)
                             {
-                                finalScore += scoreOfTile(e.column, e.row);
-                                e.isScored = true;
-                            }
-
-                            if (e.column < minColumn)
-                            {
-                                minColumn = e.column;
-                            }
-
-                            if (e.column > maxColumn)
-                            {
-                                maxColumn = e.column;
-                            }
-
-                            if(e.vertMatchLength == e.horizMatchLength)
-                            {
-                                foreach (Element e2 in targetElement.vertMatchedElements)
+                                if (!e.isScored)
                                 {
-                                    if (!e2.isScored)
-                                    {
-                                        finalScore += scoreOfTile(e2.column, e2.row);
-                                        e2.isScored = true;
-                                    }
+                                    finalScore += scoreOfTile(e.column, e.row);
+                                    e.isScored = true;
                                 }
-                                spawnX = e.column;
-                                crossMatchFound = true;
+
+                                if (e.column < minColumn)
+                                {
+                                    minColumn = e.column;
+                                }
+
+                                if (e.column > maxColumn)
+                                {
+                                    maxColumn = e.column;
+                                }
+
+                                if (e.vertMatchLength == e.horizMatchLength)
+                                {
+                                    foreach (Element e2 in targetElement.vertMatchedElements)
+                                    {
+                                        if (!e2.isScored && allElements[e2.column, e2.row] != null)
+                                        {
+                                            finalScore += scoreOfTile(e2.column, e2.row);
+                                            e2.isScored = true;
+                                        }
+                                    }
+                                    spawnX = e.column;
+                                    crossMatchFound = true;
+                                }
                             }
                         }
 
@@ -419,7 +450,7 @@ public class BoardManager : MonoBehaviour
                     {
                         foreach (Element e in targetElement.horizMatchedElements)
                         {
-                            if (!e.isScored)
+                            if (!e.isScored && allElements[e.column, e.row] != null)
                             {
                                 finalScore += scoreOfTile(e.column, e.row);
                                 e.isScored = true;
@@ -428,7 +459,7 @@ public class BoardManager : MonoBehaviour
 
                         foreach (Element e in targetElement.vertMatchedElements)
                         {
-                            if (!e.isScored)
+                            if (!e.isScored && allElements[e.column, e.row] != null)
                             {
                                 finalScore += scoreOfTile(e.column, e.row);
                                 e.isScored = true;
@@ -516,7 +547,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
-                SpawnOnDestroy spawn = targetElement.spawnType;
+            SpawnOnDestroy spawn = targetElement.spawnType;
             TargetColor colorRef = targetElement.color;
             int colorIndexRef = targetElement.colorIndex;
             string tagNameRef = targetElement.colorName;
@@ -541,57 +572,80 @@ public class BoardManager : MonoBehaviour
             if(spawn == SpawnOnDestroy.Bomb)
             {
                 Debug.Log("spawn bomb at " + column + " , " + row);
-                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
-                GameObject newBomb = Instantiate(bombPrefab, targetPos, Quaternion.identity);
-                Element targetSpawned = newBomb.GetComponent<Element>();
-                newBomb.GetComponent<Element>().initializeBomb(colorRef, colorIndexRef, tagNameRef);
-                newBomb.name = targetSpawned.colorName + " Bomb";
-                allElements[column, row] = newBomb;
-                targetSpawned.row = row;
-                targetSpawned.column = column;
-                newBomb.transform.parent = transform;
-                targetSpawned.pointValue = gameManager.baseElementValue;
-                if (targetSpawned.color == banishedType)
-                {
-                    targetSpawned.banish();
-                }
+                spawnBomb(column, row, colorRef, colorIndexRef, tagNameRef);
             }
             else if (spawn == SpawnOnDestroy.VertRocket)
             {
                 Debug.Log("spawn vert rocket at " + column + " , " + row);
-                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
-                GameObject newRocket = Instantiate(rocketPrefab, targetPos, Quaternion.identity);
-                Element targetSpawned = newRocket.GetComponent<Element>();
-                newRocket.GetComponent<Element>().initializeRocket(colorRef, colorIndexRef, tagNameRef, true, false);
-                newRocket.name = targetSpawned.colorName + " Vert Rocket";
-                allElements[column, row] = newRocket;
-                targetSpawned.row = row;
-                targetSpawned.column = column;
-                newRocket.transform.parent = transform;
-                targetSpawned.pointValue = gameManager.baseElementValue;
-                if (targetSpawned.color == banishedType)
-                {
-                    targetSpawned.banish();
-                }
+                spawnRocket(true, column, row, colorRef, colorIndexRef, tagNameRef);
 
             }
             else if (spawn == SpawnOnDestroy.HorizRocket)
             {
                 Debug.Log("spawn horiz rocket at " + column + " , " + row);
-                Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
-                GameObject newRocket = Instantiate(rocketPrefab, targetPos, Quaternion.identity);
-                Element targetSpawned = newRocket.GetComponent<Element>();
-                newRocket.GetComponent<Element>().initializeRocket(colorRef, colorIndexRef, tagNameRef, false, true);
-                newRocket.name = targetSpawned.colorName + " Vert Rocket";
-                allElements[column, row] = newRocket;
-                targetSpawned.row = row;
-                targetSpawned.column = column;
-                newRocket.transform.parent = transform;
-                targetSpawned.pointValue = gameManager.baseElementValue;
-                if (targetSpawned.color == banishedType)
-                {
-                    targetSpawned.banish();
-                }
+                spawnRocket(false, column, row, colorRef, colorIndexRef, tagNameRef);
+            }
+        }
+    }
+
+    public void spawnBomb(int column, int row, TargetColor colorRef, int colorIndexRef, string tagNameRef)
+    {
+        Debug.Log("spawn bomb at " + column + " , " + row);
+        Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+        GameObject newBomb = Instantiate(bombPrefab, targetPos, Quaternion.identity);
+        Element targetSpawned = newBomb.GetComponent<Element>();
+        newBomb.GetComponent<Element>().initializeBomb(colorRef, colorIndexRef, tagNameRef);
+        newBomb.name = targetSpawned.colorName + " Bomb";
+        allElements[column, row] = newBomb;
+        targetSpawned.row = row;
+        targetSpawned.column = column;
+        newBomb.transform.parent = transform;
+        targetSpawned.pointValue = gameManager.baseElementValue;
+        if (targetSpawned.color == banishedType)
+        {
+            targetSpawned.banish();
+        }
+
+
+    }
+
+    public void spawnRocket(bool vertical, int column, int row, TargetColor colorRef, int colorIndexRef, string tagNameRef)
+    {
+        if (vertical)
+        {
+            Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+            GameObject newRocket = Instantiate(rocketPrefab, targetPos, Quaternion.identity);
+            Element targetSpawned = newRocket.GetComponent<Element>();
+            newRocket.GetComponent<Element>().initializeRocket(colorRef, colorIndexRef, tagNameRef, true, false);
+            newRocket.name = targetSpawned.colorName + " Vert Rocket";
+            allElements[column, row] = newRocket;
+            targetSpawned.row = row;
+            targetSpawned.column = column;
+            newRocket.transform.parent = transform;
+            targetSpawned.pointValue = gameManager.baseElementValue;
+            if (targetSpawned.color == banishedType)
+            {
+                targetSpawned.banish();
+            }
+
+
+        }
+        else // horizontal
+        {
+            Debug.Log("spawn horiz rocket at " + column + " , " + row);
+            Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
+            GameObject newRocket = Instantiate(rocketPrefab, targetPos, Quaternion.identity);
+            Element targetSpawned = newRocket.GetComponent<Element>();
+            newRocket.GetComponent<Element>().initializeRocket(colorRef, colorIndexRef, tagNameRef, false, true);
+            newRocket.name = targetSpawned.colorName + " Horiz Rocket";
+            allElements[column, row] = newRocket;
+            targetSpawned.row = row;
+            targetSpawned.column = column;
+            newRocket.transform.parent = transform;
+            targetSpawned.pointValue = gameManager.baseElementValue;
+            if (targetSpawned.color == banishedType)
+            {
+                targetSpawned.banish();
             }
         }
     }
@@ -720,9 +774,6 @@ public class BoardManager : MonoBehaviour
                         maxIterations = 0;
                     }
 
-                    boardTilesGrid[i, j] = elementToUse;
-                    prevBoardTilesGrid[i,j] = elementToUse;
-
                     tempPos = new Vector2(i * xSpawnOffsetMult, (j * ySpawnOffsetMult) + offsetHeight);
                     GameObject element = Instantiate(tileElements[elementToUse], tempPos, Quaternion.identity);
                     element.name = element.GetComponent<Element>().colorName + " Element";
@@ -737,6 +788,20 @@ public class BoardManager : MonoBehaviour
                     {
                         targetElement.banish();
                     }
+
+                    boardTilesGrid[i, j].colorIndex = targetElement.colorIndex;
+                    boardTilesGrid[i, j].colorName = targetElement.colorName;
+                    boardTilesGrid[i, j].targetColor = targetElement.color;
+                    boardTilesGrid[i, j].tileType = targetElement.tileType;
+                    boardTilesGrid[i, j].isEnchanted = targetElement.isEnchanted;
+                    boardTilesGrid[i, j].isFrozen = targetElement.isFrozen;
+
+                    prevBoardTilesGrid[i, j].colorIndex = targetElement.colorIndex;
+                    prevBoardTilesGrid[i, j].colorName = targetElement.colorName;
+                    prevBoardTilesGrid[i, j].targetColor = targetElement.color;
+                    prevBoardTilesGrid[i, j].tileType = targetElement.tileType;
+                    prevBoardTilesGrid[i, j].isEnchanted = targetElement.isEnchanted;
+                    prevBoardTilesGrid[i, j].isFrozen = targetElement.isFrozen;
                 }
             }
         }
@@ -823,12 +888,6 @@ public class BoardManager : MonoBehaviour
 
     private int weightedElementToUse()
     {
-        //0 = red
-        //1 = blue
-        //2 = green
-        //3 = purple
-        //4 = yellow
-
         List<int> elementInts = new List<int>();
 
         for (int i = 0; i < redSpawnRate; i++)
@@ -865,8 +924,21 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                int temp = boardTilesGrid[i, j];
-                prevBoardTilesGrid[i, j] = temp;
+                string colorNameTEMP = boardTilesGrid[i, j].colorName;
+                int colorIndexTEMP = boardTilesGrid[i, j].colorIndex;
+                TargetColor targetColorTEMP = boardTilesGrid[i, j].targetColor;
+                TileType tileTypeTEMP = boardTilesGrid[i, j].tileType;
+                RocketFacing rocketFacingTEMP = boardTilesGrid[i, j].rocketFacing;
+                bool isFrozenTEMP = boardTilesGrid[i, j].isFrozen;
+                bool isEnchantedTEMP = boardTilesGrid[i, j].isEnchanted;
+
+                prevBoardTilesGrid[i, j].colorName = colorNameTEMP;
+                prevBoardTilesGrid[i, j].colorIndex = colorIndexTEMP;
+                prevBoardTilesGrid[i, j].targetColor = targetColorTEMP;
+                prevBoardTilesGrid[i, j].tileType = tileTypeTEMP;
+                prevBoardTilesGrid[i, j].rocketFacing = rocketFacingTEMP;
+                prevBoardTilesGrid[i, j].isFrozen = isFrozenTEMP;
+                prevBoardTilesGrid[i, j].isEnchanted = isFrozenTEMP;
             }
         }
 
@@ -877,7 +949,15 @@ public class BoardManager : MonoBehaviour
                 if (allElements[i, j] != null)
                 {
                     Element elementRef = allElements[i, j].GetComponent<Element>();
-                    boardTilesGrid[elementRef.column, elementRef.row] = elementRef.colorIndex;
+                    //boardTilesGrid[elementRef.column, elementRef.row] = elementRef.colorIndex;
+
+                    boardTilesGrid[elementRef.column, elementRef.row].colorName = elementRef.colorName;
+                    boardTilesGrid[elementRef.column, elementRef.row].colorIndex = elementRef.colorIndex;
+                    boardTilesGrid[elementRef.column, elementRef.row].targetColor = elementRef.color;
+                    boardTilesGrid[elementRef.column, elementRef.row].tileType = elementRef.tileType;
+                    boardTilesGrid[elementRef.column, elementRef.row].rocketFacing = elementRef.rocketFacing;
+                    boardTilesGrid[elementRef.column, elementRef.row].isFrozen = elementRef.isFrozen;
+                    boardTilesGrid[elementRef.column, elementRef.row].isEnchanted = elementRef.isEnchanted;
                 }
             }
         }
@@ -896,15 +976,67 @@ public class BoardManager : MonoBehaviour
                 {
                     Vector2 tempPos = new Vector2(i, j + offsetHeight);
 
-                    int elementToUse = prevBoardTilesGrid[i, j];
-                    boardTilesGrid[i, j] = elementToUse;
+                    // determine the color from old grid
+                    string colorNameTEMP = prevBoardTilesGrid[i, j].colorName;
+                    int colorIndexTEMP = prevBoardTilesGrid[i, j].colorIndex;
+                    TargetColor targetColorTEMP = prevBoardTilesGrid[i, j].targetColor;
+                    TileType tileTypeTEMP = prevBoardTilesGrid[i, j].tileType;
+                    RocketFacing rocketFacingTEMP = prevBoardTilesGrid[i, j].rocketFacing;
+                    bool isFrozenTEMP = prevBoardTilesGrid[i, j].isFrozen;
+                    bool isEnchantedTEMP = prevBoardTilesGrid[i, j].isEnchanted;
 
-                    GameObject element = Instantiate(tileElements[elementToUse], tempPos, Quaternion.identity);
-                    element.name = element.GetComponent<Element>().colorName + " Element";
-                    allElements[i, j] = element;
-                    element.GetComponent<Element>().row = j;
-                    element.GetComponent<Element>().column = i;
-                    element.transform.parent = transform;
+                    int elementToUse = targetColorDict[prevBoardTilesGrid[i, j].targetColor];
+
+                    if (prevBoardTilesGrid[i, j].tileType == TileType.Gem)
+                    {
+                        GameObject element = Instantiate(tileElements[elementToUse], tempPos, Quaternion.identity);
+                        element.name = element.GetComponent<Element>().colorName + " Element";
+                        allElements[i, j] = element;
+                        element.GetComponent<Element>().row = j;
+                        element.GetComponent<Element>().column = i;
+                        element.transform.parent = transform;
+
+                        if (prevBoardTilesGrid[i, j].isFrozen)
+                        {
+                            element.GetComponent<Element>().enchantElement();
+                        }
+
+                        if (prevBoardTilesGrid[i, j].isFrozen)
+                        {
+                            element.GetComponent<Element>().freezeElement();
+
+                        }
+                    }
+
+                    if (prevBoardTilesGrid[i, j].tileType == TileType.Rocket)
+                    {
+
+                        //horiz
+                        if(prevBoardTilesGrid[i, j].rocketFacing == RocketFacing.Left || prevBoardTilesGrid[i, j].rocketFacing == RocketFacing.Right)
+                        {
+                            spawnRocket(false, i, j, prevBoardTilesGrid[i, j].targetColor, prevBoardTilesGrid[i, j].colorIndex, prevBoardTilesGrid[i, j].colorName);
+                        }
+
+                        // vert
+                        if (prevBoardTilesGrid[i, j].rocketFacing == RocketFacing.Up || prevBoardTilesGrid[i, j].rocketFacing == RocketFacing.Down)
+                        {
+                            spawnRocket(true, i, j, prevBoardTilesGrid[i, j].targetColor, prevBoardTilesGrid[i, j].colorIndex, prevBoardTilesGrid[i, j].colorName);
+                        }
+                    }
+
+                    if (prevBoardTilesGrid[i, j].tileType == TileType.Bomb)
+                    {
+                        spawnBomb(i, j, prevBoardTilesGrid[i, j].targetColor, prevBoardTilesGrid[i, j].colorIndex, prevBoardTilesGrid[i, j].colorName);
+                    }
+
+                    // reassign current grid
+                    boardTilesGrid[i, j].colorName = colorNameTEMP;
+                    boardTilesGrid[i, j].colorIndex = colorIndexTEMP;
+                    boardTilesGrid[i, j].targetColor = targetColorTEMP;
+                    boardTilesGrid[i, j].tileType = tileTypeTEMP;
+                    boardTilesGrid[i, j].rocketFacing = rocketFacingTEMP;
+                    boardTilesGrid[i, j].isFrozen = isFrozenTEMP;
+                    boardTilesGrid[i, j].isEnchanted = isFrozenTEMP;
                 }
             }
         }
