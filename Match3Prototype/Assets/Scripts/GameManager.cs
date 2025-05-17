@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
     public void turnEnded()
     {
         //UnityEngine.Debug.Log("turn " + (maxTurns - currentTurn) + " ended - current score:  " + currentScore);
-        board.reassignTileIDs();
         if (currentScore >= currentTargetScore) // game ends, won
         {
             if(currentScore > bestScore)

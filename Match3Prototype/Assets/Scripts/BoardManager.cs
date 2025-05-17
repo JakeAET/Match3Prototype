@@ -163,6 +163,7 @@ public class BoardManager : MonoBehaviour
         {
             case GameState.Waiting:
 
+
                 break;
 
             case GameState.SettingBoard:
@@ -938,7 +939,7 @@ public class BoardManager : MonoBehaviour
                 prevBoardTilesGrid[i, j].tileType = tileTypeTEMP;
                 prevBoardTilesGrid[i, j].rocketFacing = rocketFacingTEMP;
                 prevBoardTilesGrid[i, j].isFrozen = isFrozenTEMP;
-                prevBoardTilesGrid[i, j].isEnchanted = isFrozenTEMP;
+                prevBoardTilesGrid[i, j].isEnchanted = isEnchantedTEMP;
             }
         }
 
@@ -990,21 +991,28 @@ public class BoardManager : MonoBehaviour
                     if (prevBoardTilesGrid[i, j].tileType == TileType.Gem)
                     {
                         GameObject element = Instantiate(tileElements[elementToUse], tempPos, Quaternion.identity);
-                        element.name = element.GetComponent<Element>().colorName + " Element";
+                        Element elementRef = element.GetComponent<Element>();
+                        element.name = elementRef.colorName + " Element";
                         allElements[i, j] = element;
-                        element.GetComponent<Element>().row = j;
-                        element.GetComponent<Element>().column = i;
+                        elementRef.row = j;
+                        elementRef.column = i;
                         element.transform.parent = transform;
 
-                        if (prevBoardTilesGrid[i, j].isFrozen)
+                        if (prevBoardTilesGrid[i, j].isEnchanted)
                         {
-                            element.GetComponent<Element>().enchantElement();
+                            elementRef.enchantElement();
+                            currentEnchantedTiles++;
                         }
 
                         if (prevBoardTilesGrid[i, j].isFrozen)
                         {
-                            element.GetComponent<Element>().freezeElement();
+                            elementRef.freezeElement();
+                            currentFrozenTiles++;
+                        }
 
+                        if (elementRef.color == banishedType)
+                        {
+                            elementRef.banish();
                         }
                     }
 
@@ -1036,7 +1044,7 @@ public class BoardManager : MonoBehaviour
                     boardTilesGrid[i, j].tileType = tileTypeTEMP;
                     boardTilesGrid[i, j].rocketFacing = rocketFacingTEMP;
                     boardTilesGrid[i, j].isFrozen = isFrozenTEMP;
-                    boardTilesGrid[i, j].isEnchanted = isFrozenTEMP;
+                    boardTilesGrid[i, j].isEnchanted = isEnchantedTEMP;
                 }
             }
         }
@@ -1243,6 +1251,7 @@ public class BoardManager : MonoBehaviour
                     {
                         turnEnded();
                     }
+                    reassignTileIDs();
                     currentState = GameState.Waiting;
                     enchantedTilesCreated = false;
                     frozenTilesCreated = false;

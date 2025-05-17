@@ -5712,7 +5712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd86eb834766c38469dd8769eb8dbfd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTargetScore: 0
+  baseTargetScore: 1000
   roundScoreIncMult: 0.5
   gameScoreIncMult: 2
   extraHighPointMulti: 1
@@ -5724,7 +5724,7 @@ MonoBehaviour:
   enchantedTileMulti: 2
   maxTurns: 10
   currentTurn: 0
-  maxUndos: 5
+  maxUndos: 0
   currentUndos: 0
   undoAllowed: 0
   maxRefreshes: 1
