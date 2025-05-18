@@ -98,7 +98,9 @@ public class GameManager : MonoBehaviour
             ui.refreshCountUpdate(currentRefreshes);
         }
 
-        startRound();
+        determineBossCondition();
+        FindObjectOfType<LevelProgress>().levelProgressStart();
+        //startRound();
     }
 
     // Update is called once per frame
@@ -158,7 +160,6 @@ public class GameManager : MonoBehaviour
             if(currentRound == 4) // Boss Round
             {
                 // determine which boss round (change to find this out at the start of the game instead later)
-                determineBossCondition();
                 bossRound = true;
                 ui.displayWinScreen(false);
             }
@@ -179,6 +180,7 @@ public class GameManager : MonoBehaviour
                     if (currentBossRound.constantEffect)
                     {
                         currentBossRound.deactivateConstraint();
+                        determineBossCondition();
                     }
                 }
             }

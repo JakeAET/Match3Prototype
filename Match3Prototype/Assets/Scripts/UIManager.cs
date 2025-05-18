@@ -297,24 +297,26 @@ public class UIManager : MonoBehaviour
         patronUIRefs.Clear();
         selectedPatronUIRefs.Clear();
 
+        FindObjectOfType<LevelProgress>().levelProgressStart();
+
         //foreach (PatronTopUI patronUI in patronSlotUIRefs)
         //{
         //    patronUI.removeButtonPanel.SetActive(false);
         //}
 
-        if(gameManager.currentRound == 4)
-        {
-            displayBossInfoPanel(gameManager.currentBossRound);
+        //if(gameManager.currentRound == 4)
+        //{
+        //    displayBossInfoPanel(gameManager.currentBossRound);
 
-            if (gameManager.currentBossRound.constantEffect)
-            {
-                gameManager.currentBossRound.activateConstraint();
-            }
-        }
-        else
-        {
-            gameManager.startRound();
-        }
+        //    if (gameManager.currentBossRound.constantEffect)
+        //    {
+        //        gameManager.currentBossRound.activateConstraint();
+        //    }
+        //}
+        //else
+        //{
+        //    gameManager.startRound();
+        //}
     }
 
     public void refreshPatronSelect()
@@ -358,7 +360,7 @@ public class UIManager : MonoBehaviour
         //    patronUI.removeButtonPanel.SetActive(false);
         //}
 
-        gameManager.startRound();
+        FindObjectOfType<LevelProgress>().levelProgressStart();
     }
 
     public void undoButtonPress()

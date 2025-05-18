@@ -78,7 +78,7 @@ public class patronChoiceUI : MonoBehaviour
 
         startPtrnPos = patronImgObj.transform.localPosition;
         startPtrnScaleSize = patronImgObj.transform.localScale;
-        patronImgObj.transform.parent = coveredMask.transform;
+        patronImgObj.transform.SetParent(coveredMask.transform);
 
 
         //patronToggle.onValueChanged.AddListener(() => ui.patronBttn(patron));
@@ -117,7 +117,7 @@ public class patronChoiceUI : MonoBehaviour
             outline.effectDistance = new Vector2(8, -8);
 
             //StartCoroutine(delayedMaskSet(fullMask, patronImgObj, tweenSpeed));
-            patronImgObj.transform.parent = fullMask.transform;
+            patronImgObj.transform.SetParent(fullMask.transform);
         }
         else
         {
@@ -141,7 +141,7 @@ public class patronChoiceUI : MonoBehaviour
     private IEnumerator delayedMaskSet(GameObject mask, GameObject patronImg, float delay)
     {
         yield return new WaitForSeconds(delay);
-        patronImg.transform.parent = mask.transform;
+        patronImg.transform.SetParent(mask.transform);
     }
 
     public void toggleDisable(bool isInteractable)
