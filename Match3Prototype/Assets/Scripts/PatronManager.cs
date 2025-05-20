@@ -115,6 +115,8 @@ public class PatronManager : MonoBehaviour
     public void removePatron(int ptrnIndex)
     {
         GameObject targetPatron = activePatrons[ptrnIndex].gameObject;
+        Patron patronRef = targetPatron.GetComponent<Patron>();
+        patronRef.reduceLevel(patronRef.level);
         activePatrons.RemoveAt(ptrnIndex);
         Destroy(targetPatron);
         reassignTopUIPatrons();

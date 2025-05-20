@@ -17,6 +17,16 @@ public class GameManager : MonoBehaviour
     public float currentTargetScore = 0;
 
     public float baseElementValue;
+    public float bonusBaseElementValue;
+    public Dictionary<TargetColor, float> colorElementIncrease = new Dictionary<TargetColor, float>
+    {
+        {TargetColor.Red, 0 },
+        {TargetColor.Blue, 0},
+        {TargetColor.Green, 0 },
+        {TargetColor.Purple, 0},
+        {TargetColor.Yellow, 0 }
+    };
+
     public float largeMatchBonus;
     public float streakValue = 1;
     public float enchantedTileMulti;
@@ -61,17 +71,17 @@ public class GameManager : MonoBehaviour
     public float bestScore;
     public int matchesMade;
     public int tilesCleared;
-    public Dictionary<string, int> colorTilesCleared = new Dictionary<string, int>();
+    public Dictionary<string, int> colorTilesCleared = new Dictionary<string, int>
+    {
+        {"red", 0 },
+        {"blue", 0},
+        {"green", 0 },
+        {"purple", 0},
+        {"yellow", 0 }
+    };
 
     void Start()
     {
-        colorTilesCleared.Add("red", 0);
-        colorTilesCleared.Add("blue", 0);
-        colorTilesCleared.Add("green", 0);
-        colorTilesCleared.Add("purple", 0);
-        colorTilesCleared.Add("yellow", 0);
-
-        //Application.targetFrameRate = 24;
 
         foreach (BossRound br in bossRounds)
         {

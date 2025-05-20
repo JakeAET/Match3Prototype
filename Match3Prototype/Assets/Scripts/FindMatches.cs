@@ -7,6 +7,7 @@ public class FindMatches : MonoBehaviour
     private BoardManager board;
     private GameManager gameManager;
     public List<GameObject> currentMatches = new List<GameObject>();
+    public bool rogueCanTrigger = false;
 
     // Start is called before the first frame update
     void Start()
@@ -242,8 +243,24 @@ public class FindMatches : MonoBehaviour
                 }
             }
         }
+
         //Debug.Log("Count: " + currentMatches.Count);
         bool matchesFound = (currentMatches.Count > 0);
+
+        // check for rogue effect
+        if (rogueCanTrigger)
+        {
+            foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+            {
+                if (patron.title == "Rogue")
+                {
+                    Debug.Log("Rogue triggered");
+                    patron.triggerEffect();
+                    matchesFound = true;
+                    rogueCanTrigger = false;
+                }
+            }
+        }
 
         if (matchesFound)
         {

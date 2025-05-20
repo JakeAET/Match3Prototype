@@ -163,7 +163,6 @@ public class BoardManager : MonoBehaviour
         {
             case GameState.Waiting:
 
-
                 break;
 
             case GameState.SettingBoard:
@@ -317,7 +316,7 @@ public class BoardManager : MonoBehaviour
                 float spawnX = column;
                 float spawnY = row;
 
-                if (!targetElement.isFrozen)
+                if (horizMatchLength > 0 || vertMatchLength > 0 || targetElement.specialMatchedElements.Count > 0)
                 {
                     if (targetElement.isBombMatch)
                     {
@@ -327,6 +326,7 @@ public class BoardManager : MonoBehaviour
                             {
                                 spawnX = e.column;
                                 spawnY = e.row;
+
                             }
 
                             if (!e.isScored)
@@ -344,6 +344,7 @@ public class BoardManager : MonoBehaviour
                             {
                                 spawnX = e.column;
                                 spawnY = e.row;
+
                             }
 
                             if (!e.isScored && allElements[e.column, e.row] != null)
@@ -526,6 +527,16 @@ public class BoardManager : MonoBehaviour
 
             if(targetElement.tileType == TileType.Bomb)
             {
+                // check for bomblin
+                foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+                {
+                    if (patron.title == "Bomblin")
+                    {
+                        Debug.Log("bomblin patron increasing base points");
+                        patron.triggerEffect();
+                    }
+                }
+
                 Vector2 targetPosHoriz = new Vector2(width/2 * xSpawnOffsetMult,row * ySpawnOffsetMult);
                 GameObject horizExplosion = Instantiate(bombExplosionPrefab, targetPosHoriz, Quaternion.identity);
                 horizExplosion.transform.eulerAngles = new Vector3(0, 0, 90);
@@ -534,6 +545,16 @@ public class BoardManager : MonoBehaviour
             }
             else if (targetElement.tileType == TileType.Rocket)
             {
+                // check for dwarf
+                foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+                {
+                    if (patron.title == "Dwarf")
+                    {
+                        Debug.Log("dwarf patron increasing base points");
+                        patron.triggerEffect();
+                    }
+                }
+
                 if (targetElement.isHorizRocket)
                 {
                     Vector2 targetPosHoriz = new Vector2(width / 2 * xSpawnOffsetMult, row * ySpawnOffsetMult);
@@ -601,7 +622,6 @@ public class BoardManager : MonoBehaviour
         targetSpawned.row = row;
         targetSpawned.column = column;
         newBomb.transform.parent = transform;
-        targetSpawned.pointValue = gameManager.baseElementValue;
         if (targetSpawned.color == banishedType)
         {
             targetSpawned.banish();
@@ -623,7 +643,6 @@ public class BoardManager : MonoBehaviour
             targetSpawned.row = row;
             targetSpawned.column = column;
             newRocket.transform.parent = transform;
-            targetSpawned.pointValue = gameManager.baseElementValue;
             if (targetSpawned.color == banishedType)
             {
                 targetSpawned.banish();
@@ -643,7 +662,6 @@ public class BoardManager : MonoBehaviour
             targetSpawned.row = row;
             targetSpawned.column = column;
             newRocket.transform.parent = transform;
-            targetSpawned.pointValue = gameManager.baseElementValue;
             if (targetSpawned.color == banishedType)
             {
                 targetSpawned.banish();
@@ -733,7 +751,6 @@ public class BoardManager : MonoBehaviour
                     targetElement.row = j;
                     targetElement.column = i;
                     element.transform.parent = transform;
-                    targetElement.pointValue = gameManager.baseElementValue;
                     if (targetElement.color == banishedType)
                     {
                         targetElement.banish();
@@ -783,7 +800,6 @@ public class BoardManager : MonoBehaviour
                     targetElement.row = j;
                     targetElement.column = i;
                     element.transform.parent = transform;
-                    targetElement.pointValue = gameManager.baseElementValue;
 
                     if(targetElement.color == banishedType)
                     {
@@ -853,36 +869,7 @@ public class BoardManager : MonoBehaviour
     {
         turnStarted = false;
         matchStreak = 1;
-        //int red = 0;
-        //int blue = 0;
-        //int orange = 0;
-        //int yellow = 0;
-        //int green = 0;
-        //foreach (Element element in roundMatches)
-        //{
-        //    if (element.colorName == "Red")
-        //    {
-        //        red++;
-        //    }
-        //    if (element.colorName == "Blue")
-        //    {
-        //        blue++;
-        //    }
-        //    if (element.colorName == "Orange")
-        //    {
-        //        orange++;
-        //    }
-        //    if (element.colorName == "Yellow")
-        //    {
-        //        yellow++;
-        //    }
-        //    if (element.colorName == "Green")
-        //    {
-        //        green++;
-        //    }
-        //}
-        //Debug.Log("turn " + (gameManager.maxTurns - gameManager.currentTurn) + " - red: " + red + " , blue: " + blue + " , orange: " + orange + " , yellow: " + yellow + " , green: " + green);
-        //Debug.Log("all matches collapsed");
+        findMatches.rogueCanTrigger = true;
         roundMatches.Clear();
         gameManager.turnEnded();
     }
@@ -991,28 +978,27 @@ public class BoardManager : MonoBehaviour
                     if (prevBoardTilesGrid[i, j].tileType == TileType.Gem)
                     {
                         GameObject element = Instantiate(tileElements[elementToUse], tempPos, Quaternion.identity);
-                        Element elementRef = element.GetComponent<Element>();
-                        element.name = elementRef.colorName + " Element";
+                        element.name = element.GetComponent<Element>().colorName + " Element";
                         allElements[i, j] = element;
-                        elementRef.row = j;
-                        elementRef.column = i;
+                        element.GetComponent<Element>().row = j;
+                        element.GetComponent<Element>().column = i;
                         element.transform.parent = transform;
+                        if (element.GetComponent<Element>().color == banishedType)
+                        {
+                            element.GetComponent<Element>().banish();
+                        }
 
                         if (prevBoardTilesGrid[i, j].isEnchanted)
                         {
-                            elementRef.enchantElement();
+                            element.GetComponent<Element>().enchantElement();
                             currentEnchantedTiles++;
                         }
 
                         if (prevBoardTilesGrid[i, j].isFrozen)
                         {
-                            elementRef.freezeElement();
+                            element.GetComponent<Element>().freezeElement();
                             currentFrozenTiles++;
-                        }
 
-                        if (elementRef.color == banishedType)
-                        {
-                            elementRef.banish();
                         }
                     }
 
@@ -1105,6 +1091,24 @@ public class BoardManager : MonoBehaviour
     private float scoreOfTile(int column, int row)
     {
         Element targetElement = allElements[column, row].GetComponent<Element>();
+
+        if (targetElement.isBanished)
+        {
+            targetElement.pointValue = 0;
+        }
+        else
+        {
+            targetElement.pointValue = gameManager.colorElementIncrease[targetElement.color] + gameManager.baseElementValue + gameManager.bonusBaseElementValue;
+
+            // check for scout
+            foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+            {
+                if (patron.title == "Scout")
+                {
+                    targetElement.pointValue += patron.GetComponent<PtrnScout>().increaseAmount(targetElement.colorName);
+                }
+            }
+        }
 
         float scoreIncrease = targetElement.pointValue * basePointDebuff;
         float scoreMulti = 0;

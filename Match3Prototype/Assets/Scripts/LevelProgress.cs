@@ -16,6 +16,7 @@ public class LevelProgress : MonoBehaviour
 
     [SerializeField] GameObject levelProgressPanel;
     [SerializeField] Image background;
+    [SerializeField] Image blackScreen;
     [SerializeField] GameObject arrows;
     [SerializeField] GameObject[] levelObjs;
     [SerializeField] TMP_Text bossLevelText;
@@ -31,6 +32,9 @@ public class LevelProgress : MonoBehaviour
         ui = FindObjectOfType<UIManager>();
         //arrowStartY = arrows.GetComponent<RectTransform>().localPosition.y;
         arrows.SetActive(false);
+        Color color = blackScreen.color;
+        color.a = 1f;
+        blackScreen.color = color;
     }
 
     // Update is called once per frame
@@ -46,12 +50,20 @@ public class LevelProgress : MonoBehaviour
 
     private IEnumerator levelProgressAnim()
     {
+        if(gameManager == null)
+        {
+            gameManager = FindObjectOfType<GameManager>();
+        }
         // turn on panel
 
         if (!(gameManager.currentGame == 1 && gameManager.currentRound == 0))
         {
             levelProgressPanel.transform.localScale = Vector3.zero;
-            levelProgressPanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f);
+            levelProgressPanel.GetComponent<RectTransform>().DOScale(Vector3.one, 0.2f);
+            blackScreen.DOFade(1, 0.2f);
+            yield return new WaitForSeconds(0.2f);
+            ui.winPanel.SetActive(false);
+            ui.clearPatronOptions();
         }
         
         levelProgressPanel.SetActive(true);
@@ -61,7 +73,8 @@ public class LevelProgress : MonoBehaviour
         {
             RectTransform contRect = container.GetComponent<RectTransform>();
             contRect.transform.position = new Vector3(contRect.transform.position.x, -2000, contRect.transform.position.z);
-            contRect.DOLocalMoveY(0, 0.5f);
+            contRect.DOLocalMoveY(0, 0.8f);
+            blackScreen.DOFade(0, 0.2f);
 
             arrows.SetActive(false);
             arrows.GetComponent<RectTransform>().localScale = Vector3.one;
@@ -81,7 +94,8 @@ public class LevelProgress : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(0.5f);
+            blackScreen.DOFade(0, 0.2f);
+            yield return new WaitForSeconds(0.8f);
             Image img = levelObjs[gameManager.currentRound - 1].GetComponent<Image>();
             Color baseColor = new Color(levelColors[gameManager.currentRound - 1].r * 0.2f, levelColors[gameManager.currentRound - 1].g * 0.2f, levelColors[gameManager.currentRound - 1].b * 0.2f, 0.9f);
             img.color = baseColor;
@@ -98,10 +112,18 @@ public class LevelProgress : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
+        blackScreen.DOFade(1, 0.2f);
+
+        yield return new WaitForSeconds(0.2f);
+
         //else: shift arrows up, activate current level
 
         // turn off panel
         levelProgressPanel.SetActive(false);
+
+        blackScreen.DOFade(0, 0.2f);
+
+        yield return new WaitForSeconds(0.2f);
 
         // trigger level start or boss level screen
         if (gameManager.currentRound == 4)

@@ -118,12 +118,12 @@ public class PtrnElementalTile : Patron
 
         if (spawnElement == ElementType.Frozen)
         {
-            desc = "Each turn, create " + "<color=\"green\">" + board.maxFrozenTiles + "</color>" + " frozen tiles that shatter when adjacent matches are made";
+            desc = "Each turn, create " + "<color=\"green\">" + board.maxFrozenTiles + "</color>" + " frozen tile(s) that shatter when adjacent matches are made";
         }
 
         if (spawnElement == ElementType.Enchanted)
         {
-            desc = "Each turn, create " + "<color=\"green\">" + board.maxEnchantedTiles + "</color>" + " enchanted tiles that score for double points";
+            desc = "Each turn, create " + "<color=\"green\">" + board.maxEnchantedTiles + "</color>" + " enchanted tile(s) that score for double points";
         }
 
         return desc;

@@ -63,6 +63,7 @@ public class Element : MonoBehaviour
     public bool isVertRocket = false;
     public bool isHorizRocket = false;
     public RocketFacing rocketFacing;
+    public bool isBanished = false;
 
 
     [Header("Board Variables")]
@@ -355,6 +356,7 @@ public class Element : MonoBehaviour
     public IEnumerator CheckMove()
     {
         yield return new WaitForSeconds(0f);
+
         board.startFindingMatches();
     }
 
@@ -494,7 +496,7 @@ public class Element : MonoBehaviour
 
     public void banish()
     {
-        pointValue = 0;
+        isBanished = true;
         banishedIcon.SetActive(true);
     }
 

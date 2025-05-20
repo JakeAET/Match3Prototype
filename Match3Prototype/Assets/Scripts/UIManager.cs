@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
     //[SerializeField] TMP_Text targetScoreText;
 
     [Header("Win Screen")]
-    [SerializeField] GameObject winPanel;
+    public GameObject winPanel;
     [SerializeField] TMP_Text winRoundText;
     [SerializeField] TMP_Text choosePatronText;
     [SerializeField] GameObject patronChoicePanel;
@@ -281,42 +281,7 @@ public class UIManager : MonoBehaviour
 
     public void confirmPatronSelect()
     {
-        winPanel.SetActive(false);
-
-        foreach (patronChoiceUI patronUI in selectedPatronUIRefs)
-        {
-            patronManager.selectNewPatron(patronUI.patronRef);
-        }
-
-        for (int i = 0; i < currentChoicePrefabs.Count; i++)
-        {
-            GameObject objToDestroy = currentChoicePrefabs[i];
-            Destroy(objToDestroy);
-        }
-        currentChoicePrefabs.Clear();
-        patronUIRefs.Clear();
-        selectedPatronUIRefs.Clear();
-
         FindObjectOfType<LevelProgress>().levelProgressStart();
-
-        //foreach (PatronTopUI patronUI in patronSlotUIRefs)
-        //{
-        //    patronUI.removeButtonPanel.SetActive(false);
-        //}
-
-        //if(gameManager.currentRound == 4)
-        //{
-        //    displayBossInfoPanel(gameManager.currentBossRound);
-
-        //    if (gameManager.currentBossRound.constantEffect)
-        //    {
-        //        gameManager.currentBossRound.activateConstraint();
-        //    }
-        //}
-        //else
-        //{
-        //    gameManager.startRound();
-        //}
     }
 
     public void refreshPatronSelect()
@@ -345,7 +310,16 @@ public class UIManager : MonoBehaviour
 
     public void skipPatronSelect()
     {
-        winPanel.SetActive(false);
+        FindObjectOfType<LevelProgress>().levelProgressStart();
+    }
+
+    public void clearPatronOptions()
+    {
+        foreach (patronChoiceUI patronUI in selectedPatronUIRefs)
+        {
+            patronManager.selectNewPatron(patronUI.patronRef);
+        }
+
         for (int i = 0; i < currentChoicePrefabs.Count; i++)
         {
             GameObject objToDestroy = currentChoicePrefabs[i];
@@ -354,13 +328,6 @@ public class UIManager : MonoBehaviour
         currentChoicePrefabs.Clear();
         patronUIRefs.Clear();
         selectedPatronUIRefs.Clear();
-
-        //foreach (PatronTopUI patronUI in patronSlotUIRefs)
-        //{
-        //    patronUI.removeButtonPanel.SetActive(false);
-        //}
-
-        FindObjectOfType<LevelProgress>().levelProgressStart();
     }
 
     public void undoButtonPress()

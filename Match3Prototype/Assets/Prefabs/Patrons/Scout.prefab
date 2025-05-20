@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7770736717283512635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8067568201655505590}
+  - component: {fileID: -985337790670252451}
+  m_Layer: 0
+  m_Name: Scout
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8067568201655505590
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7770736717283512635}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-985337790670252451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7770736717283512635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43a9fd2f97610af4d9fea8cb5e130f79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Scout
+  effectDescriptions:
+  - + 2 base tile score to the least matched tile
+  - + 2 base tile score to the least matched tile
+  - + 2 base tile score to the least matched tile
+  - + 2 base tile score to the least matched tile
+  - + 2 base tile score to the least matched tile
+  conditionalEffect: 0
+  constantEffect: 1
+  level: 0
+  maxLevel: 5
+  index: 0
+  sprite: {fileID: 21300000, guid: c394cbd1c0c5a5d4fb40a3c8fe376edd, type: 3}
+  color: {r: 0.08317016, g: 0.8396226, b: 0.5329833, a: 1}
+  patronChoiceUIPrefab: {fileID: 5863754952809736263, guid: fdb2656d0e24c62488f819f74bc987a9, type: 3}
+  initialPointIncrease: 2
+  pointIncrease: 2
