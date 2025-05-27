@@ -47,9 +47,9 @@ MonoBehaviour:
   title: Ranger
   effectDescriptions:
   - + increase spawn rate of red tiles
+  - + 5 point increase to red tiles
   - + increase spawn rate of red tiles
-  - + increase spawn rate of red tiles
-  - + increase spawn rate of red tiles
+  - + 5 point increase to red tiles
   - + increase spawn rate of red tiles
   conditionalEffect: 0
   constantEffect: 1
@@ -60,5 +60,6 @@ MonoBehaviour:
   color: {r: 0.882353, g: 0.15294118, b: 0.27450982, a: 1}
   patronChoiceUIPrefab: {fileID: 4722271872743335245, guid: 5f7dcdf342e75bd42ba128ab00f3e0ce, type: 3}
   targetColor: 1
-  effectTriggered: 1
+  effectTriggered: 0
   spawnRateIncrease: 2
+  pointIncrease: 5

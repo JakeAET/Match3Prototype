@@ -396,8 +396,30 @@ public class UIManager : MonoBehaviour
 
     public void removePatronButtonPress()
     {
+        GameObject targetPatron = patronManager.activePatrons[currentInfoPanelPatron.index].gameObject;
+        Patron patronRefTemp = targetPatron.GetComponent<Patron>();
+
         //Debug.Log("removed");
         patronManager.removePatron(currentInfoPanelPatron.index);
+
+        foreach(patronChoiceUI patron in patronUIRefs)
+        {
+            if(patron.patronRef == patronRefTemp)
+            {
+                foreach (Patron p in patronManager.potentialPatrons)
+                {
+                    if(p.title == patronRefTemp.title)
+                    {
+                        patronRefTemp = p;
+                        break;
+                    }
+                }
+
+                patron.initialize(patronRefTemp);
+                break;
+            }
+        }
+
         checkPatronSelections();
         currentInfoPanelPatron = null;
         patronInfoPanelHide();

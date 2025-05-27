@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PatronManager : MonoBehaviour
 {
-    [SerializeField] Patron[] potentialPatrons;
+    public Patron[] potentialPatrons;
     public List<Patron> activePatrons;
     private UIManager uiManager;
 

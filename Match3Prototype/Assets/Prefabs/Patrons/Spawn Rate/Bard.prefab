@@ -47,9 +47,9 @@ MonoBehaviour:
   title: Bard
   effectDescriptions:
   - + increase spawn rate of purple tiles
+  - + 5 point increase to purple tiles
   - + increase spawn rate of purple tiles
-  - + increase spawn rate of purple tiles
-  - + increase spawn rate of purple tiles
+  - + 5 point increase to purple tiles
   - + increase spawn rate of purple tiles
   conditionalEffect: 0
   constantEffect: 1
@@ -62,3 +62,4 @@ MonoBehaviour:
   targetColor: 4
   effectTriggered: 0
   spawnRateIncrease: 2
+  pointIncrease: 5

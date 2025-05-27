@@ -11,6 +11,11 @@ public class patronChoiceUI : MonoBehaviour
 {
     [SerializeField] float tweenSpeed;
 
+    [SerializeField] Sprite normalSprite;
+    [SerializeField] Sprite selectedSprite;
+    [SerializeField] Sprite disabledSprite;
+    [SerializeField] Image backgroundImg;
+
     [SerializeField] TMP_Text titleTxt;
     [SerializeField] TMP_Text levelUpTxt;
     [SerializeField] TMP_Text descriptionTxt;
@@ -20,9 +25,9 @@ public class patronChoiceUI : MonoBehaviour
     [SerializeField] GameObject disabledButtonCover;
     [SerializeField] GameObject disabledPatronCover;
 
-    [SerializeField] GameObject backgroundImg;
-    [SerializeField] Color offColor;
-    [SerializeField] Color onColor;
+    [SerializeField] GameObject backgroundObj;
+    //[SerializeField] Color offColor;
+    //[SerializeField] Color onColor;
 
     private Vector3 startPtrnScaleSize;
     private Vector3 startPtrnPos;
@@ -107,14 +112,16 @@ public class patronChoiceUI : MonoBehaviour
             patronImgObj.GetComponent<RectTransform>().DOScale(endPtrnScaleSize, tweenSpeed);
             patronImgObj.GetComponent<RectTransform>().DOLocalMoveY(endtPtrnPos.y, tweenSpeed);
             // adjust gradient
-            backgroundImg.GetComponent<Image>().color = onColor;
+            //backgroundImg.GetComponent<Image>().color = onColor;
+
+            backgroundImg.sprite = selectedSprite;
 
             // change outline color
-            Outline outline = backgroundImg.GetComponent<Outline>();
-            Color newColor = outline.effectColor;
-            newColor.a = 1f;
-            outline.effectColor = newColor;
-            outline.effectDistance = new Vector2(8, -8);
+            //Outline outline = backgroundImg.GetComponent<Outline>();
+            //Color newColor = outline.effectColor;
+            //newColor.a = 1f;
+            //outline.effectColor = newColor;
+            //outline.effectDistance = new Vector2(8, -8);
 
             //StartCoroutine(delayedMaskSet(fullMask, patronImgObj, tweenSpeed));
             patronImgObj.transform.SetParent(fullMask.transform);
@@ -124,14 +131,16 @@ public class patronChoiceUI : MonoBehaviour
             patronImgObj.GetComponent<RectTransform>().DOScale(startPtrnScaleSize, tweenSpeed);
             patronImgObj.GetComponent<RectTransform>().DOLocalMoveY(startPtrnPos.y, tweenSpeed);
             // adjust gradient
-            backgroundImg.GetComponent<Image>().color = offColor;
+            //backgroundImg.GetComponent<Image>().color = offColor;
+
+            backgroundImg.sprite = normalSprite;
 
             // change outline color
-            Outline outline = backgroundImg.GetComponent<Outline>();
-            Color newColor = outline.effectColor;
-            newColor.a = 0.3f;
-            outline.effectColor = newColor;
-            outline.effectDistance = new Vector2(3, -3);
+            //Outline outline = backgroundImg.GetComponent<Outline>();
+            //Color newColor = outline.effectColor;
+            //newColor.a = 0.3f;
+            //outline.effectColor = newColor;
+            //outline.effectDistance = new Vector2(3, -3);
 
             StartCoroutine(delayedMaskSet(coveredMask, patronImgObj, tweenSpeed));
             //patronImgObj.transform.parent = coveredMask.transform;
@@ -151,6 +160,15 @@ public class patronChoiceUI : MonoBehaviour
             disabledButtonCover.SetActive(false);
             disabledPatronCover.SetActive(false);
             patronToggle.interactable = true;
+
+            if (patronToggle.isOn)
+            {
+                backgroundImg.sprite = selectedSprite;
+            }
+            else
+            {
+                backgroundImg.sprite = normalSprite;
+            }
         }
         else
         {
@@ -163,6 +181,8 @@ public class patronChoiceUI : MonoBehaviour
                 patronToggle.isOn = false;
                 ui.patronToggle(this, patronToggle.isOn);
             }
+
+            backgroundImg.sprite = disabledSprite;
         }
     }
 }

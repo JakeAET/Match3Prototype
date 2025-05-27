@@ -47,9 +47,9 @@ MonoBehaviour:
   title: Cleric
   effectDescriptions:
   - + increase spawn rate of blue tiles
+  - + 5 point increase to blue tiles
   - + increase spawn rate of blue tiles
-  - + increase spawn rate of blue tiles
-  - + increase spawn rate of blue tiles
+  - + 5 point increase to blue tiles
   - + increase spawn rate of blue tiles
   conditionalEffect: 0
   constantEffect: 1
@@ -60,5 +60,6 @@ MonoBehaviour:
   color: {r: 0.15294118, g: 0.18823531, b: 0.8980393, a: 1}
   patronChoiceUIPrefab: {fileID: 7260738392682891224, guid: c14bb6a9803c9ee4f83ecd6ee23d7acb, type: 3}
   targetColor: 2
-  effectTriggered: 1
+  effectTriggered: 0
   spawnRateIncrease: 2
+  pointIncrease: 5

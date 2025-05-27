@@ -200,7 +200,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 25
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -355,7 +355,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1350966868799631309
 RectTransform:
   m_ObjectHideFlags: 0
@@ -482,7 +482,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -2134253970, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -491,7 +491,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.4
+  m_PixelsPerUnitMultiplier: 3.5
 --- !u!114 &333335654936740078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,14 +672,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2509804, g: 0.10588236, b: 0.27450982, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -2134253970, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -688,7 +688,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.4
+  m_PixelsPerUnitMultiplier: 3.5
 --- !u!114 &3425311373445055405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5384203495061255296}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
@@ -798,7 +798,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 25
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1044,7 +1044,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 43.1
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1174,7 +1174,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -2134253970, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1183,7 +1183,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.4
+  m_PixelsPerUnitMultiplier: 3.5
 --- !u!114 &453061194440152731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1263,15 +1263,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenSpeed: 0.1
+  normalSprite: {fileID: -2134253970, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
+  selectedSprite: {fileID: 2084349183, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
+  disabledSprite: {fileID: -241561689, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
+  backgroundImg: {fileID: 8993900459948517669}
   titleTxt: {fileID: 7620914360511369275}
   levelUpTxt: {fileID: 2476230649807904869}
   descriptionTxt: {fileID: 317517385607051356}
   patronImgObj: {fileID: 4748362425408182704}
   disabledButtonCover: {fileID: 9059709871417635422}
   disabledPatronCover: {fileID: 1461251795597545851}
-  backgroundImg: {fileID: 5384203495061255296}
-  offColor: {r: 0.2509804, g: 0.10588236, b: 0.27450982, a: 1}
-  onColor: {r: 0.81005377, g: 0.45109472, b: 0.8773585, a: 1}
+  backgroundObj: {fileID: 0}
   endPtrnScaleFactor: 0
   endPtrnYFactor: 0
   fullMask: {fileID: 5943174246232670975}
@@ -1298,7 +1300,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1310,8 +1312,8 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 2084349183, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
+    m_DisabledSprite: {fileID: -241561689, guid: 0d8b036e3c1fbcb45b32bc2b864db90d, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted

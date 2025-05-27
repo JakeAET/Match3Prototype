@@ -47,9 +47,9 @@ MonoBehaviour:
   title: Druid
   effectDescriptions:
   - + increase spawn rate of green tiles
+  - + 5 point increase to green tiles
   - + increase spawn rate of green tiles
-  - + increase spawn rate of green tiles
-  - + increase spawn rate of green tiles
+  - + 5 point increase to green tiles
   - + increase spawn rate of green tiles
   conditionalEffect: 0
   constantEffect: 1
@@ -60,5 +60,6 @@ MonoBehaviour:
   color: {r: 0.3372549, g: 0.9607844, b: 0.35686275, a: 1}
   patronChoiceUIPrefab: {fileID: 4277362776417541944, guid: 9a48f65b0a97eb242a973654a9af881e, type: 3}
   targetColor: 3
-  effectTriggered: 1
+  effectTriggered: 0
   spawnRateIncrease: 2
+  pointIncrease: 5

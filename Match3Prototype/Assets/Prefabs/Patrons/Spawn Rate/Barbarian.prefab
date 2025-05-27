@@ -47,9 +47,9 @@ MonoBehaviour:
   title: Barbarian
   effectDescriptions:
   - + increase spawn rate of yellow tiles
+  - + 5 point increase to yellow tiles
   - + increase spawn rate of yellow tiles
-  - + increase spawn rate of yellow tiles
-  - + increase spawn rate of yellow tiles
+  - + 5 point increase to yellow tiles
   - + increase spawn rate of yellow tiles
   conditionalEffect: 0
   constantEffect: 1
@@ -62,3 +62,4 @@ MonoBehaviour:
   targetColor: 5
   effectTriggered: 0
   spawnRateIncrease: 2
+  pointIncrease: 5
