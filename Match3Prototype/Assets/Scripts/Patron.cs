@@ -5,9 +5,11 @@ using UnityEngine;
 public abstract class Patron : MonoBehaviour
 {
     public string title;
+    public Ability[] abilitiesByLevel;
+    public List<Ability> activeAbilites;
     public string[] effectDescriptions;
-    public bool conditionalEffect;
-    public bool constantEffect;
+    //public bool conditionalEffect;
+    //public bool constantEffect;
     public int level = 1;
     public int maxLevel = 5;
     public int index = 0;
@@ -22,7 +24,7 @@ public abstract class Patron : MonoBehaviour
 
     public virtual void triggerEffect()
     {
-        // 
+
     }
 
     public virtual void levelUp()
@@ -46,6 +48,30 @@ public abstract class Patron : MonoBehaviour
 
     public virtual string currentDescription()
     {
-        return "";
+        string desc = "";
+
+        foreach (Ability ability in activeAbilites)
+        {
+            desc += ability.description();
+            desc += "\n";
+        }
+
+        return desc;
+    }
+
+    public Ability existingAbility(Ability ability)
+    {
+        Ability abilityRef = null;
+
+        foreach (Ability a in activeAbilites)
+        {
+            if(a.title == ability.title)
+            {
+                abilityRef = a;
+            }
+        }
+
+        // returns null if doesn't exist already
+        return abilityRef;
     }
 }
