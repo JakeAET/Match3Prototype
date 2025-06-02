@@ -51,6 +51,9 @@ public class Element : MonoBehaviour
     [SerializeField] private GameObject banishedIcon;
     [SerializeField] private GameObject lightFlash;
     [SerializeField] private GameObject rocketTrail;
+    [SerializeField] private Material enchantedMaterial;
+    [SerializeField] private SpriteRenderer gemSprite;
+    [SerializeField] private SpriteRenderer iceFrontSprite;
     public GameObject burstEffectPrefab;
     public string colorName;
     public int colorIndex;
@@ -492,6 +495,15 @@ public class Element : MonoBehaviour
     {
         isEnchanted = true;
         enchantedEffect.SetActive(true);
+
+        if (isFrozen)
+        {
+            iceFrontSprite.material = enchantedMaterial;
+        }
+        else
+        {
+            gemSprite.material = enchantedMaterial;
+        }
     }
 
     public void banish()

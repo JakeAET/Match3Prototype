@@ -207,14 +207,6 @@ public class BoardManager : MonoBehaviour
                 break;
 
             case GameState.CreateElementalTiles:
-                if (maxEnchantedTiles > currentEnchantedTiles)
-                {
-                    StartCoroutine(checkToSpawnEnchanted(0f));
-                }
-                else
-                {
-                    enchantedTilesCreated = true;
-                }
 
                 if (maxFrozenTiles > currentFrozenTiles)
                 {
@@ -223,6 +215,15 @@ public class BoardManager : MonoBehaviour
                 else
                 {
                     frozenTilesCreated = true;
+                }
+
+                if (maxEnchantedTiles > currentEnchantedTiles)
+                {
+                    StartCoroutine(checkToSpawnEnchanted(0f));
+                }
+                else
+                {
+                    enchantedTilesCreated = true;
                 }
 
                 break;
