@@ -45,14 +45,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Barbarian
-  effectDescriptions:
   - + increase spawn rate of yellow tiles
-  - + 5 point increase to yellow tiles
-  - + increase spawn rate of yellow tiles
-  - + 5 point increase to yellow tiles
-  - + increase spawn rate of yellow tiles
-  conditionalEffect: 0
-  constantEffect: 1
+  abilitiesByLevel:
+  - {fileID: -2070211374988286704, guid: 1e0ba756585c5904987966aff42148a9, type: 3}
+  - {fileID: -4044266900215361019, guid: 02534cc5b932d8741acb98a1dc109517, type: 3}
+  - {fileID: -2070211374988286704, guid: 1e0ba756585c5904987966aff42148a9, type: 3}
+  - {fileID: -4044266900215361019, guid: 02534cc5b932d8741acb98a1dc109517, type: 3}
+  - {fileID: -2070211374988286704, guid: 1e0ba756585c5904987966aff42148a9, type: 3}
+  activeAbilites: []
+  effectDescriptions: []
   level: 0
   maxLevel: 5
   index: 0
