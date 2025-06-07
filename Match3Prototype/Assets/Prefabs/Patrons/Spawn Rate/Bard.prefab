@@ -45,14 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Bard
+  abilitiesByLevel:
+  - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
+  - {fileID: 1016457447748494144, guid: 22d70501e478247578f4ea296753027c, type: 3}
+  - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
+  - {fileID: 1016457447748494144, guid: 22d70501e478247578f4ea296753027c, type: 3}
+  - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
+  activeAbilites: []
   effectDescriptions:
   - + increase spawn rate of purple tiles
   - + 5 point increase to purple tiles
   - + increase spawn rate of purple tiles
   - + 5 point increase to purple tiles
   - + increase spawn rate of purple tiles
-  conditionalEffect: 0
-  constantEffect: 1
   level: 0
   maxLevel: 5
   index: 0

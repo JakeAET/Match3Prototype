@@ -45,14 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Ranger
+  abilitiesByLevel:
+  - {fileID: 8997689360247144916, guid: 31ce0eee368d94a139267477d01a850a, type: 3}
+  - {fileID: 1016457447748494144, guid: a35921148889c451e834e4a013123442, type: 3}
+  - {fileID: 8997689360247144916, guid: 31ce0eee368d94a139267477d01a850a, type: 3}
+  - {fileID: 1016457447748494144, guid: a35921148889c451e834e4a013123442, type: 3}
+  - {fileID: 8997689360247144916, guid: 31ce0eee368d94a139267477d01a850a, type: 3}
+  activeAbilites: []
   effectDescriptions:
   - + increase spawn rate of red tiles
   - + 5 point increase to red tiles
   - + increase spawn rate of red tiles
   - + 5 point increase to red tiles
   - + increase spawn rate of red tiles
-  conditionalEffect: 0
-  constantEffect: 1
   level: 0
   maxLevel: 5
   index: 0

@@ -44,14 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fedffc4b3eb9f844da3d6bdc37f40e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Barbarian
-  - + increase spawn rate of yellow tiles
+  title: Barbarian - + increase spawn rate of yellow tiles
   abilitiesByLevel:
-  - {fileID: -2070211374988286704, guid: 1e0ba756585c5904987966aff42148a9, type: 3}
-  - {fileID: -4044266900215361019, guid: 02534cc5b932d8741acb98a1dc109517, type: 3}
-  - {fileID: -2070211374988286704, guid: 1e0ba756585c5904987966aff42148a9, type: 3}
-  - {fileID: -4044266900215361019, guid: 02534cc5b932d8741acb98a1dc109517, type: 3}
-  - {fileID: -2070211374988286704, guid: 1e0ba756585c5904987966aff42148a9, type: 3}
+  - {fileID: 8997689360247144916, guid: 2f775f108664d4715b79382557a380e4, type: 3}
+  - {fileID: 1016457447748494144, guid: 463abeb76eac24aaa93fa5b029b44a80, type: 3}
+  - {fileID: 8997689360247144916, guid: 2f775f108664d4715b79382557a380e4, type: 3}
+  - {fileID: 1016457447748494144, guid: 463abeb76eac24aaa93fa5b029b44a80, type: 3}
+  - {fileID: 8997689360247144916, guid: 2f775f108664d4715b79382557a380e4, type: 3}
   activeAbilites: []
   effectDescriptions: []
   level: 0

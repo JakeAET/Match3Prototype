@@ -44,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257bcf42eed17452c93f3109f28488b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: Color Point Increase
   conditionalEffect: 0
   constantEffect: 0
   canTrigger: 1
-  level: 1
-  maxLevel: 1
-  pointIncrease: 0
+  level: 0
+  maxLevel: 2
+  pointIncrease: 3
   targetColor: 0

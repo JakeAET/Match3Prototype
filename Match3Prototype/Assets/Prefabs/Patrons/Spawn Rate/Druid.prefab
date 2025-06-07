@@ -45,14 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Druid
+  abilitiesByLevel:
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  activeAbilites: []
   effectDescriptions:
   - + increase spawn rate of green tiles
   - + 5 point increase to green tiles
   - + increase spawn rate of green tiles
   - + 5 point increase to green tiles
   - + increase spawn rate of green tiles
-  conditionalEffect: 0
-  constantEffect: 1
   level: 0
   maxLevel: 5
   index: 0

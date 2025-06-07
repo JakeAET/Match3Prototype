@@ -45,14 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Cleric
+  abilitiesByLevel:
+  - {fileID: 8997689360247144916, guid: 5a2149bf0eb9e4f50bdb9771abd478ba, type: 3}
+  - {fileID: 1016457447748494144, guid: 1d046805616bd4445a9bc5f444019ab4, type: 3}
+  - {fileID: 8997689360247144916, guid: 5a2149bf0eb9e4f50bdb9771abd478ba, type: 3}
+  - {fileID: 1016457447748494144, guid: 1d046805616bd4445a9bc5f444019ab4, type: 3}
+  - {fileID: 8997689360247144916, guid: 5a2149bf0eb9e4f50bdb9771abd478ba, type: 3}
+  activeAbilites: []
   effectDescriptions:
   - + increase spawn rate of blue tiles
   - + 5 point increase to blue tiles
   - + increase spawn rate of blue tiles
   - + 5 point increase to blue tiles
   - + increase spawn rate of blue tiles
-  conditionalEffect: 0
-  constantEffect: 1
   level: 0
   maxLevel: 5
   index: 0
