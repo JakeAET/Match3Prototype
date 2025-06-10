@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4096960775488407641
 Transform:
   m_ObjectHideFlags: 0
@@ -52,19 +52,11 @@ MonoBehaviour:
   - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
   - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
   activeAbilites: []
-  effectDescriptions:
-  - + increase spawn rate of green tiles
-  - + 5 point increase to green tiles
-  - + increase spawn rate of green tiles
-  - + 5 point increase to green tiles
-  - + increase spawn rate of green tiles
   level: 0
-  maxLevel: 5
+  maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: 7846211b85d1e954cb6b66618de8c9a0, type: 3}
   color: {r: 0.3372549, g: 0.9607844, b: 0.35686275, a: 1}
   patronChoiceUIPrefab: {fileID: 4277362776417541944, guid: 9a48f65b0a97eb242a973654a9af881e, type: 3}
   targetColor: 3
   effectTriggered: 0
-  spawnRateIncrease: 2
-  pointIncrease: 5

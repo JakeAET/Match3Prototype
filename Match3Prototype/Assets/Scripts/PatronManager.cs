@@ -93,6 +93,8 @@ public class PatronManager : MonoBehaviour
         else
         {
             targetPatron = Instantiate(patron);
+            targetPatron.initialize();
+            targetPatron.transform.SetParent(gameObject.transform);
             activePatrons.Add(targetPatron);
             targetPatron.index = activePatrons.Count - 1;
             uiManager.patronSlotUIRefs[activePatrons.Count - 1].initialize(targetPatron);

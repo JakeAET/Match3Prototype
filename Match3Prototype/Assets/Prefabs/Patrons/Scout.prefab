@@ -45,19 +45,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Scout
-  effectDescriptions:
-  - + 2 base tile score to the least matched tile
-  - + 2 base tile score to the least matched tile
-  - + 2 base tile score to the least matched tile
-  - + 2 base tile score to the least matched tile
-  - + 2 base tile score to the least matched tile
-  conditionalEffect: 0
-  constantEffect: 1
+  abilitiesByLevel:
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  activeAbilites: []
   level: 0
-  maxLevel: 5
+  maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: c394cbd1c0c5a5d4fb40a3c8fe376edd, type: 3}
   color: {r: 0.08317016, g: 0.8396226, b: 0.5329833, a: 1}
   patronChoiceUIPrefab: {fileID: 5863754952809736263, guid: fdb2656d0e24c62488f819f74bc987a9, type: 3}
-  initialPointIncrease: 2
-  pointIncrease: 2

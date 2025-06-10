@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &982039656846264243
 Transform:
   m_ObjectHideFlags: 0
@@ -45,20 +45,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Bomblin
-  effectDescriptions:
-  - + 1 base tile score per bomb launched
-  - + 1 base tile score per bomb launched
-  - + 1 base tile score per bomb launched
-  - + 1 base tile score per bomb launched
-  - + 1 base tile score per bomb launched
-  conditionalEffect: 0
-  constantEffect: 1
+  abilitiesByLevel:
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  activeAbilites: []
   level: 0
-  maxLevel: 5
+  maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: f9e7febdc7667c64b99a5fb73dbcf204, type: 3}
   color: {r: 0.8666667, g: 0, b: 0.007767614, a: 1}
   patronChoiceUIPrefab: {fileID: 5863754952809736263, guid: 7e2c88cdeaa784e47bac920994f4570f, type: 3}
-  type: 1
-  initalLvlUpTileIncrease: 1
-  lvlUpTileIncrease: 1

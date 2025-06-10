@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &982039656846264243
 Transform:
   m_ObjectHideFlags: 0
@@ -45,17 +45,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Zombie
-  effectDescriptions:
-  - + 1 undo per round
-  - + 1 undo per round
-  - + 1 undo per round
-  conditionalEffect: 0
-  constantEffect: 1
+  abilitiesByLevel:
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  activeAbilites: []
   level: 0
-  maxLevel: 3
+  maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: 1099278beec681e41ba63bd386bee1d6, type: 3}
   color: {r: 0.65384126, g: 1, b: 0.624, a: 1}
   patronChoiceUIPrefab: {fileID: 7881080776616740945, guid: 0e1c526ac95eec64d8c7f2e600f0cdcd, type: 3}
   effectTriggered: 0
-  undoIncrease: 1

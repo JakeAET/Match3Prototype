@@ -121,6 +121,14 @@ public class BoardManager : MonoBehaviour
     public TargetColor banishedType;
     public float basePointDebuff = 1;
 
+    // Events
+    public delegate void TileDestroyed();
+    public static event TileDestroyed OnRocketDestroyed;
+    public static event TileDestroyed OnBombDestroyed;
+
+    public delegate float ScoutTrigger(string colorName);
+    public static event ScoutTrigger OnScoutTrigger;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -528,14 +536,9 @@ public class BoardManager : MonoBehaviour
 
             if(targetElement.tileType == TileType.Bomb)
             {
-                // check for bomblin
-                foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+                if(OnBombDestroyed != null)
                 {
-                    if (patron.title == "Bomblin")
-                    {
-                        Debug.Log("bomblin patron increasing base points");
-                        patron.triggerEffect();
-                    }
+                    OnBombDestroyed();
                 }
 
                 Vector2 targetPosHoriz = new Vector2(width/2 * xSpawnOffsetMult,row * ySpawnOffsetMult);
@@ -546,14 +549,9 @@ public class BoardManager : MonoBehaviour
             }
             else if (targetElement.tileType == TileType.Rocket)
             {
-                // check for dwarf
-                foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+                if (OnRocketDestroyed != null)
                 {
-                    if (patron.title == "Dwarf")
-                    {
-                        Debug.Log("dwarf patron increasing base points");
-                        patron.triggerEffect();
-                    }
+                    OnRocketDestroyed();
                 }
 
                 if (targetElement.isHorizRocket)
@@ -1102,12 +1100,17 @@ public class BoardManager : MonoBehaviour
             targetElement.pointValue = gameManager.colorElementIncrease[targetElement.color] + gameManager.baseElementValue + gameManager.bonusBaseElementValue;
 
             // check for scout
-            foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+            //foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+            //{
+            //    if (patron.title == "Scout")
+            //    {
+            //        targetElement.pointValue += patron.GetComponent<PtrnScout>().increaseAmount(targetElement.colorName);
+            //    }
+            //}
+
+            if (OnScoutTrigger != null)
             {
-                if (patron.title == "Scout")
-                {
-                    targetElement.pointValue += patron.GetComponent<PtrnScout>().increaseAmount(targetElement.colorName);
-                }
+                targetElement.pointValue += OnScoutTrigger(targetElement.colorName);
             }
         }
 

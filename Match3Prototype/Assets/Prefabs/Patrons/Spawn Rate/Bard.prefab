@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &982039656846264243
 Transform:
   m_ObjectHideFlags: 0
@@ -52,19 +52,11 @@ MonoBehaviour:
   - {fileID: 1016457447748494144, guid: 22d70501e478247578f4ea296753027c, type: 3}
   - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
   activeAbilites: []
-  effectDescriptions:
-  - + increase spawn rate of purple tiles
-  - + 5 point increase to purple tiles
-  - + increase spawn rate of purple tiles
-  - + 5 point increase to purple tiles
-  - + increase spawn rate of purple tiles
   level: 0
-  maxLevel: 5
+  maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: 2b22ee2f633314940bc317eda4f53046, type: 3}
   color: {r: 0.6039216, g: 0.19607845, b: 0.9058824, a: 1}
   patronChoiceUIPrefab: {fileID: 8135142262022621938, guid: 5646582ec1981eb41879c333528396cb, type: 3}
   targetColor: 4
   effectTriggered: 0
-  spawnRateIncrease: 2
-  pointIncrease: 5

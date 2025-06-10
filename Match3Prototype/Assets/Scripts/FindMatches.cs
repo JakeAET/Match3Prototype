@@ -9,6 +9,9 @@ public class FindMatches : MonoBehaviour
     public List<GameObject> currentMatches = new List<GameObject>();
     public bool rogueCanTrigger = false;
 
+    public delegate void RogueTrigger();
+    public static event RogueTrigger OnRogueTrigger;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -250,15 +253,11 @@ public class FindMatches : MonoBehaviour
         // check for rogue effect
         if (rogueCanTrigger)
         {
-            foreach (Patron patron in FindObjectOfType<PatronManager>().activePatrons)
+            if (OnRogueTrigger != null)
             {
-                if (patron.title == "Rogue")
-                {
-                    Debug.Log("Rogue triggered");
-                    patron.triggerEffect();
-                    matchesFound = true;
-                    rogueCanTrigger = false;
-                }
+                OnRogueTrigger();
+                matchesFound = true;
+                rogueCanTrigger = false;
             }
         }
 

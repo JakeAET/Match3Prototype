@@ -43,6 +43,18 @@ PrefabInstance:
       propertyPath: burstEffectPrefab
       value: 
       objectReference: {fileID: 6269695655630198732, guid: 6f332549e703c7c4ba11973a02d3aa5b, type: 3}
+    - target: {fileID: 3197791837128543761, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3404678062910266255, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35998178
+      objectReference: {fileID: 0}
+    - target: {fileID: 3404678062910266255, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0441
+      objectReference: {fileID: 0}
     - target: {fileID: 3829458100372691615, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -87,6 +99,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6575341310540453342, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35998178
+      objectReference: {fileID: 0}
+    - target: {fileID: 6575341310540453342, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0441
+      objectReference: {fileID: 0}
+    - target: {fileID: 7118715720449165828, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35998178
+      objectReference: {fileID: 0}
+    - target: {fileID: 7118715720449165828, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0441
+      objectReference: {fileID: 0}
     - target: {fileID: 7225419870597372579, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_Name
       value: Tile Element Yellow
@@ -94,6 +122,14 @@ PrefabInstance:
     - target: {fileID: 7225419870597372579, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_TagString
       value: yellow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495471852829134040, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35998178
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495471852829134040, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0441
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}

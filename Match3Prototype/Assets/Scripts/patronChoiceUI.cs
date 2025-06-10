@@ -75,7 +75,18 @@ public class patronChoiceUI : MonoBehaviour
         {
             levelUpTxt.text = "Lvl " + patronRef.level + " -> Lvl " + (patronRef.level + 1);
         }
-        descriptionTxt.text = patronRef.effectDescriptions[patronRef.level];
+
+        Ability nextAbility = patronRef.existingAbility(patronRef.abilitiesByLevel[patronRef.level]);
+
+        if (nextAbility != null)
+        {
+            descriptionTxt.text = nextAbility.patronSelectDescription();
+        }
+        else
+        {
+            descriptionTxt.text = patronRef.abilitiesByLevel[patronRef.level].patronSelectDescription();
+        }
+
         ui = FindObjectOfType<UIManager>();
         ui.currentChoicePrefabs.Add(gameObject);
         ui.patronUIRefs.Add(this);

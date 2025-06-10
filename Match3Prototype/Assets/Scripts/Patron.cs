@@ -7,7 +7,6 @@ public abstract class Patron : MonoBehaviour
     public string title;
     public Ability[] abilitiesByLevel;
     public List<Ability> activeAbilites;
-    public string[] effectDescriptions;
     //public bool conditionalEffect;
     //public bool constantEffect;
     public int level = 1;
@@ -16,6 +15,11 @@ public abstract class Patron : MonoBehaviour
     public Sprite sprite;
     public Color color;
     public GameObject patronChoiceUIPrefab;
+
+    public virtual void initialize()
+    {
+        determineMaxLevel();
+    }
 
     public virtual bool conditionMet()
     {
@@ -33,17 +37,43 @@ public abstract class Patron : MonoBehaviour
         {
             level++;
             FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
+
+            Ability ability = existingAbility(abilitiesByLevel[level - 1]);
+
+            if (ability != null) // already exists
+            {
+                ability.levelUp();
+            }
+            else // new ability
+            {
+                ability = Instantiate(abilitiesByLevel[level - 1]);
+                ability.transform.SetParent(gameObject.transform);
+                activeAbilites.Add(ability);
+                ability.patron = this;
+                ability.initialize();
+                ability.levelUp();
+            }
         }
     }
 
     public virtual void reduceLevel(int levelNum)
     {
+        for (int i = 0; i < levelNum; i++)
+        {
+            Ability ability = abilitiesByLevel[level - 1];
+            existingAbility(ability).undoAbility(1);
 
+            level--;
+            FindObjectOfType<PatronManager>().updatePatronLvl(index, level);
+        }
     }
 
     public virtual void restoreLevel(int levelNum)
     {
-
+        for (int i = 0; i < levelNum; i++)
+        {
+            levelUp();
+        }
     }
 
     public virtual string currentDescription()
@@ -73,5 +103,10 @@ public abstract class Patron : MonoBehaviour
 
         // returns null if doesn't exist already
         return abilityRef;
+    }
+
+    public virtual void determineMaxLevel()
+    {
+        maxLevel = abilitiesByLevel.Length;
     }
 }

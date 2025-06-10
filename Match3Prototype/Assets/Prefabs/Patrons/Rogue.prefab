@@ -45,16 +45,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Rogue
-  effectDescriptions:
-  - +1 random tile destroyed each swap
-  - +1 random tile destroyed each swap
-  - +1 random tile destroyed each swap
-  conditionalEffect: 0
-  constantEffect: 1
+  abilitiesByLevel:
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  activeAbilites: []
   level: 0
   maxLevel: 3
   index: 0
   sprite: {fileID: 21300000, guid: 0f263a2bf16154d4aa891c8c6c24f2fe, type: 3}
   color: {r: 0.8301887, g: 0, b: 0.7047498, a: 1}
   patronChoiceUIPrefab: {fileID: 5863754952809736263, guid: aecc5babdb6d45f4e8ae8a5b64f0ef5b, type: 3}
-  tilesDestroyedIncrease: 1

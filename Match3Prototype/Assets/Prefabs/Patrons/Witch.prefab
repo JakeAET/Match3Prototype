@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &982039656846264243
 Transform:
   m_ObjectHideFlags: 0
@@ -45,16 +45,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Witch
-  effectDescriptions:
-  - + 1 enchanted tile per turn
-  - + 1 enchanted tile per turn
-  - + 1 enchanted tile per turn
-  - + 1 enchanted tile per turn
-  - + 1 enchanted tile per turn
-  conditionalEffect: 0
-  constantEffect: 1
+  abilitiesByLevel:
+  - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  activeAbilites: []
   level: 0
-  maxLevel: 5
+  maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: c56bf305b66902042a00158c9bf3e7de, type: 3}
   color: {r: 1, g: 0, b: 0.5504589, a: 1}
