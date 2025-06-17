@@ -668,7 +668,7 @@ Transform:
   m_GameObject: {fileID: 7225419870597372579}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalScale: {x: 0.41095394, y: 0.41095394, z: 0.5136924}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1402681285403700429}
@@ -721,7 +721,7 @@ SpriteRenderer:
   m_SortingLayerID: -1728117695
   m_SortingLayer: 2
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 137ec6a421becaa42b57e537e78b94a1, type: 3}
+  m_Sprite: {fileID: -51065789, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -769,6 +769,9 @@ MonoBehaviour:
   banishedIcon: {fileID: 2323246821102994651}
   lightFlash: {fileID: 8267291320799500029}
   rocketTrail: {fileID: 8666036407179200402}
+  enchantedMaterial: {fileID: 0}
+  gemSprite: {fileID: 0}
+  iceFrontSprite: {fileID: 0}
   burstEffectPrefab: {fileID: 7667150690387464802, guid: 806052a81c4b749458a4ad392ac672dc, type: 3}
   colorName: 
   colorIndex: 0
@@ -780,6 +783,8 @@ MonoBehaviour:
   pointValue: 0
   isVertRocket: 0
   isHorizRocket: 0
+  rocketFacing: 0
+  isBanished: 0
   column: 0
   row: 0
   targetX: 0
