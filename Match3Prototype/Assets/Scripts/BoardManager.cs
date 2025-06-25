@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using static UnityEngine.GraphicsBuffer;
 
 public enum GameState
@@ -101,6 +102,8 @@ public class BoardManager : MonoBehaviour
 
     ElementInfo[,] prevBoardTilesGrid;
     ElementInfo[,] boardTilesGrid;
+    bool[,] maskedTilesGrid;
+
 
     //0 = red
     //1 = blue
@@ -129,11 +132,17 @@ public class BoardManager : MonoBehaviour
     public delegate float ScoutTrigger(string colorName);
     public static event ScoutTrigger OnScoutTrigger;
 
+    // Tilemap
+    [SerializeField] Tilemap tileBase;
+    [SerializeField] Tilemap currentTileMask;
+    [SerializeField] GameObject[] tileMaskPrefabs;
+
     // Start is called before the first frame update
     void Start()
     {
         prevBoardTilesGrid = new ElementInfo[width, height];
         boardTilesGrid = new ElementInfo[width, height];
+        maskedTilesGrid = new bool[width, height];
 
         for (int i = 0; i < width; i++)
         {
@@ -1168,6 +1177,11 @@ public class BoardManager : MonoBehaviour
         }
 
         return scoreIncrease * scoreMulti * matchStreak;
+    }
+
+    private void assignTileMask(GameObject tileMask)
+    {
+        Tilemap mask = tileMask.GetComponent<Tilemap>();
     }
 
     private IEnumerator spawnPopUpScore(Vector3 pos, float score, Color color)

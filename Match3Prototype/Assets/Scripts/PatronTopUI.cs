@@ -21,6 +21,10 @@ public class PatronTopUI : MonoBehaviour
     public float largeScaleFactor;
     private Vector3 largeScale;
     private UIManager ui;
+    public GameObject bg;
+    public LayoutElement layoutElement;
+    public GameObject patronMask;
+    private bool patronEffectActive = false;
 
     public void initialize(Patron targetPatron)
     {
@@ -30,6 +34,8 @@ public class PatronTopUI : MonoBehaviour
         //lvlText.text = "" + targetPatron.level;
         patronSlotContainer.SetActive(true);
         largeScale = new Vector3(largeScaleFactor, largeScaleFactor, largeScaleFactor);
+        bg.SetActive(true);
+        bg.GetComponent<Image>().color = targetPatron.color;
     }
 
     public void reassign(Patron targetPatron)
@@ -62,6 +68,14 @@ public class PatronTopUI : MonoBehaviour
                 }
             }
         }
+
+        if (patronRef != null)
+        {
+            if (Input.GetKeyDown("" + patronRef.index))
+            {
+                patronEffectTriggered(1f, 0.2f);
+            }
+        }
     }
 
 
@@ -71,6 +85,7 @@ public class PatronTopUI : MonoBehaviour
         ptrnSprite.sprite = null;
         //lvlText.text = "";
         patronSlotContainer.SetActive(false);
+        bg.SetActive(false);
     }
 
     public void topUIPatronToggle()
@@ -85,7 +100,7 @@ public class PatronTopUI : MonoBehaviour
         {
             ptrnSpriteObj.GetComponent<RectTransform>().DOScale(Vector3.one, 0.1f);
             Color newColor = Color.black;
-            newColor.a = 0.5f;
+            newColor.a = 0f;
             ptrnSpriteObj.GetComponent<Outline>().effectColor = newColor;
         }
 
@@ -95,6 +110,8 @@ public class PatronTopUI : MonoBehaviour
             {
                 ui.patronInfoPanelShow(patronRef);
                 // enable info screen
+
+                //patronEffectTriggered(1f, 0.5f);
             }
             else
             {
@@ -129,5 +146,43 @@ public class PatronTopUI : MonoBehaviour
         List<RaycastResult> raysastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raysastResults);
         return raysastResults;
+    }
+
+    public void patronEffectTriggered(float effectDuration, float tweenDuration)
+    {
+        if (!patronEffectActive)
+        {
+            patronEffectActive = true;
+            StartCoroutine(patronEffect(effectDuration, tweenDuration));
+        }
+    }
+
+    IEnumerator patronEffect(float effectDuration, float tweenDuration)
+    {
+        float startSize = layoutElement.preferredWidth;
+        float endSize = layoutElement.preferredWidth * 1.5f;
+
+        RectTransform rect = patronMask.GetComponent<RectTransform>();
+
+        Vector2 startScale = rect.localScale;
+        Vector2 endScale = startScale * 1.1f;
+
+        if (toggle.isOn)
+        {
+            toggle.isOn = false;
+            topUIPatronToggle();
+        }
+
+        DOTween.To(() => layoutElement.preferredWidth, x => layoutElement.preferredWidth = x, endSize, tweenDuration);
+        rect.DOScale(endScale, tweenDuration);
+
+        yield return new WaitForSeconds(effectDuration + tweenDuration);
+
+        DOTween.To(() => layoutElement.preferredWidth, x => layoutElement.preferredWidth = x, startSize, tweenDuration);
+        rect.DOScale(startScale, tweenDuration);
+
+        yield return new WaitForSeconds(tweenDuration);
+
+        patronEffectActive = false;
     }
 }
