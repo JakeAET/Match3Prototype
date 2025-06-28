@@ -71,7 +71,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] GameObject[] tileElements;
     [SerializeField] float tileSpawnDelay;
     [SerializeField] float elementSpawnHeight;
-    //private Tile[,] allTiles;
+    public Tile[,] allTiles;
     public GameObject[,] allElements;
     private FindMatches findMatches;
     private GameManager gameManager;
@@ -136,6 +136,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] Tilemap tileBase;
     [SerializeField] Tilemap currentTileMask;
     [SerializeField] GameObject[] tileMaskPrefabs;
+    public List<Tilemap> availableTileMasks;
 
     // Start is called before the first frame update
     void Start()
@@ -155,9 +156,14 @@ public class BoardManager : MonoBehaviour
 
         gameManager = FindObjectOfType<GameManager>();
         findMatches = FindObjectOfType<FindMatches>();
-        //allTiles = new Tile[width, height];
+        allTiles = new Tile[width, height];
         allElements = new GameObject[width, height];
         currentState = GameState.SettingBoard;
+
+        foreach (GameObject tm in tileMaskPrefabs)
+        {
+            availableTileMasks.Add(tm.GetComponent<Tilemap>());
+        }
     }
 
     // Update is called once per frame
@@ -258,12 +264,18 @@ public class BoardManager : MonoBehaviour
             {
                 Vector2 tempPos = new Vector2(i * xSpawnOffsetMult, j * ySpawnOffsetMult);
                 GameObject thisTile = Instantiate(tilePrefab, tempPos, Quaternion.identity) as GameObject;
+                Tile tile = thisTile.GetComponent<Tile>();
                 thisTile.transform.parent = transform;
-                thisTile.GetComponent<Tile>().column = i;
-                thisTile.GetComponent<Tile>().row = j;
+                tile.column = i;
+                tile.row = j;
                 thisTile.name = "Tile ( " + i + "," + j + " )";
+                allTiles[i,j] = tile;
             }
         }
+
+        //temp
+        //assignRandomTileMask();
+
         boardInitialized = true;
     }
 
@@ -286,30 +298,43 @@ public class BoardManager : MonoBehaviour
     {
         if (column > 1 && row > 1)
         {
-            if (allElements[column - 1, row].tag == piece.tag && allElements[column - 2, row].tag == piece.tag)
+            if (!allTiles[column - 1, row].isMasked && !allTiles[column - 2, row].isMasked)
             {
-                return true;
+                if (allElements[column - 1, row].tag == piece.tag && allElements[column - 2, row].tag == piece.tag)
+                {
+                    return true;
+                }
             }
 
-            if (allElements[column, row - 1].tag == piece.tag && allElements[column, row - 2].tag == piece.tag)
-            {
-                return true;
-            }
-        }
-        else if(column <= 1 || row <= 1)
-        {
-            if(row > 1)
+            if (!allTiles[column, row - 1].isMasked && !allTiles[column, row - 2].isMasked)
             {
                 if (allElements[column, row - 1].tag == piece.tag && allElements[column, row - 2].tag == piece.tag)
                 {
                     return true;
                 }
             }
+        }
+        else if(column <= 1 || row <= 1)
+        {
+
+            if(row > 1)
+            {
+                if (!allTiles[column, row - 1].isMasked && !allTiles[column, row - 2].isMasked)
+                {
+                    if (allElements[column, row - 1].tag == piece.tag && allElements[column, row - 2].tag == piece.tag)
+                    {
+                        return true;
+                    }
+                }
+            }
             if (column > 1)
             {
-                if (allElements[column - 1, row].tag == piece.tag && allElements[column - 2,row].tag == piece.tag)
+                if (!allTiles[column - 1, row].isMasked && !allTiles[column - 2, row].isMasked)
                 {
-                    return true;
+                    if (allElements[column - 1, row].tag == piece.tag && allElements[column - 2, row].tag == piece.tag)
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -716,14 +741,17 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                if (allElements[i, j] == null)
+                if (!allTiles[i, j].isMasked)
                 {
-                    nullCount++;
-                }
-                else if (nullCount > 0)
-                {
-                    allElements[i,j].GetComponent<Element>().row -= nullCount;
-                    allElements[i,j] = null;
+                    if (allElements[i, j] == null)
+                    {
+                        nullCount++;
+                    }
+                    else if (nullCount > 0)
+                    {
+                        allElements[i, j].GetComponent<Element>().row -= nullCount;
+                        allElements[i, j] = null;
+                    }
                 }
             }
             nullCount = 0;
@@ -743,7 +771,7 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                if(allElements[i,j] == null)
+                if(allElements[i,j] == null && !allTiles[i,j].isMasked)
                 {
                     //yield return new WaitForSeconds(0.07f);
                     Vector2 tempPos = new Vector2(i, j + offsetHeight);
@@ -779,7 +807,7 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                if (allElements[i, j] == null)
+                if (allElements[i, j] == null && !allTiles[i,j].isMasked)
                 {
                     yield return new WaitForSecondsRealtime(0.001f);
 
@@ -1052,10 +1080,10 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < numToSpawn; i++)
         {
             // pick an unenchanted gem element
-            Element targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
-            while (targetElement.isEnchanted || targetElement.tileType == TileType.Bomb || targetElement.tileType == TileType.Rocket)
+            Element targetElement = targetElement = randomUnmaskedElement();
+            while (targetElement.isEnchanted || targetElement.tileType == TileType.Bomb || targetElement.tileType == TileType.Rocket || allTiles[targetElement.column, targetElement.row].isMasked)
             {
-                targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
+                targetElement = targetElement = randomUnmaskedElement();
             }
             targetElement.enchantElement();
             currentEnchantedTiles++;
@@ -1070,16 +1098,34 @@ public class BoardManager : MonoBehaviour
         int numToSpawn = maxFrozenTiles - currentFrozenTiles;
         for (int i = 0; i < numToSpawn; i++)
         {
-            // pick an unenchanted element
-            Element targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
-            while (targetElement.isFrozen)
+            Element targetElement = randomUnmaskedElement();
+
+            while (targetElement.isFrozen || allTiles[targetElement.column, targetElement.row].isMasked)
             {
-                targetElement = allElements[UnityEngine.Random.Range(0, width - 1), UnityEngine.Random.Range(0, height - 1)].GetComponent<Element>();
+                targetElement = targetElement = randomUnmaskedElement();
             }
             targetElement.freezeElement();
             currentFrozenTiles++;
         }
         frozenTilesCreated = true;
+    }
+
+    public Element randomUnmaskedElement()
+    {
+        int randCol = UnityEngine.Random.Range(0, width - 1);
+        int randRow = UnityEngine.Random.Range(0, height - 1);
+
+        Tile targetTile = allTiles[randCol, randRow];
+
+        while (targetTile.isMasked)
+        {
+            randCol = UnityEngine.Random.Range(0, width - 1);
+            randRow = UnityEngine.Random.Range(0, height - 1);
+
+            targetTile = allTiles[randCol, randRow];
+        }
+
+        return allElements[targetTile.column, targetTile.row].GetComponent<Element>();
     }
 
     public void startFindingMatches()
@@ -1179,9 +1225,49 @@ public class BoardManager : MonoBehaviour
         return scoreIncrease * scoreMulti * matchStreak;
     }
 
-    private void assignTileMask(GameObject tileMask)
+    public void assignRandomTileMask()
     {
-        Tilemap mask = tileMask.GetComponent<Tilemap>();
+        if(availableTileMasks.Count == 0)
+        {
+            foreach (GameObject tm in tileMaskPrefabs)
+            {
+                availableTileMasks.Add(tm.GetComponent<Tilemap>());
+            }
+        }
+
+        int rand = UnityEngine.Random.Range(0, availableTileMasks.Count);
+
+        Debug.Log(rand);
+        assignTileMask(availableTileMasks[rand]);
+
+        availableTileMasks.RemoveAt(rand);
+    }
+
+
+    private void assignTileMask(Tilemap tileMask)
+    {
+        //disable masked tiles
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                allTiles[i, j].isMasked = false;
+            }
+        }
+
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                //Debug.Log("all tiles length: " + allTiles.Length);
+
+                if(tileMask.GetTile(new Vector3Int(i, j, 0)) != null)
+                {
+                    allTiles[i, j].isMasked = (tileMask.GetTile(new Vector3Int(i, j, 0)).name == "tile_mask");
+                }
+            }
+        }
     }
 
     private IEnumerator spawnPopUpScore(Vector3 pos, float score, Color color)

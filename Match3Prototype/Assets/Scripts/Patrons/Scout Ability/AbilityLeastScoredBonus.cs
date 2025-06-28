@@ -32,23 +32,29 @@ public class AbilityLeastScoredBonus : Ability
         gm = FindObjectOfType<GameManager>();
         float amount = 0;
 
-        int leastMatchedNum = gm.colorTilesCleared[gm.mostMatchedTile()]; // set to max first
-        string leastMatchedColor = "";
-        foreach (KeyValuePair<string, int> kvp in gm.colorTilesCleared)
+        string mostMatched = gm.mostMatchedTile();
+
+        if (mostMatched != "")
         {
-            if (kvp.Value <= leastMatchedNum)
+
+            int leastMatchedNum = gm.colorTilesCleared[gm.mostMatchedTile()]; // set to max first
+            string leastMatchedColor = "";
+            foreach (KeyValuePair<string, int> kvp in gm.colorTilesCleared)
             {
-                leastMatchedNum = kvp.Value;
-                leastMatchedColor = kvp.Key;
+                if (kvp.Value <= leastMatchedNum)
+                {
+                    leastMatchedNum = kvp.Value;
+                    leastMatchedColor = kvp.Key;
+                }
             }
-        }
 
-        //Debug.Log("least matched color: " + leastMatchedColor + " - current color: " + colorName + " - this color matched: " + gm.colorTilesCleared[colorName] + "  vs " + leastMatchedNum);
+            //Debug.Log("least matched color: " + leastMatchedColor + " - current color: " + colorName + " - this color matched: " + gm.colorTilesCleared[colorName] + "  vs " + leastMatchedNum);
 
-        if (gm.colorTilesCleared[colorName] <= leastMatchedNum)
-        {
-            amount += currentPointIncrease;
-            //Debug.Log("scout found least matched color of " + colorName);
+            if (gm.colorTilesCleared[colorName] <= leastMatchedNum)
+            {
+                amount += currentPointIncrease;
+                //Debug.Log("scout found least matched color of " + colorName);
+            }
         }
 
         return amount;

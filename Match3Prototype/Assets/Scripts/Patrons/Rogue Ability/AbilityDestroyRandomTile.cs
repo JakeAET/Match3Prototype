@@ -27,10 +27,10 @@ public class AbilityDestroyRandomTile : Ability
     {
         for (int i = 0; i < currentTilesDestroyed; i++)
         {
-            Element targetElement = board.allElements[UnityEngine.Random.Range(0, board.width - 1), UnityEngine.Random.Range(0, board.height - 1)].GetComponent<Element>();
-            while (targetElement.isMatched)
+            Element targetElement = board.randomUnmaskedElement();
+            while (targetElement.isMatched || board.allTiles[targetElement.column, targetElement.row].isMasked)
             {
-                targetElement = board.allElements[UnityEngine.Random.Range(0, board.width - 1), UnityEngine.Random.Range(0, board.height - 1)].GetComponent<Element>();
+                targetElement = board.randomUnmaskedElement();
             }
             targetElement.isMatched = true;
         }

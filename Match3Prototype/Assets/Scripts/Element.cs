@@ -151,27 +151,39 @@ public class Element : MonoBehaviour
 
                     for (int i = 0; i < board.height; i++)
                     {
-                        Element elementRef = board.allElements[column, i].GetComponent<Element>();
-                        elementRef.isMatched = true;
-                        elementRef.isBombMatch = true;
-
-                        for (int j = 0; j < board.height; j++)
+                        if (!board.allTiles[column, i].isMasked)
                         {
-                            elementRef.specialMatchedElements.Add(board.allElements[column, j].GetComponent<Element>());
+                            Element elementRef = board.allElements[column, i].GetComponent<Element>();
+                            elementRef.isMatched = true;
+                            elementRef.isBombMatch = true;
+
+                            for (int j = 0; j < board.height; j++)
+                            {
+                                if (!board.allTiles[column, j].isMasked)
+                                {
+                                    elementRef.specialMatchedElements.Add(board.allElements[column, j].GetComponent<Element>());
+                                }
+                            }
                         }
                     }
 
                     for (int i = 0; i < board.width; i++)
                     {
-                        Element elementRef = board.allElements[i, row].GetComponent<Element>();
-                        elementRef.isMatched = true;
-                        elementRef.isBombMatch = true;
-
-                        for (int j = 0; j < board.width; j++)
+                        if (!board.allTiles[i, row].isMasked)
                         {
-                            if(j != elementRef.column)
+                            Element elementRef = board.allElements[i, row].GetComponent<Element>();
+                            elementRef.isMatched = true;
+                            elementRef.isBombMatch = true;
+
+                            for (int j = 0; j < board.width; j++)
                             {
-                                elementRef.specialMatchedElements.Add(board.allElements[j, row].GetComponent<Element>());
+                                if (j != elementRef.column)
+                                {
+                                    if (!board.allTiles[j, row].isMasked)
+                                    {
+                                        elementRef.specialMatchedElements.Add(board.allElements[j, row].GetComponent<Element>());
+                                    }
+                                }
                             }
                         }
                     }
@@ -188,13 +200,19 @@ public class Element : MonoBehaviour
 
                     for (int i = 0; i < board.height; i++)
                     {
-                        Element elementRef = board.allElements[column, i].GetComponent<Element>();
-                        elementRef.isMatched = true;
-                        elementRef.isRocketMatch = true;
-
-                        for (int j = 0; j < board.height; j++)
+                        if (!board.allTiles[column, i].isMasked)
                         {
-                            elementRef.specialMatchedElements.Add(board.allElements[column, j].GetComponent<Element>());
+                            Element elementRef = board.allElements[column, i].GetComponent<Element>();
+                            elementRef.isMatched = true;
+                            elementRef.isRocketMatch = true;
+
+                            for (int j = 0; j < board.height; j++)
+                            {
+                                if (!board.allTiles[column, j].isMasked)
+                                {
+                                    elementRef.specialMatchedElements.Add(board.allElements[column, j].GetComponent<Element>());
+                                }
+                            }
                         }
                     }
 
@@ -222,13 +240,19 @@ public class Element : MonoBehaviour
 
                     for (int i = 0; i < board.width; i++)
                     {
-                        Element elementRef = board.allElements[i, row].GetComponent<Element>();
-                        elementRef.isMatched = true;
-                        elementRef.isRocketMatch = true;
-
-                        for (int j = 0; j < board.width; j++)
+                        if (!board.allTiles[i, row].isMasked)
                         {
-                            elementRef.specialMatchedElements.Add(board.allElements[j, row].GetComponent<Element>());
+                            Element elementRef = board.allElements[i, row].GetComponent<Element>();
+                            elementRef.isMatched = true;
+                            elementRef.isRocketMatch = true;
+
+                            for (int j = 0; j < board.width; j++)
+                            {
+                                if (!board.allTiles[j, row].isMasked)
+                                {
+                                    elementRef.specialMatchedElements.Add(board.allElements[j, row].GetComponent<Element>());
+                                }
+                            }
                         }
                     }
 
@@ -399,7 +423,7 @@ public class Element : MonoBehaviour
         //Debug.Log("Waiting -> Moving Tiles");
         FindObjectOfType<AudioManager>().Play("tile swap");
         board.currentState = GameState.MovingTiles;
-        if(swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1) // right swipe
+        if(swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1 && noMaskFound(1,0)) // right swipe
         {
             otherElement = board.allElements[column + 1, row];
             otherElement.GetComponent<Element>().column -= 1;
@@ -408,7 +432,7 @@ public class Element : MonoBehaviour
             StartCoroutine(flashSequence("right", animDuration));
             transform.DOPunchScale(new Vector3(0.3f, 0.9f, 1), animDuration, 0, 0);
         }
-        else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1) // up swipe
+        else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1 && noMaskFound(0,1)) // up swipe
         {
             otherElement = board.allElements[column, row + 1];
             otherElement.GetComponent<Element>().row -= 1;
@@ -417,7 +441,7 @@ public class Element : MonoBehaviour
             StartCoroutine(flashSequence("up", animDuration));
             transform.DOPunchScale(new Vector3(0.9f, 0.3f, 1), animDuration, 0, 0);
         }
-        else if ((swipeAngle > 135 || swipeAngle <= -135) && column > 0) // left swipe
+        else if ((swipeAngle > 135 || swipeAngle <= -135) && column > 0 && noMaskFound(-1,0)) // left swipe
         {
             otherElement = board.allElements[column - 1, row];
             otherElement.GetComponent<Element>().column += 1;
@@ -426,7 +450,7 @@ public class Element : MonoBehaviour
             StartCoroutine(flashSequence("left",animDuration));
             transform.DOPunchScale(new Vector3(0.3f, 0.9f, 1), animDuration, 0, 0);
         }
-        else if (swipeAngle < -45 && swipeAngle >= -135 && row > 0) // dowm swipe
+        else if (swipeAngle < -45 && swipeAngle >= -135 && row > 0 && noMaskFound(0, -1)) // dowm swipe
         {
             otherElement = board.allElements[column, row - 1];
             otherElement.GetComponent<Element>().row += 1;
@@ -567,5 +591,17 @@ public class Element : MonoBehaviour
         }
 
         transform.DOPunchScale(new Vector3(1.2f, 1.2f, 1), 0.3f, 0, 0);
+    }
+
+    private bool noMaskFound(int xChange, int yChange)
+    {
+        if (board.allTiles[column + xChange, row + yChange].isMasked)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

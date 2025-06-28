@@ -211,22 +211,27 @@ public class GameManager : MonoBehaviour
 
     public void startRound()
     {
+        if (currentRound == 5)
+        {
+            currentRound = 1;
+            currentGame++;
+
+            if(currentGame > 1)
+            {
+                board.assignRandomTileMask();
+            }
+        }
+        else
+        {
+            currentRound++;
+        }
+
         board.roundOver(false);
         board.currentState = GameState.SettingBoard;
         roundActive = true;
         currentScore = 0;
         currentTurn = maxTurns;
         currentUndos = maxUndos;
-
-        if(currentRound == 5)
-        {
-            currentRound = 1;
-            currentGame++;
-        }
-        else
-        {
-            currentRound++;
-        }
 
         currentTargetScore = (baseTargetScore * (currentGame * (gameScoreIncMult - 1))) * (1 + (roundScoreIncMult * (currentRound - 1))) * extraHighPointMulti;
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class FindMatches : MonoBehaviour
@@ -33,13 +34,13 @@ public class FindMatches : MonoBehaviour
             for (int j = 0; j < board.height; j++)
             {
                 GameObject currentElement = board.allElements[i, j];
-                if(currentElement != null)
+                if(currentElement != null && !board.allTiles[i,j].isMasked)
                 {
                     if(i > 0 && i < board.width - 1 && currentElement.GetComponent<Element>().horizMatchLength == 0)
                     {
                         GameObject leftElement = board.allElements[i - 1, j];
                         GameObject rightElement = board.allElements[i + 1, j];
-                        if (leftElement != null && rightElement != null)
+                        if (leftElement != null && rightElement != null && !board.allTiles[i - 1, j].isMasked && !board.allTiles[i + 1, j].isMasked)
                         {
                             if(leftElement.tag == currentElement.tag && rightElement.tag == currentElement.tag)
                             {
@@ -78,12 +79,19 @@ public class FindMatches : MonoBehaviour
 
                                 while (column >= 0)
                                 {
-                                    if (board.allElements[column, row].tag == board.allElements[column + 1, row].tag)
+                                    if (!board.allTiles[column + 1, row].isMasked && board.allElements[column + 1, row] != null && board.allElements[column, row] != null)
                                     {
-                                        Element targetElement = board.allElements[column, row].GetComponent<Element>();
-                                        targetElement.isMatched = true;
-                                        allElementsInMatch.Add(targetElement);
-                                        checkAdjacentForFrozen(column, row);
+                                        if (board.allElements[column, row].tag == board.allElements[column + 1, row].tag)
+                                        {
+                                            Element targetElement = board.allElements[column, row].GetComponent<Element>();
+                                            targetElement.isMatched = true;
+                                            allElementsInMatch.Add(targetElement);
+                                            checkAdjacentForFrozen(column, row);
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
                                     else
                                     {
@@ -98,12 +106,19 @@ public class FindMatches : MonoBehaviour
 
                                 while (column <= board.width - 1)
                                 {
-                                    if (board.allElements[column, row].tag == board.allElements[column - 1, row].tag)
+                                    if (!board.allTiles[column - 1, row].isMasked && board.allElements[column - 1, row] != null && board.allElements[column, row] != null)
                                     {
-                                        Element targetElement = board.allElements[column, row].GetComponent<Element>();
-                                        targetElement.isMatched = true;
-                                        allElementsInMatch.Add(targetElement);
-                                        checkAdjacentForFrozen(column, row);
+                                        if (board.allElements[column, row].tag == board.allElements[column - 1, row].tag)
+                                        {
+                                            Element targetElement = board.allElements[column, row].GetComponent<Element>();
+                                            targetElement.isMatched = true;
+                                            allElementsInMatch.Add(targetElement);
+                                            checkAdjacentForFrozen(column, row);
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
                                     else
                                     {
@@ -142,7 +157,7 @@ public class FindMatches : MonoBehaviour
                     {
                         GameObject upElement = board.allElements[i, j + 1];
                         GameObject downElement = board.allElements[i, j - 1];
-                        if (upElement != null && downElement != null)
+                        if (upElement != null && downElement != null && !board.allTiles[i, j + 1].isMasked && !board.allTiles[i, j - 1].isMasked)
                         {
                             if (upElement.tag == currentElement.tag && downElement.tag == currentElement.tag)
                             {
@@ -183,12 +198,19 @@ public class FindMatches : MonoBehaviour
 
                                 while (row >= 0)
                                 {
-                                    if(board.allElements[column,row].tag == board.allElements[column, row + 1].tag)
+                                    if (!board.allTiles[column, row + 1].isMasked && board.allElements[column, row + 1] != null && board.allElements[column, row] != null)
                                     {
-                                        Element targetElement = board.allElements[column, row].GetComponent<Element>();
-                                        targetElement.isMatched = true;
-                                        allElementsInMatch.Add(targetElement);
-                                        checkAdjacentForFrozen(column, row);
+                                        if (board.allElements[column, row].tag == board.allElements[column, row + 1].tag)
+                                        {
+                                            Element targetElement = board.allElements[column, row].GetComponent<Element>();
+                                            targetElement.isMatched = true;
+                                            allElementsInMatch.Add(targetElement);
+                                            checkAdjacentForFrozen(column, row);
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
                                     else
                                     {
@@ -203,12 +225,19 @@ public class FindMatches : MonoBehaviour
 
                                 while (row <= board.height - 1)
                                 {
-                                    if (board.allElements[column, row].tag == board.allElements[column, row - 1].tag)
+                                    if (!board.allTiles[column, row - 1].isMasked && board.allElements[column, row - 1] != null && board.allElements[column, row] != null)
                                     {
-                                        Element targetElement = board.allElements[column, row].GetComponent<Element>();
-                                        targetElement.isMatched = true;
-                                        allElementsInMatch.Add(targetElement);
-                                        checkAdjacentForFrozen(column, row);
+                                        if (board.allElements[column, row].tag == board.allElements[column, row - 1].tag)
+                                        {
+                                            Element targetElement = board.allElements[column, row].GetComponent<Element>();
+                                            targetElement.isMatched = true;
+                                            allElementsInMatch.Add(targetElement);
+                                            checkAdjacentForFrozen(column, row);
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
                                     else
                                     {

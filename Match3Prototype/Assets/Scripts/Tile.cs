@@ -17,6 +17,7 @@ public class Tile : MonoBehaviour
     public int row;
     public GameObject assignedElement;
     private BoardManager boardManager;
+    public bool isMasked = false;
 
     // Start is called before the first frame update
     void Start()
