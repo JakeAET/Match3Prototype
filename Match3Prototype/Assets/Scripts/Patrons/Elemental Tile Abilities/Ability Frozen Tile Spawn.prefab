@@ -19,6 +19,10 @@ PrefabInstance:
       propertyPath: spawnElement
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5809514674927003440, guid: cce517fde078a6d4f8f1be62d8d39eb7, type: 3}
+      propertyPath: procEffectDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6184555020806397490, guid: cce517fde078a6d4f8f1be62d8d39eb7, type: 3}
       propertyPath: m_RootOrder
       value: 0

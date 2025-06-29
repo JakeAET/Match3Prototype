@@ -50,6 +50,7 @@ public class AbilityBasePointIncrease : Ability
     {
         targetTilesDestroyed++;
         gm.bonusBaseElementValue += currentBaseIncrease;
+        procEffect();
     }
 
     public override void levelUp()

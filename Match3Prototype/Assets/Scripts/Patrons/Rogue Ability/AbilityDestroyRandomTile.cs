@@ -34,6 +34,7 @@ public class AbilityDestroyRandomTile : Ability
             }
             targetElement.isMatched = true;
         }
+        procEffect();
     }
 
     public override void levelUp()

@@ -11,6 +11,8 @@ public abstract class Ability : MonoBehaviour
     public int level = 0;
     public int maxLevel = 0;
     public Patron patron;
+    public float procEffectDuration = 1f;
+    public float procTweenDuration = 0.2f;
 
     public virtual void initialize()
     {
@@ -25,6 +27,12 @@ public abstract class Ability : MonoBehaviour
     public virtual void triggerEffect()
     {
 
+    }
+
+    public virtual void procEffect()
+    {
+        UIManager ui = FindObjectOfType<UIManager>();
+        ui.patronSlotUIRefs[patron.index].patronEffectTriggered(procEffectDuration, procTweenDuration);
     }
 
     public virtual void levelUp()

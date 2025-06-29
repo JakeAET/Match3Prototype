@@ -57,6 +57,11 @@ public class AbilityLeastScoredBonus : Ability
             }
         }
 
+        if(amount > 0)
+        {
+            procEffect();
+        }
+
         return amount;
     }
 

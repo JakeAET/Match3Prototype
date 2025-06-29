@@ -132,6 +132,11 @@ public class BoardManager : MonoBehaviour
     public delegate float ScoutTrigger(string colorName);
     public static event ScoutTrigger OnScoutTrigger;
 
+    public delegate void abilityProcEffect();
+    public static event abilityProcEffect OnFrozenTileCreated;
+    public static event abilityProcEffect OnEnchantedTileCreated;
+    public static event abilityProcEffect OnUndoUsed;
+
     // Tilemap
     [SerializeField] Tilemap tileBase;
     [SerializeField] Tilemap currentTileMask;
@@ -1070,6 +1075,11 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+
+        if (OnUndoUsed != null)
+        {
+            OnUndoUsed();
+        }
     }
 
     private IEnumerator checkToSpawnEnchanted(float delay)
@@ -1089,6 +1099,14 @@ public class BoardManager : MonoBehaviour
             currentEnchantedTiles++;
         }
         enchantedTilesCreated = true;
+
+        if(numToSpawn > 0)
+        {
+            if (OnEnchantedTileCreated != null)
+            {
+                OnEnchantedTileCreated();
+            }
+        }
     }
 
     private IEnumerator checkToSpawnFrozen(float delay)
@@ -1108,6 +1126,14 @@ public class BoardManager : MonoBehaviour
             currentFrozenTiles++;
         }
         frozenTilesCreated = true;
+
+        if (numToSpawn > 0)
+        {
+            if (OnFrozenTileCreated != null)
+            {
+                OnFrozenTileCreated();
+            }
+        }
     }
 
     public Element randomUnmaskedElement()

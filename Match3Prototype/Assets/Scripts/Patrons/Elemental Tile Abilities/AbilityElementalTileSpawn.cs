@@ -20,6 +20,29 @@ public class AbilityElementalTileSpawn : Ability
     {
         board = FindObjectOfType<BoardManager>();
         determineMaxLevel();
+
+        if(spawnElement == ElementType.Enchanted)
+        {
+            BoardManager.OnEnchantedTileCreated += procEffect;
+        }
+
+        if (spawnElement == ElementType.Frozen)
+        {
+            BoardManager.OnFrozenTileCreated += procEffect;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (spawnElement == ElementType.Enchanted)
+        {
+            BoardManager.OnEnchantedTileCreated -= procEffect;
+        }
+
+        if (spawnElement == ElementType.Frozen)
+        {
+            BoardManager.OnFrozenTileCreated -= procEffect;
+        }
     }
 
     public override void triggerEffect()

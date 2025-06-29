@@ -13,6 +13,12 @@ public class AbilityGainUndos : Ability
     {
         gm = FindObjectOfType<GameManager>();
         determineMaxLevel();
+        BoardManager.OnUndoUsed += procEffect;
+    }
+
+    private void OnDisable()
+    {
+        BoardManager.OnUndoUsed -= procEffect;
     }
 
     public override void triggerEffect()
