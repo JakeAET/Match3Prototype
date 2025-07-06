@@ -2571,7 +2571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -48}
+  m_AnchoredPosition: {x: -0.00024414062, y: -48}
   m_SizeDelta: {x: 0.0001, y: 126.2391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &286427578
@@ -5973,9 +5973,19 @@ MonoBehaviour:
   tileBase: {fileID: 1658899245}
   currentTileMask: {fileID: 2913635770866868390, guid: a21effcb7f3b262439044117db8352c6, type: 3}
   tileMaskPrefabs:
+  - {fileID: 2913635770866868315, guid: 9703ca8e57cd8694dbe7ca935266c4d5, type: 3}
   - {fileID: 2913635770866868315, guid: 1dde78e00c976aa48a6a98dea111a3ec, type: 3}
   - {fileID: 2913635770866868315, guid: 5e02330566317a04cbdcb9337201455f, type: 3}
+  - {fileID: 2913635770866868315, guid: 3e7e7b7f9b3437f45bf5b3a9aa84e99e, type: 3}
+  - {fileID: 2913635770866868315, guid: 8d89b7ac6af54b64485b149bb1c56728, type: 3}
+  - {fileID: 2913635770866868315, guid: 3695334827dc5974ead492ba70d0ae20, type: 3}
+  - {fileID: 2913635770866868315, guid: 2eb60584204d23a499cc67df6d2a71c6, type: 3}
+  - {fileID: 2913635770866868315, guid: cf5561ee1b4802948bb63b3d65245c69, type: 3}
+  - {fileID: 2913635770866868315, guid: d5205cb7dd8aaa14e8dd2d8535387c3a, type: 3}
+  - {fileID: 2913635770866868315, guid: f960f8f4cf12d98429d5aa9443e560c7, type: 3}
   availableTileMasks: []
+  tilemapBase: {fileID: 1658899245}
+  tilemapBasePrefab: {fileID: 2639358566643329383, guid: 4c57436cbd619ab4585c9be229cb28ea, type: 3}
 --- !u!4 &670887317
 Transform:
   m_ObjectHideFlags: 0
@@ -6511,7 +6521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd86eb834766c38469dd8769eb8dbfd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTargetScore: 0
+  baseTargetScore: 1000
   roundScoreIncMult: 0.5
   gameScoreIncMult: 2
   extraHighPointMulti: 1

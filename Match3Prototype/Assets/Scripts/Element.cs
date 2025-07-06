@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEngine.GraphicsBuffer;
 
 public enum TargetColor
@@ -100,6 +101,8 @@ public class Element : MonoBehaviour
     public List<Element> horizMatchedElements = new List<Element>();
     public List<Element> vertMatchedElements = new List<Element>();
     public List<Element> specialMatchedElements = new List<Element>();
+
+    [SerializeField] Color flashColor;
 
     // Start is called before the first frame update
     void Start()
@@ -429,8 +432,8 @@ public class Element : MonoBehaviour
             otherElement.GetComponent<Element>().column -= 1;
             column += 1;
 
-            StartCoroutine(flashSequence("right", animDuration));
             transform.DOPunchScale(new Vector3(0.3f, 0.9f, 1), animDuration, 0, 0);
+            beingSwiped = true;
         }
         else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1 && noMaskFound(0,1)) // up swipe
         {
@@ -438,8 +441,8 @@ public class Element : MonoBehaviour
             otherElement.GetComponent<Element>().row -= 1;
             row += 1;
 
-            StartCoroutine(flashSequence("up", animDuration));
             transform.DOPunchScale(new Vector3(0.9f, 0.3f, 1), animDuration, 0, 0);
+            beingSwiped = true;
         }
         else if ((swipeAngle > 135 || swipeAngle <= -135) && column > 0 && noMaskFound(-1,0)) // left swipe
         {
@@ -447,8 +450,8 @@ public class Element : MonoBehaviour
             otherElement.GetComponent<Element>().column += 1;
             column -= 1;
 
-            StartCoroutine(flashSequence("left",animDuration));
             transform.DOPunchScale(new Vector3(0.3f, 0.9f, 1), animDuration, 0, 0);
+            beingSwiped = true;
         }
         else if (swipeAngle < -45 && swipeAngle >= -135 && row > 0 && noMaskFound(0, -1)) // dowm swipe
         {
@@ -456,57 +459,59 @@ public class Element : MonoBehaviour
             otherElement.GetComponent<Element>().row += 1;
             row -= 1;
 
-            StartCoroutine(flashSequence("down", animDuration));
             transform.DOPunchScale(new Vector3(0.3f, 0.6f, 1), animDuration, 0, 0);
+            beingSwiped = true;
         }
 
-        beingSwiped = true;
-        otherElement.GetComponent<Element>().beingSwiped = true;
-        StartCoroutine(CheckMove());
-        //findMatches.FindAllMatchesStart();
-        gameManager.turnStarted();
+        if (beingSwiped)
+        {
+            otherElement.GetComponent<Element>().beingSwiped = true;
+            StartCoroutine(CheckMove());
+            //findMatches.FindAllMatchesStart();
+            gameManager.turnStarted();
+        }
+        else
+        {
+            board.currentState = GameState.Waiting;
+        }
     } 
 
-    IEnumerator flashSequence(string direction, float duration)
+    public void flashSequence()
     {
-        //DG.Tweening.Sequence fadeSequence = DOTween.Sequence();
-        //fadeSequence.Append(lightFlash.GetComponent<SpriteRenderer>().DOFade(0.5f, duration / 2));
-        //fadeSequence.Append(lightFlash.GetComponent<SpriteRenderer>().DOFade(0, duration / 2));
-        //fadeSequence.Play();
+        StartCoroutine(FlashSequence());
+    }
 
-        //lightFlash.SetActive(true);
-        if (direction == "up" || direction == "down")
-        {
-            //if (direction == "up")
-            //{
-            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x, lightFlash.transform.localPosition.y - 0.5f, lightFlash.transform.localPosition.z), duration);
-            //}
-            //else
-            //{
-            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x, lightFlash.transform.localPosition.y + 0.5f, lightFlash.transform.localPosition.z), duration);
-            //}
-            //lightFlash.transform.DOPunchScale(new Vector3(0.1f, 1f, 1), duration, 0, 0);
-            GetComponent<SpriteRenderer>().sortingOrder++;
+    IEnumerator FlashSequence()
+    {
+        //Debug.Log("flashing");
+        lightFlash.GetComponent<SpriteRenderer>().color = flashColor;
 
-            yield return new WaitForSeconds(duration);
-        }
-        else if (direction == "left" || direction == "right")
-        {
-            //if (direction == "left")
-            //{
-            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x + 0.5f, lightFlash.transform.localPosition.y, lightFlash.transform.localPosition.z), duration);
-            //}
-            //else
-            //{
-            //    lightFlash.transform.DOPunchPosition(new Vector3(lightFlash.transform.localPosition.x - 0.5f, lightFlash.transform.localPosition.y, lightFlash.transform.localPosition.z), duration);
-            //}
-            //lightFlash.transform.DOPunchScale(new Vector3(1f, 0.1f, 1), duration, 0, 0);
-            GetComponent<SpriteRenderer>().sortingOrder++;
 
-            yield return new WaitForSeconds(duration);
-        }
-        GetComponent<SpriteRenderer>().sortingOrder--;
-        //lightFlash.SetActive(false);
+        float duration = 0.5f;
+        float pause = 0.2f;
+        float flashScaleFactor = 1.5f;
+        float gemScaleFactor = 1.2f;
+
+        Vector3 startScaleFlash = lightFlash.transform.localScale;
+        Vector3 startScaleGem = gameObject.transform.localScale;
+
+        Vector3 endScaleFlash = startScaleFlash * flashScaleFactor;
+        Vector3 endScaleGem = startScaleGem * gemScaleFactor;
+
+        lightFlash.SetActive(true);
+        lightFlash.GetComponent<SpriteRenderer>().DOFade(1, (duration - pause)/2);
+        lightFlash.transform.DOScale(endScaleFlash, (duration - pause) / 2);
+        gameObject.transform.DOScale(endScaleGem, (duration - pause) / 2);
+
+        yield return new WaitForSeconds(((duration - pause) / 2) + pause);
+
+        lightFlash.GetComponent<SpriteRenderer>().DOFade(0, (duration - pause) / 2);
+        lightFlash.transform.DOScale(startScaleFlash, (duration - pause) / 2);
+        gameObject.transform.DOScale(startScaleGem, (duration - pause) / 2);
+
+        yield return new WaitForSeconds((duration - pause) / 2);
+
+        lightFlash.SetActive(false);
     }
 
     public void freezeElement()

@@ -148,6 +148,18 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: flashColor.b
+      value: 0.86274517
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: flashColor.g
+      value: 0.27450982
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: flashColor.r
+      value: 0.20000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823170657958241623, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: burstEffectPrefab
       value: 
       objectReference: {fileID: 4809580599687504605, guid: 83586c5fc08e41b46995b1328a9de5c2, type: 3}

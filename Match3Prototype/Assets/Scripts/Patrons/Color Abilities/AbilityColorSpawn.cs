@@ -13,6 +13,29 @@ public class AbilityColorSpawn : Ability
     {
         board = FindObjectOfType<BoardManager>();
         determineMaxLevel();
+
+        BoardManager.OnFullBoardSet += procEffect;
+    }
+
+    public override void procEffect()
+    {
+        base.procEffect();
+
+        foreach (GameObject gem in board.allElements)
+        {
+            if(gem != null)
+            {
+                if (gem.GetComponent<Element>().color == targetColor)
+                {
+                    gem.GetComponent<Element>().flashSequence();
+                }
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        BoardManager.OnFullBoardSet -= procEffect;
     }
 
     public override void triggerEffect()

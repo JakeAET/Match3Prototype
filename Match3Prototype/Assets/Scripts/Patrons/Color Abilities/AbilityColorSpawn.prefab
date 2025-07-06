@@ -50,5 +50,9 @@ MonoBehaviour:
   canTrigger: 1
   level: 0
   maxLevel: 3
+  patron: {fileID: 0}
+  procEffectDuration: 0.3
+  procTweenDuration: 0.2
   spawnRateIncrease: 1
   targetColor: 0
+  board: {fileID: 0}

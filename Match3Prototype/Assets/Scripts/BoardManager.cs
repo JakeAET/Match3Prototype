@@ -136,12 +136,15 @@ public class BoardManager : MonoBehaviour
     public static event abilityProcEffect OnFrozenTileCreated;
     public static event abilityProcEffect OnEnchantedTileCreated;
     public static event abilityProcEffect OnUndoUsed;
+    public static event abilityProcEffect OnFullBoardSet;
 
     // Tilemap
     [SerializeField] Tilemap tileBase;
     [SerializeField] Tilemap currentTileMask;
     [SerializeField] GameObject[] tileMaskPrefabs;
     public List<Tilemap> availableTileMasks;
+    [SerializeField] Tilemap tilemapBase;
+    [SerializeField] Tilemap tilemapBasePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -279,6 +282,7 @@ public class BoardManager : MonoBehaviour
         }
 
         //temp
+        assignTileMask(currentTileMask);
         //assignRandomTileMask();
 
         boardInitialized = true;
@@ -741,25 +745,92 @@ public class BoardManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         //collapsingActive = true;
-        int nullCount = 0;
+        //int nullCount = 0;
         for (int i = 0; i < width; i++)
         {
+            List<Vector2Int> nullTiles = new List<Vector2Int>();
             for (int j = 0; j < height; j++)
             {
-                if (!allTiles[i, j].isMasked)
+                if(!allTiles[i, j].isMasked)
                 {
-                    if (allElements[i, j] == null)
+
+                    if(allElements[i, j] == null)
                     {
-                        nullCount++;
+                        nullTiles.Add(new Vector2Int(i, j));
                     }
-                    else if (nullCount > 0)
+                    else
                     {
-                        allElements[i, j].GetComponent<Element>().row -= nullCount;
-                        allElements[i, j] = null;
+                        if(nullTiles.Count > 0)
+                        {
+                            Element target = allElements[i, j].GetComponent<Element>();
+                            target.row = nullTiles[0].y;
+                            nullTiles.RemoveAt(0);
+                            allElements[i, j] = null;
+                            nullTiles.Add(new Vector2Int(i, j));
+                        }
                     }
                 }
+
+                // while tile below is null
+                // check if tile below is a mask
+                // if yes, check if tile after mask is null, move to that if yes, otherwise break
+                // if no, move one down
+
+                //bool validSpaceFound = false;
+                //bool noMoveNeeded = false;
+                //int downShift = 0;
+                //int rowChecking = 1;
+                //int maskCount = 0;
+
+                //while (!validSpaceFound && !noMoveNeeded && j - rowChecking > 0) // break if space is found or bottom limit reached
+                //{
+                //    Element target = allElements[i,j - rowChecking].GetComponent<Element>();
+
+                //    if(target == null)
+                //    {
+                //        if(allTiles[i, j].isMasked)
+                //        {
+                //            maskCount++;
+                //            downShift++;
+                //            rowChecking++;
+                //        }
+                //        else
+                //        {
+
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if(j + 1 < height)
+                //        {
+                //            if (allTiles[i, j].isMasked)
+                //            {
+
+                //            }
+                //        }
+                //        noMoveNeeded = true;
+                //    }
+                //}
+
+                //if (validSpaceFound)
+                //{
+                //    allElements[i, j].GetComponent<Element>().row -= downShift;
+                //}
+
+                //if (!allTiles[i, j].isMasked)
+                //{
+                //    if (allElements[i, j] == null)
+                //    {
+                //        nullCount++;
+                //    }
+                //    else if (nullCount > 0)
+                //    {
+                //        allElements[i, j].GetComponent<Element>().row -= nullCount;
+                //        allElements[i, j] = null;
+                //    }
+                //}
             }
-            nullCount = 0;
+            //nullCount = 0;
         }
 
         //yield return new WaitForSeconds(0f);
@@ -802,6 +873,12 @@ public class BoardManager : MonoBehaviour
         //yield return null;
         yield return new WaitForSeconds(0.2f);
         refillingBoard = false;
+
+        //if (OnFullBoardSet != null)
+        //{
+        //    OnFullBoardSet();
+        //    //Debug.Log("OnFullBoardSet called");
+        //}
     }
 
     public IEnumerator ResetBoard()
@@ -867,6 +944,11 @@ public class BoardManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         tilesInitialized = true;
 
+        if (OnFullBoardSet != null)
+        {
+            OnFullBoardSet();
+            //Debug.Log("OnFullBoardSet called");
+        }
     }
 
     private bool MatchesOnBoard()
@@ -1080,6 +1162,11 @@ public class BoardManager : MonoBehaviour
         {
             OnUndoUsed();
         }
+
+        if (OnFullBoardSet != null)
+        {
+            OnFullBoardSet();
+        }
     }
 
     private IEnumerator checkToSpawnEnchanted(float delay)
@@ -1291,6 +1378,11 @@ public class BoardManager : MonoBehaviour
                 if(tileMask.GetTile(new Vector3Int(i, j, 0)) != null)
                 {
                     allTiles[i, j].isMasked = (tileMask.GetTile(new Vector3Int(i, j, 0)).name == "tile_mask");
+                    tilemapBase.SetTile(new Vector3Int(i, j, 0), null);
+                }
+                else
+                {
+                    tilemapBase.SetTile(new Vector3Int(i, j, 0), tilemapBasePrefab.GetTile(new Vector3Int(i, j, 0)));
                 }
             }
         }
