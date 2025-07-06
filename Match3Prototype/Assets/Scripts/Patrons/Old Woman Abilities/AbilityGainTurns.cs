@@ -7,6 +7,8 @@ public class AbilityGainTurns : Ability
 {
     public bool effectTriggered = false;
     public int turnIncrease;
+    public int initialTurnIncrease;
+    private int currentTurnIncrease;
     [SerializeField] GameManager gm;
 
     public override void initialize()
@@ -19,8 +21,19 @@ public class AbilityGainTurns : Ability
     {
         if (canTrigger)
         {
-            gm.increaseMaxTurns(turnIncrease);
+            //gm.increaseMaxTurns(turnIncrease);
             canTrigger = false;
+
+            if (level == 1)
+            {
+                gm.increaseMaxTurns(initialTurnIncrease);
+                currentTurnIncrease += initialTurnIncrease;
+            }
+            else
+            {
+                gm.increaseMaxTurns(turnIncrease);
+                currentTurnIncrease += turnIncrease;
+            }
         }
     }
 
@@ -38,8 +51,19 @@ public class AbilityGainTurns : Ability
     {
         for (int i = 0; i < levelNum; i++)
         {
-            gm.increaseMaxTurns(turnIncrease * -1);
+            //gm.increaseMaxTurns(turnIncrease * -1);
             level--;
+
+            if (level == 1)
+            {
+                gm.increaseMaxTurns(initialTurnIncrease * -1);
+                currentTurnIncrease -= initialTurnIncrease;
+            }
+            else
+            {
+                gm.increaseMaxTurns(turnIncrease * -1);
+                currentTurnIncrease -= turnIncrease;
+            }
         }
     }
 
@@ -53,14 +77,25 @@ public class AbilityGainTurns : Ability
 
     public override string description()
     {
-        string desc = "- Grants " + "<color=\"green\">" + (level * turnIncrease) + "</color>" + " additional turns per round";
+        string desc = "- Grants " + "<color=\"green\">" + currentTurnIncrease + "</color>" + " additional turns per round";
 
         return desc;
     }
 
     public override string patronSelectDescription()
     {
-        string desc = "+ Additional " + "<color=\"green\">" + (turnIncrease) + "</color>" + " turns per round";
+        int increase = 0;
+
+        if (level == 0)
+        {
+            increase = initialTurnIncrease;
+        }
+        else
+        {
+            increase = turnIncrease;
+        }
+
+        string desc = "+ Additional " + "<color=\"green\">" + (increase) + "</color>" + " turns per round";
 
         return desc;
     }

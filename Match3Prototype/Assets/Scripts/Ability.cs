@@ -11,7 +11,7 @@ public abstract class Ability : MonoBehaviour
     public int level = 0;
     public int maxLevel = 0;
     public Patron patron;
-    public float procEffectDuration = 1f;
+    public float procEffectDuration = 0.5f;
     public float procTweenDuration = 0.2f;
 
     public virtual void initialize()

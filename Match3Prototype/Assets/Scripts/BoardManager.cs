@@ -132,6 +132,10 @@ public class BoardManager : MonoBehaviour
     public delegate float ScoutTrigger(string colorName);
     public static event ScoutTrigger OnScoutTrigger;
 
+    public delegate float TurnBonus();
+    public static event TurnBonus OnFirstTurn;
+    public static event TurnBonus OnLastTurn;
+
     public delegate void abilityProcEffect();
     public static event abilityProcEffect OnFrozenTileCreated;
     public static event abilityProcEffect OnEnchantedTileCreated;
@@ -1280,10 +1284,26 @@ public class BoardManager : MonoBehaviour
             {
                 targetElement.pointValue += OnScoutTrigger(targetElement.colorName);
             }
+
+            if (gameManager.currentTurn == gameManager.maxTurns - 1)
+            {
+                if (OnFirstTurn != null)
+                {
+                    targetElement.pointValue += OnFirstTurn();
+                }
+            }
         }
 
         float scoreIncrease = targetElement.pointValue * basePointDebuff;
         float scoreMulti = 0;
+
+        if (gameManager.currentTurn == 0)
+        {
+            if (OnLastTurn != null)
+            {
+                scoreMulti += OnLastTurn();
+            }
+        }
 
         int horizMatchLength = targetElement.horizMatchLength;
         int vertMatchLength = targetElement.vertMatchLength;

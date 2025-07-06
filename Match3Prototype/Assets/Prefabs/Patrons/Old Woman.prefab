@@ -47,10 +47,10 @@ MonoBehaviour:
   title: Old Woman
   abilitiesByLevel:
   - {fileID: 2996130921925856705, guid: 07cf207d1f476ab49bcc10f2885c9149, type: 3}
-  - {fileID: 2996130921925856705, guid: 07cf207d1f476ab49bcc10f2885c9149, type: 3}
-  - {fileID: 2996130921925856705, guid: 07cf207d1f476ab49bcc10f2885c9149, type: 3}
-  - {fileID: 2996130921925856705, guid: 07cf207d1f476ab49bcc10f2885c9149, type: 3}
-  - {fileID: 2996130921925856705, guid: 07cf207d1f476ab49bcc10f2885c9149, type: 3}
+  - {fileID: 3596451275606886203, guid: be4bd05ae308f9542a9b5032e717941b, type: 3}
+  - {fileID: 2338119177645047770, guid: a514dfc4ee00c2a42ae984642f2950b0, type: 3}
+  - {fileID: 3596451275606886203, guid: be4bd05ae308f9542a9b5032e717941b, type: 3}
+  - {fileID: 2338119177645047770, guid: a514dfc4ee00c2a42ae984642f2950b0, type: 3}
   activeAbilites: []
   level: 0
   maxLevel: 0
@@ -59,4 +59,3 @@ MonoBehaviour:
   color: {r: 1, g: 0.5319149, b: 0.37765956, a: 1}
   patronChoiceUIPrefab: {fileID: 3799233932109439013, guid: 530e07ce66736014e9dd4406f65ccc6c, type: 3}
   effectTriggered: 0
-  turnIncrease: 2
