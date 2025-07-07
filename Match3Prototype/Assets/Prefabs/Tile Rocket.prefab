@@ -770,7 +770,7 @@ MonoBehaviour:
   lightFlash: {fileID: 8267291320799500029}
   rocketTrail: {fileID: 8666036407179200402}
   enchantedMaterial: {fileID: 0}
-  gemSprite: {fileID: 0}
+  gemSprite: {fileID: 1203373384818866496}
   iceFrontSprite: {fileID: 0}
   burstEffectPrefab: {fileID: 7667150690387464802, guid: 806052a81c4b749458a4ad392ac672dc, type: 3}
   colorName: 
@@ -801,6 +801,14 @@ MonoBehaviour:
   horizMatchedElements: []
   vertMatchedElements: []
   specialMatchedElements: []
+  bombColors: []
+  rocketColors:
+  - {fileID: -51065789, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
+  - {fileID: -1829915514, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
+  - {fileID: 751286563, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
+  - {fileID: -841963318, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
+  - {fileID: 2048301189, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
+  flashColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &8267291320799500029
 GameObject:
   m_ObjectHideFlags: 0

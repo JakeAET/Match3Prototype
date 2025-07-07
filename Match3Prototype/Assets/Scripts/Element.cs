@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -101,6 +102,12 @@ public class Element : MonoBehaviour
     public List<Element> horizMatchedElements = new List<Element>();
     public List<Element> vertMatchedElements = new List<Element>();
     public List<Element> specialMatchedElements = new List<Element>();
+
+    [SerializeField] Sprite[] bombColors;
+    private Dictionary<TargetColor, Sprite> bombColorDict;
+
+    [SerializeField] Sprite[] rocketColors;
+    private Dictionary<TargetColor, Sprite> rocketColorDict;
 
     [SerializeField] Color flashColor;
 
@@ -489,7 +496,7 @@ public class Element : MonoBehaviour
 
         float duration = 0.5f;
         float pause = 0.2f;
-        float flashScaleFactor = 1.5f;
+        float flashScaleFactor = 2f;
         float gemScaleFactor = 1.2f;
 
         Vector3 startScaleFlash = lightFlash.transform.localScale;
@@ -499,7 +506,7 @@ public class Element : MonoBehaviour
         Vector3 endScaleGem = startScaleGem * gemScaleFactor;
 
         lightFlash.SetActive(true);
-        lightFlash.GetComponent<SpriteRenderer>().DOFade(1, (duration - pause)/2);
+        lightFlash.GetComponent<SpriteRenderer>().DOFade(0.5f, (duration - pause)/2);
         lightFlash.transform.DOScale(endScaleFlash, (duration - pause) / 2);
         gameObject.transform.DOScale(endScaleGem, (duration - pause) / 2);
 
@@ -543,8 +550,21 @@ public class Element : MonoBehaviour
 
     public void initializeBomb(TargetColor colorRef, int colorIndexRef, string tagName)
     {
+        if (bombColors.Length == 5)
+        {
+            bombColorDict = new Dictionary<TargetColor, Sprite>
+            {
+                {TargetColor.Red, bombColors[0]},
+                {TargetColor.Blue, bombColors[1]},
+                {TargetColor.Green, bombColors[2]},
+                {TargetColor.Purple, bombColors[3]},
+                {TargetColor.Yellow, bombColors[4]},
+            };
+        }
+
         color = colorRef;
-        GetComponent<SpriteRenderer>().color = FindObjectOfType<GameManager>().tileColors[colorIndexRef];
+        //GetComponent<SpriteRenderer>().color = FindObjectOfType<GameManager>().tileColors[colorIndexRef];
+        gemSprite.sprite = bombColorDict[color];
         colorIndex = colorIndexRef;
         colorName = tagName;
         gameObject.tag = tagName;
@@ -554,11 +574,24 @@ public class Element : MonoBehaviour
 
     public void initializeRocket(TargetColor colorRef,int colorIndexRef, string tagName, bool isVert, bool isHoriz)
     {
+        if (rocketColors.Length == 5)
+        {
+            rocketColorDict = new Dictionary<TargetColor, Sprite>
+            {
+                {TargetColor.Red, rocketColors[0]},
+                {TargetColor.Blue, rocketColors[1]},
+                {TargetColor.Green, rocketColors[2]},
+                {TargetColor.Purple, rocketColors[3]},
+                {TargetColor.Yellow, rocketColors[4]},
+            };
+        }
+
         isVertRocket = isVert;
         isHorizRocket = isHoriz;
         color = colorRef;
         Color elemColor = FindObjectOfType<GameManager>().tileColors[colorIndexRef];
-        GetComponent<SpriteRenderer>().color = elemColor;
+        //GetComponent<SpriteRenderer>().color = elemColor;
+        gemSprite.sprite = rocketColorDict[color];
         rocketTrail.GetComponent<TrailRenderer>().startColor = elemColor;
         elemColor.a = 0f;
         rocketTrail.GetComponent<TrailRenderer>().endColor = elemColor;
