@@ -5,6 +5,7 @@ using TMPro;
 using System.Diagnostics;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     public int maxTurns = 0;
     public int currentTurn = 0;
+    private int extraTurns = 0;
 
     public int maxUndos = 0;
     public int currentUndos = 0;
@@ -91,14 +93,14 @@ public class GameManager : MonoBehaviour
         board = FindObjectOfType<BoardManager>();
         ui = FindObjectOfType<UIManager>();
 
-        if (maxSkips > 0)
-        {
-            currentSkips = maxSkips;
-            skipAllowed = true;
-            ui.toggleSkipInteract(skipAllowed);
-            ui.skipCountUpdate(currentSkips);
+        //if (maxSkips > 0)
+        //{
+        //    currentSkips = maxSkips;
+        //    skipAllowed = true;
+        //    ui.toggleSkipInteract(skipAllowed);
+        //    ui.skipCountUpdate(currentSkips);
 
-        }
+        //}
 
         if (maxRefreshes > 0)
         {
@@ -122,6 +124,7 @@ public class GameManager : MonoBehaviour
     public void turnStarted()
     {
         currentTurn--;
+        ui.turnEffect(-1);
         ui.updateTurns(currentTurn);
     }
 
@@ -251,6 +254,11 @@ public class GameManager : MonoBehaviour
         //turnsText.text = "Turns Left: " + currentTurn;
         //roundsText.text = "Round: " + currentRound;
         //targetScoreText.text = "Target Score: " + currentTargetScore;
+
+        if(extraTurns > 0)
+        {
+            ui.turnEffect(extraTurns);
+        }
     }
 
     private void gameOver()
@@ -275,6 +283,7 @@ public class GameManager : MonoBehaviour
     public void increaseMaxTurns(int num)
     {
         maxTurns += num;
+        extraTurns += num;
         ui.updateTurns(currentTurn);
     }
 
@@ -294,16 +303,16 @@ public class GameManager : MonoBehaviour
         ui.toggleUndoInteract(false);
     }
 
-    public void useSkip()
-    {
-        --currentSkips;
-        if (currentSkips == 0)
-        {
-            skipAllowed = false;
-        }
-        ui.toggleSkipInteract(skipAllowed);
-        ui.skipCountUpdate(currentSkips);
-    }
+    //public void useSkip()
+    //{
+    //    --currentSkips;
+    //    if (currentSkips == 0)
+    //    {
+    //        skipAllowed = false;
+    //    }
+    //    ui.toggleSkipInteract(skipAllowed);
+    //    ui.skipCountUpdate(currentSkips);
+    //}
 
     public void useRefresh()
     {

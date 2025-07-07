@@ -163,9 +163,13 @@ public class PatronTopUI : MonoBehaviour
         float endSize = layoutElement.preferredWidth * 1.5f;
 
         RectTransform rect = patronMask.GetComponent<RectTransform>();
+        RectTransform rectBG = bg.GetComponent<RectTransform>();
 
         Vector2 startScale = rect.localScale;
-        Vector2 endScale = startScale * 1.1f;
+        Vector2 endScale = new Vector2(startScale.x * 1.1f, startScale.y);
+
+        Vector2 startScaleBG = rectBG.localScale;
+        Vector2 endScaleBG = new Vector2(startScaleBG.x * 1.1f, startScaleBG.y);
 
         if (toggle.isOn)
         {
@@ -175,11 +179,13 @@ public class PatronTopUI : MonoBehaviour
 
         DOTween.To(() => layoutElement.preferredWidth, x => layoutElement.preferredWidth = x, endSize, tweenDuration);
         rect.DOScale(endScale, tweenDuration);
+        rectBG.DOScale(endScaleBG, tweenDuration);
 
         yield return new WaitForSeconds(effectDuration + tweenDuration);
 
         DOTween.To(() => layoutElement.preferredWidth, x => layoutElement.preferredWidth = x, startSize, tweenDuration);
         rect.DOScale(startScale, tweenDuration);
+        rectBG.DOScale(startScaleBG, tweenDuration);
 
         yield return new WaitForSeconds(tweenDuration);
 

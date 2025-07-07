@@ -17,6 +17,9 @@ public class UIManager : MonoBehaviour
     //[SerializeField] TMP_Text scoreText;
     [SerializeField] TMP_Text streakText;
     [SerializeField] TMP_Text turnsText;
+    [SerializeField] GameObject turnTextObj;
+    [SerializeField] GameObject turnObj;
+    [SerializeField] GameObject textPopupPrefab;
     [SerializeField] TMP_Text roundsText;
     [SerializeField] TMP_Text gamesText;
     [SerializeField] TMP_Text progressText;
@@ -39,8 +42,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text confirmPatronsBttnText;
     //private string confirmPatronsText;
     public int patronChoiceLimit;
-    [SerializeField] TMP_Text skipCountText;
-    [SerializeField] Button skipButton;
+    //[SerializeField] TMP_Text skipCountText;
+    //[SerializeField] Button skipButton;
     [SerializeField] TMP_Text refreshCountText;
     [SerializeField] Button refreshButton;
 
@@ -348,10 +351,10 @@ public class UIManager : MonoBehaviour
         refreshCountText.text = "" + count;
     }
 
-    public void skipCountUpdate(int count)
-    {
-        skipCountText.text = "" + count;
-    }
+    //public void skipCountUpdate(int count)
+    //{
+    //    skipCountText.text = "" + count;
+    //}
 
     public void checkToEnableUndo()
     {
@@ -366,10 +369,10 @@ public class UIManager : MonoBehaviour
         undoButton.interactable = canInteract;
     }
 
-    public void toggleSkipInteract(bool canInteract)
-    {
-        skipButton.interactable = canInteract;
-    }
+    //public void toggleSkipInteract(bool canInteract)
+    //{
+    //    skipButton.interactable = canInteract;
+    //}
 
     public void toggleRefreshInteract(bool canInteract)
     {
@@ -387,11 +390,12 @@ public class UIManager : MonoBehaviour
 
     public void skipButtonPress()
     {
-        if (gameManager.currentSkips > 0)
-        {
-            skipPatronSelect();
-            gameManager.useSkip();
-        }
+        //if (gameManager.currentSkips > 0)
+        //{
+        //    skipPatronSelect();
+        //    gameManager.useSkip();
+        //}
+        skipPatronSelect();
     }
 
     public void removePatronButtonPress()
@@ -487,5 +491,29 @@ public class UIManager : MonoBehaviour
     public void musicToggleUpdate()
     {
         audioManager.muteMusic(!musicToggle.isOn);
+    }
+
+    public void turnEffect(int turnNum)
+    {
+        float scaleValue = 1.1f;
+        Vector3 punchScale = new Vector3(scaleValue, scaleValue, scaleValue);
+        turnTextObj.GetComponent<RectTransform>().DOPunchScale(punchScale, 0.3f, 0, 0);
+
+        string text = "";
+
+        if (turnNum >= 0)
+        {
+            text = "+" + turnNum;
+        }
+        else
+        {
+            text = "-" + (turnNum * -1);
+        }
+
+        //instantiate text effect
+        GameObject popup = Instantiate(textPopupPrefab, turnObj.transform);
+        popup.GetComponent<TMP_Text>().text = text;
+        popup.SetActive(true);
+        //assign string to effect
     }
 }
