@@ -111,6 +111,10 @@ public class Element : MonoBehaviour
 
     [SerializeField] Color flashColor;
 
+    [SerializeField] int minPointParticles = 5;
+    [SerializeField] int maxPointParticles = 8;
+    [SerializeField] GameObject pointParticlePrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -641,5 +645,29 @@ public class Element : MonoBehaviour
         {
             return true;
         }
+    }
+
+    public void destroyThis()
+    {
+        if(tileType == TileType.Gem)
+        {
+            int randAmount = Random.Range(minPointParticles, maxPointParticles + 1);
+
+            for (int i = 0; i < randAmount; i++)
+            {
+                float randScale = Random.Range(0.1f, 0.2f);
+                Vector3 newScale = new Vector3(randScale, randScale, randScale);
+
+                float xOffset = Random.Range(-0.25f,0.25f);
+                float yOffset = Random.Range(-0.25f,0.25f);
+
+                Vector3 pos = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
+                GameObject particle = Instantiate(pointParticlePrefab, pos, Quaternion.identity);
+                particle.transform.localScale = newScale;
+                //Debug.Log("particle spawned");
+            }
+        }
+
+        Destroy(gameObject);
     }
 }

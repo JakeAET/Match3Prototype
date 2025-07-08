@@ -12,6 +12,7 @@ TagManager:
   - master volume
   - sfx toggle
   - music toggle
+  - point particle target
   layers:
   - Default
   - TransparentFX

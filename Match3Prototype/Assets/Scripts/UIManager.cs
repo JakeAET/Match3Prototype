@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -76,6 +77,10 @@ public class UIManager : MonoBehaviour
 
     [Header("Patron Panel")]
     [SerializeField] Slider progressSlider;
+    [SerializeField] GameObject sliderObj;
+    [SerializeField] Image sliderFill;
+    private Color sliderBaseColor;
+    private Color sliderBrightColor;
 
     public GameObject[] patronSlots;
     public List<PatronTopUI> patronSlotUIRefs;
@@ -117,6 +122,9 @@ public class UIManager : MonoBehaviour
         {
             patronSlotUIRefsWS.Add(slot.GetComponent<PatronTopUI>());
         }
+
+        sliderBaseColor = sliderFill.color;
+        sliderBrightColor = new Color(sliderBaseColor.r * 1.3f, sliderBaseColor.g * 1.3f, sliderBaseColor.b * 1.3f);
     }
 
     // Update is called once per frame
@@ -138,7 +146,24 @@ public class UIManager : MonoBehaviour
 
 
         DOTween.To(() => progressSlider.value, x => progressSlider.value = x, sliderValue, 0.3f);
+        StartCoroutine(delayedSliderFlex(0f));
         //progressSlider.value = sliderValue;
+    }
+
+    IEnumerator delayedSliderFlex(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        sliderFill.color = sliderBaseColor;
+
+        Vector3 endScale = new Vector3(0, 0.1f, 0);
+        sliderObj.GetComponent<RectTransform>().DOPunchScale(endScale, 0.3f, 0, 0);
+
+        sliderFill.DOColor(sliderBrightColor, 0.15f);
+
+        yield return new WaitForSeconds(0.15f);
+
+        sliderFill.DOColor(sliderBaseColor, 0.15f);
     }
 
     public void updateStreak(float num)
@@ -495,8 +520,8 @@ public class UIManager : MonoBehaviour
 
     public void turnEffect(int turnNum)
     {
-        float scaleValue = 1.1f;
-        Vector3 punchScale = new Vector3(scaleValue, scaleValue, scaleValue);
+        float scaleValue = 0.3f;
+        Vector3 punchScale = new Vector3(scaleValue, scaleValue, 0);
         turnTextObj.GetComponent<RectTransform>().DOPunchScale(punchScale, 0.3f, 0, 0);
 
         string text = "";
