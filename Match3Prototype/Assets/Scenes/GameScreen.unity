@@ -5328,7 +5328,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1937458134}
   m_Father: {fileID: 1290439914}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6170,7 +6171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd86eb834766c38469dd8769eb8dbfd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTargetScore: 0
+  baseTargetScore: 1000
   roundScoreIncMult: 0.5
   gameScoreIncMult: 2
   extraHighPointMulti: 1
@@ -8985,6 +8986,8 @@ MonoBehaviour:
   loseRoundText: {fileID: 398176471}
   lossStatsText: {fileID: 1014293482}
   progressSlider: {fileID: 524711895}
+  sliderObj: {fileID: 524711892}
+  sliderFill: {fileID: 301967518}
   patronSlots:
   - {fileID: 95625558}
   - {fileID: 499570411}
@@ -18573,6 +18576,51 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930528744}
+  m_CullTransparentMesh: 1
+--- !u!1 &1937458133
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1937458134}
+  - component: {fileID: 1937458135}
+  m_Layer: 5
+  m_Name: Point Particle Target
+  m_TagString: point particle target
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1937458134
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937458133}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 562899577}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 10.2, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1937458135
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937458133}
   m_CullTransparentMesh: 1
 --- !u!1001 &1938602297
 PrefabInstance:

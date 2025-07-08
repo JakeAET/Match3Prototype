@@ -579,6 +579,7 @@ public class BoardManager : MonoBehaviour
             {
                 Vector2 targetPos = new Vector2(column * xSpawnOffsetMult, row * ySpawnOffsetMult);
                 Instantiate(targetElement.burstEffectPrefab, targetPos, Quaternion.identity);
+                //
             }
 
             if(targetElement.tileType == TileType.Bomb)
@@ -742,7 +743,7 @@ public class BoardManager : MonoBehaviour
         gameManager.tilesCleared++;
 
         yield return new WaitForSeconds(waitTime);
-        Destroy(target);
+        targetElement.destroyThis();
     }
 
     private IEnumerator DecreaseRow()

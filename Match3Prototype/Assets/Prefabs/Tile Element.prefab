@@ -976,7 +976,11 @@ MonoBehaviour:
   - {fileID: 1300860967, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
   - {fileID: -1290393750, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
   - {fileID: 366747274, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
+  rocketColors: []
   flashColor: {r: 0, g: 0, b: 0, a: 0}
+  minPointParticles: 5
+  maxPointParticles: 8
+  pointParticlePrefab: {fileID: 7248180152511523243, guid: eb798a74202cd504caba74bb01984023, type: 3}
 --- !u!1 &8267291320799500029
 GameObject:
   m_ObjectHideFlags: 0
