@@ -26,6 +26,24 @@ public class PatronTopUI : MonoBehaviour
     public GameObject patronMask;
     private bool patronEffectActive = false;
 
+    [SerializeField] GameObject procVFX;
+    [SerializeField] ParticleSystem streakParticles;
+    //[SerializeField] ParticleSystem leftLightningParticles;
+    //[SerializeField] ParticleSystem rightLightningParticles;
+    [SerializeField] ParticleSystem starsParticles;
+    [SerializeField] Image leftLightningImg;
+    [SerializeField] Image rightLightningImg;
+    [SerializeField] Animator leftLightningAnim;
+    [SerializeField] Animator rightLightningAnim;
+    [SerializeField] Outline leftLightningOutline;
+    [SerializeField] Outline rightLightningOutline;
+
+    private void Awake()
+    {
+        streakParticles.Stop();
+        starsParticles.Stop();
+    }
+
     public void initialize(Patron targetPatron)
     {
         ui = FindObjectOfType<UIManager>();
@@ -159,6 +177,18 @@ public class PatronTopUI : MonoBehaviour
 
     IEnumerator patronEffect(float effectDuration, float tweenDuration)
     {
+        Color startColor = patronRef.color;
+        float transparency = 0.2f;
+
+        float lightenFactor = 2f;
+        Color lighterColor = new Color(startColor.r * lightenFactor, startColor.g * lightenFactor, startColor.b * lightenFactor, transparency);
+
+        float darkenFactor = 0.8f;
+        Color darkerColor = new Color(startColor.r * darkenFactor, startColor.g * darkenFactor, startColor.b * darkenFactor, transparency);
+
+        var streaksMain = streakParticles.main;
+        streaksMain.startColor = new ParticleSystem.MinMaxGradient(lighterColor, darkerColor); ;
+
         float startSize = layoutElement.preferredWidth;
         float endSize = layoutElement.preferredWidth * 1.5f;
 
@@ -170,6 +200,18 @@ public class PatronTopUI : MonoBehaviour
 
         Vector2 startScaleBG = rectBG.localScale;
         Vector2 endScaleBG = new Vector2(startScaleBG.x * 1.1f, startScaleBG.y);
+
+        streakParticles.Play();
+        //leftLightningParticles.Play();
+        //rightLightningParticles.Play();
+        starsParticles.Play();
+
+        leftLightningOutline.DOColor(startColor, tweenDuration);
+        rightLightningOutline.DOColor(startColor, tweenDuration);
+        leftLightningImg.DOFade(1f, tweenDuration);
+        rightLightningImg.DOFade(1f, tweenDuration);
+        leftLightningAnim.enabled = true;
+        rightLightningAnim.enabled = true;
 
         if (toggle.isOn)
         {
@@ -187,8 +229,18 @@ public class PatronTopUI : MonoBehaviour
         rect.DOScale(startScale, tweenDuration);
         rectBG.DOScale(startScaleBG, tweenDuration);
 
+        streakParticles.Stop();
+        starsParticles.Stop();
+
         yield return new WaitForSeconds(tweenDuration);
 
         patronEffectActive = false;
+
+        leftLightningImg.DOFade(0, tweenDuration);
+        rightLightningImg.DOFade(0, tweenDuration);
+        leftLightningOutline.DOFade(1f, tweenDuration);
+        rightLightningOutline.DOFade(1f, tweenDuration);
+        leftLightningAnim.enabled = false;
+        rightLightningAnim.enabled = false;
     }
 }

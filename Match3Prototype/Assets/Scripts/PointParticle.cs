@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 using static UnityEngine.GraphicsBuffer;
@@ -43,9 +44,17 @@ public class PointParticle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GameObject target = GameObject.FindGameObjectWithTag("point particle target");
+
+        Vector3 pos = target.GetComponent<RectTransform>().position;
+
+        if (System.Single.IsNaN(pos.x) || System.Single.IsNaN(pos.y) || System.Single.IsNaN(pos.y))
+        {
+            isMoving = false;
+        }
+
         if (isMoving)
         {
-            GameObject target = GameObject.FindGameObjectWithTag("point particle target");
 
             if (target != null)
             {
