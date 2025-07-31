@@ -25880,6 +25880,7 @@ GameObject:
   - component: {fileID: 8966744716410637743}
   - component: {fileID: 8282499635045712089}
   - component: {fileID: 8282499635045712088}
+  - component: {fileID: 8505365611741392290}
   m_Layer: 5
   m_Name: Patron Slot
   m_TagString: Untagged
@@ -25952,6 +25953,7 @@ MonoBehaviour:
   rightLightningAnim: {fileID: 2349985994829724345}
   leftLightningOutline: {fileID: 3761941119494764948}
   rightLightningOutline: {fileID: 628062357730309807}
+  canvas: {fileID: 8505365611741392290}
 --- !u!114 &8282499635045712089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26002,6 +26004,27 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!223 &8505365611741392290
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8282499635045712094}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 1812806169
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &8719950932850499592
 GameObject:
   m_ObjectHideFlags: 0

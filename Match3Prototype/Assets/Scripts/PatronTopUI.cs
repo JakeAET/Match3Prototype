@@ -37,6 +37,7 @@ public class PatronTopUI : MonoBehaviour
     [SerializeField] Animator rightLightningAnim;
     [SerializeField] Outline leftLightningOutline;
     [SerializeField] Outline rightLightningOutline;
+    [SerializeField] Canvas canvas;
 
     private void Awake()
     {
@@ -212,6 +213,7 @@ public class PatronTopUI : MonoBehaviour
         rightLightningImg.DOFade(1f, tweenDuration);
         leftLightningAnim.enabled = true;
         rightLightningAnim.enabled = true;
+        canvas.sortingOrder = 1;
 
         if (toggle.isOn)
         {
@@ -242,5 +244,6 @@ public class PatronTopUI : MonoBehaviour
         rightLightningOutline.DOFade(1f, tweenDuration);
         leftLightningAnim.enabled = false;
         rightLightningAnim.enabled = false;
+        canvas.sortingOrder = 0;
     }
 }
