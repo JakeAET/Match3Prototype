@@ -33,6 +33,7 @@ public class AbilityDestroyRandomTile : Ability
                 targetElement = board.randomUnmaskedElement();
             }
             targetElement.isMatched = true;
+            targetElement.markedByRogue = true;
         }
         procEffect();
     }

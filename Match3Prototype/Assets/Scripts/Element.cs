@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEngine.GraphicsBuffer;
@@ -69,6 +70,7 @@ public class Element : MonoBehaviour
     public bool isHorizRocket = false;
     public RocketFacing rocketFacing;
     public bool isBanished = false;
+    public bool markedByRogue = false;
 
 
     [Header("Board Variables")]
@@ -114,6 +116,9 @@ public class Element : MonoBehaviour
     [SerializeField] int minPointParticles = 5;
     [SerializeField] int maxPointParticles = 8;
     [SerializeField] GameObject pointParticlePrefab;
+
+    [SerializeField] GameObject rogueEffect;
+    [SerializeField] Animator rogueAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -649,7 +654,27 @@ public class Element : MonoBehaviour
 
     public void destroyThis()
     {
-        if(tileType == TileType.Gem)
+        StartCoroutine(destroyThisEnum());
+    }
+
+    IEnumerator destroyThisEnum()
+    {
+        if (markedByRogue)
+        {
+            rogueEffect.SetActive(true);
+
+            int animHash = Animator.StringToHash("Base Layer.Rogue Action");
+
+            rogueAnimator.Play(animHash, 0);
+
+            float animLength = rogueAnimator.GetCurrentAnimatorClipInfo(0).Length;
+
+            yield return new WaitForSeconds(animLength);
+
+            rogueEffect.SetActive(false);
+        }
+
+        if (tileType == TileType.Gem)
         {
             int randAmount = Random.Range(minPointParticles, maxPointParticles + 1);
 
@@ -658,8 +683,8 @@ public class Element : MonoBehaviour
                 float randScale = Random.Range(0.1f, 0.2f);
                 Vector3 newScale = new Vector3(randScale, randScale, randScale);
 
-                float xOffset = Random.Range(-0.25f,0.25f);
-                float yOffset = Random.Range(-0.25f,0.25f);
+                float xOffset = Random.Range(-0.25f, 0.25f);
+                float yOffset = Random.Range(-0.25f, 0.25f);
 
                 Vector3 pos = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
                 GameObject particle = Instantiate(pointParticlePrefab, pos, Quaternion.identity);
@@ -669,5 +694,6 @@ public class Element : MonoBehaviour
         }
 
         Destroy(gameObject);
+        yield return null;
     }
 }

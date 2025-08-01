@@ -6263,7 +6263,7 @@ MonoBehaviour:
   maxUndos: 0
   currentUndos: 0
   undoAllowed: 0
-  maxRefreshes: 1
+  maxRefreshes: 20
   currentRefreshes: 0
   refreshAllowed: 0
   maxSkips: 1
