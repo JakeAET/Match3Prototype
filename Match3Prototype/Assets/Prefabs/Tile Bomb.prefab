@@ -544,7 +544,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1728117695
   m_SortingLayer: 2
-  m_SortingOrder: 3
+  m_SortingOrder: 11
   m_Sprite: {fileID: -1290393750, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -831,7 +831,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: -0.03997737, y: -0.09494572}
   serializedVersion: 2
-  m_Radius: 1.0946606
+  m_Radius: 1.3
 --- !u!114 &2823170657958241623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,6 +856,7 @@ MonoBehaviour:
   enchantedMaterial: {fileID: 0}
   gemSprite: {fileID: 4953604549976672078}
   iceFrontSprite: {fileID: 0}
+  explosionParticles: {fileID: 8567142157502090641, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
   burstEffectPrefab: {fileID: 7667150690387464802, guid: 806052a81c4b749458a4ad392ac672dc, type: 3}
   colorName: 
   colorIndex: 0
@@ -869,6 +870,7 @@ MonoBehaviour:
   isHorizRocket: 0
   rocketFacing: 0
   isBanished: 0
+  markedByRogue: 0
   column: 0
   row: 0
   targetX: 0
@@ -891,7 +893,14 @@ MonoBehaviour:
   - {fileID: 1300860967, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
   - {fileID: -1290393750, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
   - {fileID: 366747274, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
+  rocketColors: []
   flashColor: {r: 0, g: 0, b: 0, a: 0}
+  minPointParticles: 5
+  maxPointParticles: 8
+  pointParticlePrefab: {fileID: 0}
+  rogueEffect: {fileID: 0}
+  rogueAnimator: {fileID: 0}
+  highlightRailPrefab: {fileID: 0}
 --- !u!1 &8267291320799500029
 GameObject:
   m_ObjectHideFlags: 0

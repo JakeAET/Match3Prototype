@@ -57,6 +57,7 @@ public class Element : MonoBehaviour
     [SerializeField] private Material enchantedMaterial;
     [SerializeField] private SpriteRenderer gemSprite;
     [SerializeField] private SpriteRenderer iceFrontSprite;
+    [SerializeField] private GameObject explosionParticles;
     public GameObject burstEffectPrefab;
     public string colorName;
     public int colorIndex;
@@ -71,6 +72,7 @@ public class Element : MonoBehaviour
     public RocketFacing rocketFacing;
     public bool isBanished = false;
     public bool markedByRogue = false;
+    //public bool explodedByBomb = false;
 
 
     [Header("Board Variables")]
@@ -111,7 +113,7 @@ public class Element : MonoBehaviour
     [SerializeField] Sprite[] rocketColors;
     private Dictionary<TargetColor, Sprite> rocketColorDict;
 
-    [SerializeField] Color flashColor;
+    public Color flashColor;
 
     [SerializeField] int minPointParticles = 5;
     [SerializeField] int maxPointParticles = 8;
@@ -119,6 +121,8 @@ public class Element : MonoBehaviour
 
     [SerializeField] GameObject rogueEffect;
     [SerializeField] Animator rogueAnimator;
+
+    [SerializeField] GameObject highlightRailPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -215,7 +219,7 @@ public class Element : MonoBehaviour
                     //Debug.Log("Vert Rocket SPLODED");
                     // vert rocket effect
 
-                    transform.DOScale(new Vector3(2, 2, 2), 0.2f);
+                    //transform.DOScale(new Vector3(2, 2, 2), 0.2f);
 
                     for (int i = 0; i < board.height; i++)
                     {
@@ -235,19 +239,19 @@ public class Element : MonoBehaviour
                         }
                     }
 
-                    if (rocketFacing == RocketFacing.Down) // face down
-                    {
-                        Debug.Log("rocket sploded down");
-                        targetY = board.height * -3f * board.ySpawnOffsetMult;
-                    }
-                    else if (rocketFacing == RocketFacing.Up) // face up
-                    {
-                        Debug.Log("rocket sploded up");
-                        targetY = board.height * 3f * board.ySpawnOffsetMult;
-                    }
+                    //if (rocketFacing == RocketFacing.Down) // face down
+                    //{
+                    //    Debug.Log("rocket sploded down");
+                    //    targetY = board.height * -3f * board.ySpawnOffsetMult;
+                    //}
+                    //else if (rocketFacing == RocketFacing.Up) // face up
+                    //{
+                    //    Debug.Log("rocket sploded up");
+                    //    targetY = board.height * 3f * board.ySpawnOffsetMult;
+                    //}
 
-                    rocketTrail.SetActive(true);
-                    //fallSpeed *= 2f;
+                    //rocketTrail.SetActive(true);
+                    fallSpeed *= 2f;
                     triggeredMatchEffect = true;
                 }
                 else if (tileType == TileType.Rocket && isHorizRocket)
@@ -255,7 +259,7 @@ public class Element : MonoBehaviour
                     //Debug.Log("Horiz Rocket SPLODED");
                     // horiz rocket effect
 
-                    transform.DOScale(new Vector3(2, 2, 2), 0.2f);
+                    //transform.DOScale(new Vector3(2, 2, 2), 0.2f);
 
                     for (int i = 0; i < board.width; i++)
                     {
@@ -275,19 +279,19 @@ public class Element : MonoBehaviour
                         }
                     }
 
-                    if (rocketFacing == RocketFacing.Left) // face left
-                    {
-                        Debug.Log("rocket sploded left");
-                        targetX = board.width * -3f;
-                    }
-                    else if(rocketFacing == RocketFacing.Right) // face right
-                    {
-                        Debug.Log("rocket sploded right");
-                        targetX = board.width + (board.width * 3f);
-                    }
+                    //if (rocketFacing == RocketFacing.Left) // face left
+                    //{
+                    //    Debug.Log("rocket sploded left");
+                    //    targetX = board.width * -3f;
+                    //}
+                    //else if(rocketFacing == RocketFacing.Right) // face right
+                    //{
+                    //    Debug.Log("rocket sploded right");
+                    //    targetX = board.width + (board.width * 3f);
+                    //}
 
-                    rocketTrail.SetActive(true);
-                    //fallSpeed *= 2f;
+                    //rocketTrail.SetActive(true);
+                    fallSpeed *= 2f;
                     triggeredMatchEffect = true;
                 }
             }
@@ -657,22 +661,42 @@ public class Element : MonoBehaviour
         StartCoroutine(destroyThisEnum());
     }
 
+    public void rogueEffectStart()
+    {
+        StartCoroutine(rogueEffectEnum());
+    }
+
+    IEnumerator rogueEffectEnum()
+    {
+        rogueEffect.SetActive(true);
+
+        int animHash = Animator.StringToHash("Base Layer.Rogue Action");
+
+        rogueAnimator.Play(animHash, 0);
+
+        float animLength = rogueAnimator.GetCurrentAnimatorClipInfo(0).Length;
+
+        yield return new WaitForSeconds(animLength);
+
+        rogueEffect.SetActive(false);
+    }
+
     IEnumerator destroyThisEnum()
     {
-        if (markedByRogue)
-        {
-            rogueEffect.SetActive(true);
+        //if (markedByRogue)
+        //{
+        //    rogueEffect.SetActive(true);
 
-            int animHash = Animator.StringToHash("Base Layer.Rogue Action");
+        //    int animHash = Animator.StringToHash("Base Layer.Rogue Action");
 
-            rogueAnimator.Play(animHash, 0);
+        //    rogueAnimator.Play(animHash, 0);
 
-            float animLength = rogueAnimator.GetCurrentAnimatorClipInfo(0).Length;
+        //    float animLength = rogueAnimator.GetCurrentAnimatorClipInfo(0).Length;
 
-            yield return new WaitForSeconds(animLength);
+        //    yield return new WaitForSeconds(animLength);
 
-            rogueEffect.SetActive(false);
-        }
+        //    rogueEffect.SetActive(false);
+        //}
 
         if (tileType == TileType.Gem)
         {
@@ -691,6 +715,64 @@ public class Element : MonoBehaviour
                 particle.transform.localScale = newScale;
                 //Debug.Log("particle spawned");
             }
+        }
+        else if(tileType == TileType.Rocket)
+        {
+            if (isHorizRocket)
+            {
+                Vector2 targetPosHoriz = new Vector2(board.width / 2 * board.xSpawnOffsetMult, row * board.ySpawnOffsetMult);
+                GameObject horizTrail = Instantiate(highlightRailPrefab, targetPosHoriz, Quaternion.identity);
+                Color col = board.gemColors[board.targetColorDict[color]];
+                col.a = 0.5f;
+                horizTrail.GetComponent<SpriteRenderer>().color = col;
+                horizTrail.transform.eulerAngles = new Vector3(0, 0, 90);
+            }
+
+            if (isVertRocket)
+            {
+                Vector2 targetPosVert = new Vector2(column * board.xSpawnOffsetMult, board.height / 2 * board.ySpawnOffsetMult);
+                GameObject vertTrail = Instantiate(highlightRailPrefab, targetPosVert, Quaternion.identity);
+                Color col = board.gemColors[board.targetColorDict[color]];
+                col.a = 0.5f;
+                vertTrail.GetComponent<SpriteRenderer>().color = col;
+            }
+
+            if (rocketFacing == RocketFacing.Left) // face left
+            {
+                Debug.Log("rocket sploded left");
+                targetX = board.width * -3f;
+            }
+            else if (rocketFacing == RocketFacing.Right) // face right
+            {
+                Debug.Log("rocket sploded right");
+                targetX = board.width + (board.width * 3f);
+            }
+            else if (rocketFacing == RocketFacing.Down) // face down
+            {
+                Debug.Log("rocket sploded down");
+                targetY = board.height * -3f * board.ySpawnOffsetMult;
+            }
+            else if (rocketFacing == RocketFacing.Up) // face up
+            {
+                Debug.Log("rocket sploded up");
+                targetY = board.height * 3f * board.ySpawnOffsetMult;
+            }
+
+            transform.DOScale(new Vector3(1.7f, 1.7f, 1.7f), 0.2f);
+            rocketTrail.SetActive(true);
+
+            yield return new WaitForSeconds(0.5f);
+        }
+        //else if(tileType == TileType.Bomb)
+        //{
+        //    Vector3 pos = transform.position;
+        //    Instantiate(explosionParticles, pos, Quaternion.identity);
+        //}
+
+        if (isBombMatch)
+        {
+            Vector3 pos = transform.position;
+            Instantiate(explosionParticles, pos, Quaternion.identity);
         }
 
         Destroy(gameObject);

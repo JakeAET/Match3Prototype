@@ -34,6 +34,7 @@ public class AbilityDestroyRandomTile : Ability
             }
             targetElement.isMatched = true;
             targetElement.markedByRogue = true;
+            targetElement.rogueEffectStart();
         }
         procEffect();
     }

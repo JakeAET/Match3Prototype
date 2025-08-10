@@ -5816,7 +5816,6 @@ MonoBehaviour:
   - {r: 1, g: 0.19999999, b: 0.9333336, a: 1}
   frozenBurstPrefab: {fileID: 1182475831823992387, guid: a38481dd8ee1be340ae349096f0f081c, type: 3}
   bombExplosionPrefab: {fileID: 7538121860508034703, guid: 3e22499d36c498f46a95dba71bc42961, type: 3}
-  highlightRailPrefab: {fileID: 7937980223953944099, guid: b16690404222b644783bc0fe3ae4d24d, type: 3}
   rocketPrefab: {fileID: 7225419870597372579, guid: f764838266f86ba41bdec253aa8064ff, type: 3}
   bombPrefab: {fileID: 7225419870597372579, guid: a66f8c11b87858e459800d506b403adf, type: 3}
   redSpawnRate: 1
@@ -5830,6 +5829,12 @@ MonoBehaviour:
   currentFrozenTiles: 0
   xSpawnOffsetMult: 1.2
   ySpawnOffsetMult: 1.2
+  gemColors:
+  - {r: 0.8980393, g: 0.23137257, b: 0.34117648, a: 1}
+  - {r: 0.2901961, g: 0.36078432, b: 0.94117653, a: 1}
+  - {r: 0.3372549, g: 0.9333334, b: 0.34901962, a: 1}
+  - {r: 0.77647066, g: 0.4431373, b: 0.9725491, a: 1}
+  - {r: 1, g: 0.9960785, b: 0.41960788, a: 1}
   banishedType: 0
   basePointDebuff: 1
   tileBase: {fileID: 1658899245}
@@ -21820,6 +21825,79 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1180885559691859
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5177849092576854913, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5177849092576854913, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5177849092576854913, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1728117695
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508150407952809327, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567142157502090641, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_Name
+      value: Explosion Particle Effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567142157502090641, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
 --- !u!1001 &2015799235301440344
 PrefabInstance:
   m_ObjectHideFlags: 0

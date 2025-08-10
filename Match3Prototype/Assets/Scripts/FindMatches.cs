@@ -287,6 +287,7 @@ public class FindMatches : MonoBehaviour
                 OnRogueTrigger();
                 matchesFound = true;
                 rogueCanTrigger = false;
+                waitTime += 1f;
             }
         }
 

@@ -80,7 +80,6 @@ public class BoardManager : MonoBehaviour
     [SerializeField] Color[] popUpColors;
     [SerializeField] GameObject frozenBurstPrefab;
     [SerializeField] GameObject bombExplosionPrefab;
-    [SerializeField] GameObject highlightRailPrefab;
     [SerializeField] GameObject rocketPrefab;
     [SerializeField] GameObject bombPrefab;
 
@@ -111,7 +110,7 @@ public class BoardManager : MonoBehaviour
     //3 = purple
     //4 = yellow
 
-    Dictionary<TargetColor, int> targetColorDict = new Dictionary<TargetColor, int>
+    public Dictionary<TargetColor, int> targetColorDict = new Dictionary<TargetColor, int>
     {
         {TargetColor.Red, 0},
         {TargetColor.Blue, 1},
@@ -119,6 +118,8 @@ public class BoardManager : MonoBehaviour
         {TargetColor.Purple, 3},
         {TargetColor.Yellow, 4},
     };
+
+    public Color[] gemColors;
 
     // Boss Round
     public TargetColor banishedType;
@@ -589,11 +590,11 @@ public class BoardManager : MonoBehaviour
                     OnBombDestroyed();
                 }
 
-                Vector2 targetPosHoriz = new Vector2(width/2 * xSpawnOffsetMult,row * ySpawnOffsetMult);
-                GameObject horizExplosion = Instantiate(bombExplosionPrefab, targetPosHoriz, Quaternion.identity);
-                horizExplosion.transform.eulerAngles = new Vector3(0, 0, 90);
-                Vector2 targetPosVert = new Vector2(column * xSpawnOffsetMult, height / 2 * ySpawnOffsetMult);
-                Instantiate(bombExplosionPrefab, targetPosVert, Quaternion.identity);
+                //Vector2 targetPosHoriz = new Vector2(width/2 * xSpawnOffsetMult,row * ySpawnOffsetMult);
+                //GameObject horizExplosion = Instantiate(bombExplosionPrefab, targetPosHoriz, Quaternion.identity);
+                //horizExplosion.transform.eulerAngles = new Vector3(0, 0, 90);
+                //Vector2 targetPosVert = new Vector2(column * xSpawnOffsetMult, height / 2 * ySpawnOffsetMult);
+                //Instantiate(bombExplosionPrefab, targetPosVert, Quaternion.identity);
             }
             else if (targetElement.tileType == TileType.Rocket)
             {
@@ -602,18 +603,24 @@ public class BoardManager : MonoBehaviour
                     OnRocketDestroyed();
                 }
 
-                if (targetElement.isHorizRocket)
-                {
-                    Vector2 targetPosHoriz = new Vector2(width / 2 * xSpawnOffsetMult, row * ySpawnOffsetMult);
-                    GameObject horizTrail = Instantiate(highlightRailPrefab, targetPosHoriz, Quaternion.identity);
-                    horizTrail.transform.eulerAngles = new Vector3(0, 0, 90);
-                }
+                //if (targetElement.isHorizRocket)
+                //{
+                //    Vector2 targetPosHoriz = new Vector2(width / 2 * xSpawnOffsetMult, row * ySpawnOffsetMult);
+                //    GameObject horizTrail = Instantiate(highlightRailPrefab, targetPosHoriz, Quaternion.identity);
+                //    Color col = gemColors[targetColorDict[targetElement.color]];
+                //    col.a = 0.5f;
+                //    horizTrail.GetComponent<SpriteRenderer>().color = col;
+                //    horizTrail.transform.eulerAngles = new Vector3(0, 0, 90);
+                //}
 
-                if (targetElement.isVertRocket)
-                {
-                    Vector2 targetPosVert = new Vector2(column * xSpawnOffsetMult, height / 2 * ySpawnOffsetMult);
-                    Instantiate(highlightRailPrefab, targetPosVert, Quaternion.identity);
-                }
+                //if (targetElement.isVertRocket)
+                //{
+                //    Vector2 targetPosVert = new Vector2(column * xSpawnOffsetMult, height / 2 * ySpawnOffsetMult);
+                //    GameObject vertTrail = Instantiate(highlightRailPrefab, targetPosVert, Quaternion.identity);
+                //    Color col = gemColors[targetColorDict[targetElement.color]];
+                //    col.a = 0.5f;
+                //    vertTrail.GetComponent<SpriteRenderer>().color = col;
+                //}
             }
 
             SpawnOnDestroy spawn = targetElement.spawnType;

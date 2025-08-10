@@ -1194,6 +1194,7 @@ MonoBehaviour:
   enchantedMaterial: {fileID: 2100000, guid: 13bc952ec071a426082b4ff2e1a42dd0, type: 2}
   gemSprite: {fileID: 1203373384818866496}
   iceFrontSprite: {fileID: 549275564193053558}
+  explosionParticles: {fileID: 8567142157502090641, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
   burstEffectPrefab: {fileID: 0}
   colorName: 
   colorIndex: 0
@@ -1237,6 +1238,7 @@ MonoBehaviour:
   pointParticlePrefab: {fileID: 7248180152511523243, guid: eb798a74202cd504caba74bb01984023, type: 3}
   rogueEffect: {fileID: 7326123086782372018}
   rogueAnimator: {fileID: 2025282824397738758}
+  highlightRailPrefab: {fileID: 7937980223953944099, guid: b16690404222b644783bc0fe3ae4d24d, type: 3}
 --- !u!1 &7326123086782372018
 GameObject:
   m_ObjectHideFlags: 0
