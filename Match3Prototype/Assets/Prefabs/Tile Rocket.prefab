@@ -772,7 +772,7 @@ MonoBehaviour:
   enchantedMaterial: {fileID: 0}
   gemSprite: {fileID: 1203373384818866496}
   iceFrontSprite: {fileID: 0}
-  explosionParticles: {fileID: 0}
+  explosionParticles: {fileID: 8567142157502090641, guid: fbf3e9c98d24e894e9ac5da9c251a093, type: 3}
   burstEffectPrefab: {fileID: 7667150690387464802, guid: 806052a81c4b749458a4ad392ac672dc, type: 3}
   colorName: 
   colorIndex: 0

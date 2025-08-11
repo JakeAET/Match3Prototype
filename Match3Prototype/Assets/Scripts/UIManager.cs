@@ -101,6 +101,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Toggle musicToggle;
     [SerializeField] Toggle sfxToggle;
 
+    [SerializeField] Color[] healthBarColors;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,15 +135,30 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void updateSliderColor(int round)
+    {
+        sliderFill.color = healthBarColors[round - 1];
+
+        sliderBaseColor = sliderFill.color;
+        sliderBrightColor = new Color(sliderBaseColor.r * 1.3f, sliderBaseColor.g * 1.3f, sliderBaseColor.b * 1.3f);
+    }
+
     public void updateScoreProgress(float score, float target)
     {
-        progressText.text = score + " / " + target;
+        //progressText.text = score + " / " + target;
+        progressText.text = target - score + " HP";
 
-        float sliderValue = score / target;
+        //float sliderValue = score / target;
+        float sliderValue = (target - score) / target;
 
-        if (sliderValue > 1)
+        //if (sliderValue > 1)
+        //{
+        //    sliderValue = 1;
+        //}
+
+        if (sliderValue < 0)
         {
-            sliderValue = 1;
+            sliderValue = 0;
         }
 
 

@@ -49,10 +49,13 @@ public class GameManager : MonoBehaviour
     public bool skipAllowed = false;
 
     public int currentRound = 0;
+    public int maxRounds = 5;
     public int currentGame = 1;
-
+    public int maxGames = 3;
     public bool roundActive = false;
     public bool bossRound = false;
+    public int baseTurnIncrease;
+    public int currentTurnIncrease;
 
     private BoardManager board;
     private UIManager ui;
@@ -101,6 +104,8 @@ public class GameManager : MonoBehaviour
         //    ui.skipCountUpdate(currentSkips);
 
         //}
+
+        currentTurnIncrease = baseTurnIncrease;
 
         if (maxRefreshes > 0)
         {
@@ -168,9 +173,9 @@ public class GameManager : MonoBehaviour
         if (roundWon)
         {
             //UnityEngine.Debug.Log("Round Won");
-            board.clearBoard();
+            //board.clearBoard();
 
-            if(currentRound == 4) // Boss Round
+            if (currentRound == maxRounds - 1) // Boss Round
             {
                 // determine which boss round (change to find this out at the start of the game instead later)
                 bossRound = true;
@@ -178,10 +183,11 @@ public class GameManager : MonoBehaviour
             }
             else if (currentRound == 5)
             {
+                board.clearBoard();
                 // show boss win screen with stats
                 // select from 5 patrons now
 
-                if(currentGame == 10)
+                if (currentGame == maxGames)
                 {
                     ui.displayRunComplete();
                 }
@@ -214,7 +220,7 @@ public class GameManager : MonoBehaviour
 
     public void startRound()
     {
-        if (currentRound == 5)
+        if (currentRound == maxRounds)
         {
             currentRound = 1;
             currentGame++;
@@ -229,11 +235,26 @@ public class GameManager : MonoBehaviour
             currentRound++;
         }
 
+
+        // round start
         board.roundOver(false);
-        board.currentState = GameState.SettingBoard;
         roundActive = true;
         currentScore = 0;
-        currentTurn = maxTurns;
+
+        ui.updateSliderColor(currentRound);
+
+        if (currentRound == 1)
+        {
+            board.currentState = GameState.SettingBoard;
+            currentTurn = maxTurns;
+        }
+        else
+        {
+            board.currentState = GameState.Waiting;
+            currentTurn += currentTurnIncrease;
+        }
+
+
         currentUndos = maxUndos;
 
         currentTargetScore = (baseTargetScore * (currentGame * (gameScoreIncMult - 1))) * (1 + (roundScoreIncMult * (currentRound - 1))) * extraHighPointMulti;

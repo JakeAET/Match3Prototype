@@ -11,6 +11,21 @@ public class BssRndColorRestrict : BossRound
     {
         board = FindObjectOfType<BoardManager>();
         board.banishedType = targetColor;
+
+        foreach (GameObject obj in board.allElements)
+        {
+            if(obj != null)
+            {
+                Element target = obj.GetComponent<Element>();
+                if (target != null)
+                {
+                    if(target.color == targetColor)
+                    {
+                        target.banish();
+                    }
+                }
+            }
+        }
     }
 
     public override void deactivateConstraint()
