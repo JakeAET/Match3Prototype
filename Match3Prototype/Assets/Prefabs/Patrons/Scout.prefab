@@ -55,6 +55,6 @@ MonoBehaviour:
   level: 0
   maxLevel: 0
   index: 0
-  sprite: {fileID: 21300000, guid: c394cbd1c0c5a5d4fb40a3c8fe376edd, type: 3}
+  sprite: {fileID: 21300000, guid: c2ac52390fd65e743b202aeda0f7fd92, type: 3}
   color: {r: 0.08317016, g: 0.8396226, b: 0.5329833, a: 1}
   patronChoiceUIPrefab: {fileID: 5863754952809736263, guid: fdb2656d0e24c62488f819f74bc987a9, type: 3}
