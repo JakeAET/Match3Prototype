@@ -73,6 +73,8 @@ public class Element : MonoBehaviour
     public bool isBanished = false;
     public bool markedByRogue = false;
     //public bool explodedByBomb = false;
+    private bool bombSploded = false;
+    private bool rocketSploded = false;
 
 
     [Header("Board Variables")]
@@ -251,8 +253,14 @@ public class Element : MonoBehaviour
                     //}
 
                     //rocketTrail.SetActive(true);
-                    fallSpeed *= 2f;
+                    fallSpeed *= 1.5f;
                     triggeredMatchEffect = true;
+
+                    if (!rocketSploded)
+                    {
+                        StartCoroutine(RocketEffect());
+                        rocketSploded = true;
+                    }
                 }
                 else if (tileType == TileType.Rocket && isHorizRocket)
                 {
@@ -291,8 +299,14 @@ public class Element : MonoBehaviour
                     //}
 
                     //rocketTrail.SetActive(true);
-                    fallSpeed *= 2f;
+                    fallSpeed *= 1.5f;
                     triggeredMatchEffect = true;
+
+                    if (!rocketSploded)
+                    {
+                        StartCoroutine(RocketEffect());
+                        rocketSploded = true;
+                    }
                 }
             }
         }
@@ -401,6 +415,56 @@ public class Element : MonoBehaviour
                 //row == board.height - 1 &&
             }
         }
+    }
+
+    private IEnumerator RocketEffect()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if (isHorizRocket)
+        {
+            Vector2 targetPosHoriz = new Vector2(board.width / 2 * board.xSpawnOffsetMult, row * board.ySpawnOffsetMult);
+            GameObject horizTrail = Instantiate(highlightRailPrefab, targetPosHoriz, Quaternion.identity);
+            Color col = board.gemColors[board.targetColorDict[color]];
+            col.a = 0.5f;
+            horizTrail.GetComponent<SpriteRenderer>().color = col;
+            horizTrail.transform.eulerAngles = new Vector3(0, 0, 90);
+        }
+
+        if (isVertRocket)
+        {
+            Vector2 targetPosVert = new Vector2(column * board.xSpawnOffsetMult, board.height / 2 * board.ySpawnOffsetMult);
+            GameObject vertTrail = Instantiate(highlightRailPrefab, targetPosVert, Quaternion.identity);
+            Color col = board.gemColors[board.targetColorDict[color]];
+            col.a = 0.5f;
+            vertTrail.GetComponent<SpriteRenderer>().color = col;
+        }
+
+        if (rocketFacing == RocketFacing.Left) // face left
+        {
+            Debug.Log("rocket sploded left");
+            targetX = board.width * -3f;
+        }
+        else if (rocketFacing == RocketFacing.Right) // face right
+        {
+            Debug.Log("rocket sploded right");
+            targetX = board.width + (board.width * 3f);
+        }
+        else if (rocketFacing == RocketFacing.Down) // face down
+        {
+            Debug.Log("rocket sploded down");
+            targetY = board.height * -3f * board.ySpawnOffsetMult;
+        }
+        else if (rocketFacing == RocketFacing.Up) // face up
+        {
+            Debug.Log("rocket sploded up");
+            targetY = board.height * 3f * board.ySpawnOffsetMult;
+        }
+
+        transform.DOScale(new Vector3(1.7f, 1.7f, 1.7f), 0.2f);
+        rocketTrail.SetActive(true);
+
+        //yield return null;
     }
 
     public IEnumerator CheckMove()
@@ -718,50 +782,50 @@ public class Element : MonoBehaviour
         }
         else if(tileType == TileType.Rocket)
         {
-            if (isHorizRocket)
-            {
-                Vector2 targetPosHoriz = new Vector2(board.width / 2 * board.xSpawnOffsetMult, row * board.ySpawnOffsetMult);
-                GameObject horizTrail = Instantiate(highlightRailPrefab, targetPosHoriz, Quaternion.identity);
-                Color col = board.gemColors[board.targetColorDict[color]];
-                col.a = 0.5f;
-                horizTrail.GetComponent<SpriteRenderer>().color = col;
-                horizTrail.transform.eulerAngles = new Vector3(0, 0, 90);
-            }
+            //if (isHorizRocket)
+            //{
+            //    Vector2 targetPosHoriz = new Vector2(board.width / 2 * board.xSpawnOffsetMult, row * board.ySpawnOffsetMult);
+            //    GameObject horizTrail = Instantiate(highlightRailPrefab, targetPosHoriz, Quaternion.identity);
+            //    Color col = board.gemColors[board.targetColorDict[color]];
+            //    col.a = 0.5f;
+            //    horizTrail.GetComponent<SpriteRenderer>().color = col;
+            //    horizTrail.transform.eulerAngles = new Vector3(0, 0, 90);
+            //}
 
-            if (isVertRocket)
-            {
-                Vector2 targetPosVert = new Vector2(column * board.xSpawnOffsetMult, board.height / 2 * board.ySpawnOffsetMult);
-                GameObject vertTrail = Instantiate(highlightRailPrefab, targetPosVert, Quaternion.identity);
-                Color col = board.gemColors[board.targetColorDict[color]];
-                col.a = 0.5f;
-                vertTrail.GetComponent<SpriteRenderer>().color = col;
-            }
+            //if (isVertRocket)
+            //{
+            //    Vector2 targetPosVert = new Vector2(column * board.xSpawnOffsetMult, board.height / 2 * board.ySpawnOffsetMult);
+            //    GameObject vertTrail = Instantiate(highlightRailPrefab, targetPosVert, Quaternion.identity);
+            //    Color col = board.gemColors[board.targetColorDict[color]];
+            //    col.a = 0.5f;
+            //    vertTrail.GetComponent<SpriteRenderer>().color = col;
+            //}
 
-            if (rocketFacing == RocketFacing.Left) // face left
-            {
-                Debug.Log("rocket sploded left");
-                targetX = board.width * -3f;
-            }
-            else if (rocketFacing == RocketFacing.Right) // face right
-            {
-                Debug.Log("rocket sploded right");
-                targetX = board.width + (board.width * 3f);
-            }
-            else if (rocketFacing == RocketFacing.Down) // face down
-            {
-                Debug.Log("rocket sploded down");
-                targetY = board.height * -3f * board.ySpawnOffsetMult;
-            }
-            else if (rocketFacing == RocketFacing.Up) // face up
-            {
-                Debug.Log("rocket sploded up");
-                targetY = board.height * 3f * board.ySpawnOffsetMult;
-            }
+            //if (rocketFacing == RocketFacing.Left) // face left
+            //{
+            //    Debug.Log("rocket sploded left");
+            //    targetX = board.width * -3f;
+            //}
+            //else if (rocketFacing == RocketFacing.Right) // face right
+            //{
+            //    Debug.Log("rocket sploded right");
+            //    targetX = board.width + (board.width * 3f);
+            //}
+            //else if (rocketFacing == RocketFacing.Down) // face down
+            //{
+            //    Debug.Log("rocket sploded down");
+            //    targetY = board.height * -3f * board.ySpawnOffsetMult;
+            //}
+            //else if (rocketFacing == RocketFacing.Up) // face up
+            //{
+            //    Debug.Log("rocket sploded up");
+            //    targetY = board.height * 3f * board.ySpawnOffsetMult;
+            //}
 
-            transform.DOScale(new Vector3(1.7f, 1.7f, 1.7f), 0.2f);
-            rocketTrail.SetActive(true);
+            //transform.DOScale(new Vector3(1.7f, 1.7f, 1.7f), 0.2f);
+            //rocketTrail.SetActive(true);
 
-            yield return new WaitForSeconds(0.5f);
+            //yield return new WaitForSeconds(0.5f);
         }
         //else if(tileType == TileType.Bomb)
         //{

@@ -26,7 +26,7 @@ public class RocketTrail : MonoBehaviour
 
     IEnumerator RocketTrailEffect()
     {
-        sprite.DOFade(1, lifeTime / 2);
+        sprite.DOFade(0.8f, lifeTime / 2);
 
         yield return new WaitForSeconds(lifeTime/2);
 
