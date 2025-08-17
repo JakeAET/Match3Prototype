@@ -1233,9 +1233,14 @@ MonoBehaviour:
   - {fileID: 366747274, guid: 49721fbba9ba4a44889449e3a3f07d0e, type: 3}
   rocketColors: []
   flashColor: {r: 0, g: 0, b: 0, a: 0}
-  minPointParticles: 5
-  maxPointParticles: 8
-  pointParticlePrefab: {fileID: 7248180152511523243, guid: eb798a74202cd504caba74bb01984023, type: 3}
+  minPointParticles: 1
+  maxPointParticles: 1
+  pointParticlePrefabs:
+  - {fileID: 6852742775262849706, guid: 3c365ab08d66bef46ae7c4973b8f40fe, type: 3}
+  - {fileID: 6852742775262849706, guid: 1a9b984a4a177ae4d8ae3faace7eaa04, type: 3}
+  - {fileID: 6852742775262849706, guid: 4e9f3332323de0d44a1d1c6202a71e18, type: 3}
+  - {fileID: 6852742775262849706, guid: a6f6fefc6b03c5340b0bc5cecf87b93e, type: 3}
+  - {fileID: 6852742775262849706, guid: f8b412aa958309b4b9a1a3698ecdede9, type: 3}
   rogueEffect: {fileID: 7326123086782372018}
   rogueAnimator: {fileID: 2025282824397738758}
   highlightRailPrefab: {fileID: 7937980223953944099, guid: b16690404222b644783bc0fe3ae4d24d, type: 3}

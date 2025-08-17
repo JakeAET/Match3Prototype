@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7056911370961807539
 Transform:
   m_ObjectHideFlags: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 449820464709379025}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7248180152511523285}
@@ -160,7 +160,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 49fe4ec3976531343b09e109b7f71226, type: 3}
-  m_Color: {r: 0.99607843, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -182,6 +182,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef6b2c69cf67f343b7547f1d35d96fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetColor: 2
+  weaponSprites:
+  - {fileID: 21300000, guid: ce2b8ffc51f77484fb6aacf6c6481d7c, type: 3}
+  - {fileID: 21300000, guid: e57f18543dc003648bdd34b15babe238, type: 3}
+  - {fileID: 21300000, guid: 79ab352cc738cb44789cc8bc4e64ee5a, type: 3}
+  - {fileID: 21300000, guid: ad841c5a11b6e0d40b286786966d7b18, type: 3}
+  - {fileID: 21300000, guid: c9ba584e4d82e67468fba03905bbe9b7, type: 3}
+  glowSR: {fileID: 4861037526807070452}
   targetPos: {x: 0, y: 0, z: 0}
   fracComplete: 0
   duration: 0.5
+  isSpinning: 0
+  pointAtTarget: 0

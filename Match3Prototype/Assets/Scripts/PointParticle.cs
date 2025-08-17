@@ -7,6 +7,11 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PointParticle : MonoBehaviour
 {
+    [SerializeField] TargetColor targetColor;
+    [SerializeField] Sprite[] weaponSprites;
+    private SpriteRenderer sr;
+    [SerializeField] SpriteRenderer glowSR;
+
     public Vector3 targetPos = Vector3.zero;
     public float fracComplete;
 
@@ -18,6 +23,20 @@ public class PointParticle : MonoBehaviour
     private bool isMoving = true;
 
     private float randOffset;
+
+    [SerializeField] bool isSpinning = false;
+    [SerializeField] bool pointAtTarget = false;
+
+    [SerializeField] float spinSpeed;
+
+    public Dictionary<TargetColor, int> targetColorDict = new Dictionary<TargetColor, int>
+    {
+        {TargetColor.Red, 0},
+        {TargetColor.Blue, 1},
+        {TargetColor.Green, 2},
+        {TargetColor.Purple, 3},
+        {TargetColor.Yellow, 4},
+    };
 
     private void Awake()
     {
@@ -33,12 +52,16 @@ public class PointParticle : MonoBehaviour
 
         startTime = Time.time;
         startPosition = gameObject.transform.position;
+
+        sr = gameObject.GetComponent<SpriteRenderer>();
+        sr.sprite = weaponSprites[targetColorDict[targetColor]];
+        glowSR.sprite = weaponSprites[targetColorDict[targetColor]];
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        randOffset = Random.Range(-0.01f, 0.01f);
+        randOffset = Random.Range(-0.03f, 0.03f);
     }
 
     // Update is called once per frame
@@ -90,6 +113,19 @@ public class PointParticle : MonoBehaviour
             if (fracComplete >= 1f)
             {
                 isMoving = false;
+            }
+
+            if (isSpinning)
+            {
+                transform.Rotate(0, 0, spinSpeed, Space.Self);
+            }
+
+            if (pointAtTarget)
+            {
+                //transform.LookAt(targetPos);
+                Vector3 lookPos = target.transform.position - transform.position;
+                lookPos.z = 0;
+                transform.up = lookPos;
             }
         }
         else

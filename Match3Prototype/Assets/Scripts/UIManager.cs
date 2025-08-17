@@ -162,16 +162,17 @@ public class UIManager : MonoBehaviour
         }
 
 
-        DOTween.To(() => progressSlider.value, x => progressSlider.value = x, sliderValue, 0.3f);
-        StartCoroutine(delayedSliderFlex(0f));
+        //DOTween.To(() => progressSlider.value, x => progressSlider.value = x, sliderValue, 0.3f);
+        StartCoroutine(delayedSliderFlex(0.6f, sliderValue));
         //progressSlider.value = sliderValue;
     }
 
-    IEnumerator delayedSliderFlex(float delay)
+    IEnumerator delayedSliderFlex(float delay, float value)
     {
         yield return new WaitForSeconds(delay);
 
         sliderFill.color = sliderBaseColor;
+        DOTween.To(() => progressSlider.value, x => progressSlider.value = x, value, 0.3f);
 
         Vector3 endScale = new Vector3(0, 0.1f, 0);
         sliderObj.GetComponent<RectTransform>().DOPunchScale(endScale, 0.3f, 0, 0);

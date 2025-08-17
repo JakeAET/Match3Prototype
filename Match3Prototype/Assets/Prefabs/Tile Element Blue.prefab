@@ -611,6 +611,10 @@ PrefabInstance:
       propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[1].tangentMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6149311959846356204, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7008706561675735744, guid: b94e3f825b3fdf1489b76f2236a64cff, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.042

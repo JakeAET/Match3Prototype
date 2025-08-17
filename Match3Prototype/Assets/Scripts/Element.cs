@@ -119,7 +119,7 @@ public class Element : MonoBehaviour
 
     [SerializeField] int minPointParticles = 5;
     [SerializeField] int maxPointParticles = 8;
-    [SerializeField] GameObject pointParticlePrefab;
+    [SerializeField] GameObject[] pointParticlePrefabs;
 
     [SerializeField] GameObject rogueEffect;
     [SerializeField] Animator rogueAnimator;
@@ -768,14 +768,15 @@ public class Element : MonoBehaviour
 
             for (int i = 0; i < randAmount; i++)
             {
-                float randScale = Random.Range(0.1f, 0.2f);
+                float randScale = Random.Range(0.3f, 0.5f);
+                //float randScale = 0.4f;
                 Vector3 newScale = new Vector3(randScale, randScale, randScale);
 
                 float xOffset = Random.Range(-0.25f, 0.25f);
                 float yOffset = Random.Range(-0.25f, 0.25f);
 
                 Vector3 pos = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
-                GameObject particle = Instantiate(pointParticlePrefab, pos, Quaternion.identity);
+                GameObject particle = Instantiate(pointParticlePrefabs[board.targetColorDict[color]], pos, Quaternion.identity);
                 particle.transform.localScale = newScale;
                 //Debug.Log("particle spawned");
             }
