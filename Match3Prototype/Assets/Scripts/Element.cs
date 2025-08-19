@@ -213,7 +213,7 @@ public class Element : MonoBehaviour
                         }
                     }
 
-                    transform.DOPunchScale(new Vector3(2, 2, 2), 0.3f);
+                    transform.DOPunchScale(new Vector3(2, 2, 2), 0.3f, 0, 0);
                     triggeredMatchEffect = true;
                 }
                 else if (tileType == TileType.Rocket && isVertRocket)
@@ -766,9 +766,11 @@ public class Element : MonoBehaviour
         {
             int randAmount = Random.Range(minPointParticles, maxPointParticles + 1);
 
+            Vector3 targetPos = new Vector3(Random.Range(0f,7f), -3, 0);
+
             for (int i = 0; i < randAmount; i++)
             {
-                float randScale = Random.Range(0.3f, 0.5f);
+                float randScale = Random.Range(0.2f, 0.3f);
                 //float randScale = 0.4f;
                 Vector3 newScale = new Vector3(randScale, randScale, randScale);
 
@@ -777,7 +779,8 @@ public class Element : MonoBehaviour
 
                 Vector3 pos = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
                 GameObject particle = Instantiate(pointParticlePrefabs[board.targetColorDict[color]], pos, Quaternion.identity);
-                particle.transform.localScale = newScale;
+                particle.GetComponent<PointParticle>().initialize(targetPos, newScale);
+                //particle.transform.localScale = newScale;
                 //Debug.Log("particle spawned");
             }
         }

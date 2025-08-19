@@ -45,11 +45,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Zombie
+  levelOneAbilities:
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  levelTwoAbilities:
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  levelThreeAbilities:
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  levelFourAbilities:
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  levelFiveAbilities:
+  - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
+  activeAbilites: []
   abilitiesByLevel:
   - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
   - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
   - {fileID: 8633396101148921237, guid: 3c6e6747fb9d2aa4389ac8315eba2172, type: 3}
-  activeAbilites: []
   level: 0
   maxLevel: 0
   index: 0

@@ -45,13 +45,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Druid
+  levelOneAbilities:
+  - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  levelTwoAbilities:
+  - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  levelThreeAbilities:
+  - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  levelFourAbilities:
+  - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  levelFiveAbilities:
+  - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
+  - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
+  activeAbilites: []
   abilitiesByLevel:
   - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
   - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
   - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
   - {fileID: 1016457447748494144, guid: dbada8d822bea450f8d34d11d60192ba, type: 3}
   - {fileID: 8997689360247144916, guid: ad23fef27e15d4dc6998e5c59bf200b7, type: 3}
-  activeAbilites: []
   level: 0
   maxLevel: 0
   index: 0

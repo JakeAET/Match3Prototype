@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,8 +8,11 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PointParticle : MonoBehaviour
 {
+    bool initialized = false;
+
     [SerializeField] TargetColor targetColor;
     [SerializeField] Sprite[] weaponSprites;
+    [SerializeField] Sprite[] weaponGlowSprites;
     private SpriteRenderer sr;
     [SerializeField] SpriteRenderer glowSR;
 
@@ -29,6 +33,8 @@ public class PointParticle : MonoBehaviour
 
     [SerializeField] float spinSpeed;
 
+    [SerializeField] GameObject weaponHitEffect;
+
     public Dictionary<TargetColor, int> targetColorDict = new Dictionary<TargetColor, int>
     {
         {TargetColor.Red, 0},
@@ -38,101 +44,107 @@ public class PointParticle : MonoBehaviour
         {TargetColor.Yellow, 4},
     };
 
-    private void Awake()
+    public void initialize(Vector3 targetPosInput, Vector3 newScale)
     {
-        //GameObject target = GameObject.FindGameObjectWithTag("point particle target");
-
-        //if(target != null)
-        //{
-        //    Camera cam = Camera.main;
-        //    //targetPos = cam.ScreenToWorldPoint(cam.WorldToScreenPoint(target.GetComponent<RectTransform>().position));
-        //    targetPos = target.GetComponent<RectTransform>().position;
-        //    targetPos.z = 0;
-        //}
-
         startTime = Time.time;
         startPosition = gameObject.transform.position;
 
         sr = gameObject.GetComponent<SpriteRenderer>();
-        sr.sprite = weaponSprites[targetColorDict[targetColor]];
-        glowSR.sprite = weaponSprites[targetColorDict[targetColor]];
+        sr.sprite = weaponGlowSprites[targetColorDict[targetColor]];
+        glowSR.sprite = weaponGlowSprites[targetColorDict[targetColor]];
+        transform.localScale = newScale;
+
+        randOffset = Random.Range(-0.03f, 0.03f);
+
+        targetPos = targetPosInput;
+
+        initialized = true;
+
+        transform.DOPunchScale(newScale * 2, duration, 0, 0);
+    }
+
+    private void Awake()
+    {
+        //startTime = Time.time;
+        //startPosition = gameObject.transform.position;
+
+        //sr = gameObject.GetComponent<SpriteRenderer>();
+        //sr.sprite = weaponSprites[targetColorDict[targetColor]];
+        //glowSR.sprite = weaponSprites[targetColorDict[targetColor]];
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        randOffset = Random.Range(-0.03f, 0.03f);
+        //randOffset = Random.Range(-0.03f, 0.03f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        GameObject target = GameObject.FindGameObjectWithTag("point particle target");
-
-        Vector3 pos = target.GetComponent<RectTransform>().position;
-
-        if (System.Single.IsNaN(pos.x) || System.Single.IsNaN(pos.y) || System.Single.IsNaN(pos.y))
+        if (initialized)
         {
-            isMoving = false;
-        }
+            //GameObject target = GameObject.FindGameObjectWithTag("point particle target");
 
-        if (isMoving)
-        {
+            //Vector3 pos = target.GetComponent<RectTransform>().position;
 
-            if (target != null)
-            {
-                Camera cam = Camera.main;
-                //targetPos = cam.ScreenToWorldPoint(cam.WorldToScreenPoint(target.GetComponent<RectTransform>().position));
-                targetPos = target.GetComponent<RectTransform>().position;
-                targetPos.z = 0;
-            }
-
-            //float t = Mathf.Clamp01((Time.time - startTime) / duration);
-            //float curveValue = movementCurve.Evaluate(t);
-            //transform.position = Vector3.Lerp(startPosition, targetPos, curveValue);
-
-            //if (t >= 1f)
+            //if (System.Single.IsNaN(pos.x) || System.Single.IsNaN(pos.y) || System.Single.IsNaN(pos.y))
             //{
             //    isMoving = false;
             //}
 
-            Vector3 center = (startPosition + targetPos) * 0.5F;
-
-            //float randOffset = Random.Range(-0.01f, 0.01f);
-
-            center -= new Vector3(randOffset, 0, 0);
-
-            Vector3 riseRelCenter = startPosition - center;
-            Vector3 setRelCenter = targetPos - center;
-
-            fracComplete = (Time.time - startTime) / duration;
-
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
-            transform.position += center;
-
-            if (fracComplete >= 1f)
+            if (isMoving)
             {
-                isMoving = false;
-            }
 
-            if (isSpinning)
+                //if (target != null)
+                //{
+                //    Camera cam = Camera.main;
+                //    //targetPos = cam.ScreenToWorldPoint(cam.WorldToScreenPoint(target.GetComponent<RectTransform>().position));
+                //    targetPos = target.GetComponent<RectTransform>().position;
+                //    targetPos.z = 0;
+                //}
+
+                Vector3 center = (startPosition + targetPos) * 0.5F;
+
+                //float randOffset = Random.Range(-0.01f, 0.01f);
+
+                center -= new Vector3(randOffset, 0, 0);
+
+                Vector3 riseRelCenter = startPosition - center;
+                Vector3 setRelCenter = targetPos - center;
+
+                fracComplete = (Time.time - startTime) / duration;
+
+                transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
+                transform.position += center;
+
+                if (fracComplete >= 1f)
+                {
+                    isMoving = false;
+                }
+
+                if (isSpinning)
+                {
+                    transform.Rotate(0, 0, spinSpeed, Space.Self);
+                }
+
+                if (pointAtTarget && fracComplete <= 0.8f)
+                {
+                    //transform.LookAt(targetPos);
+                    Vector3 lookPos = targetPos - transform.position;
+                    lookPos.z = 0;
+                    transform.up = lookPos;
+                }
+            }
+            else
             {
-                transform.Rotate(0, 0, spinSpeed, Space.Self);
-            }
+                //Debug.Log("particle destroyed");
 
-            if (pointAtTarget)
-            {
-                //transform.LookAt(targetPos);
-                Vector3 lookPos = target.transform.position - transform.position;
-                lookPos.z = 0;
-                transform.up = lookPos;
+                Vector3 pos = transform.position;
+                GameObject burstEffect = Instantiate(weaponHitEffect, pos, Quaternion.identity);
+                burstEffect.GetComponent<WeaponHitBurst>().initialize(glowSR.color);
+                Destroy(gameObject);
             }
-        }
-        else
-        {
-            //Debug.Log("particle destroyed");
-
-            Destroy(gameObject);
         }
     }
 }

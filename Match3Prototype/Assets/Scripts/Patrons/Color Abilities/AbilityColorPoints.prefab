@@ -49,6 +49,10 @@ MonoBehaviour:
   constantEffect: 0
   canTrigger: 1
   level: 0
-  maxLevel: 2
+  maxLevel: 0
+  patron: {fileID: 0}
+  procEffectDuration: 1
+  procTweenDuration: 0.2
   pointIncrease: 3
   targetColor: 0
+  gm: {fileID: 0}

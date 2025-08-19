@@ -103,6 +103,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] Color[] healthBarColors;
 
+    [SerializeField] SkillTreeUI skillTree;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -163,7 +165,7 @@ public class UIManager : MonoBehaviour
 
 
         //DOTween.To(() => progressSlider.value, x => progressSlider.value = x, sliderValue, 0.3f);
-        StartCoroutine(delayedSliderFlex(0.6f, sliderValue));
+        StartCoroutine(delayedSliderFlex(0.8f, sliderValue));
         //progressSlider.value = sliderValue;
     }
 
@@ -305,6 +307,8 @@ public class UIManager : MonoBehaviour
             {
                 selectedPatronUIRefs.Add(thisPatronChoice);
             }
+
+            skillTree.openSkillTree(thisPatronChoice.patronRef, thisPatronChoice);
         }
         else
         {
@@ -363,7 +367,8 @@ public class UIManager : MonoBehaviour
     {
         foreach (patronChoiceUI patronUI in selectedPatronUIRefs)
         {
-            patronManager.selectNewPatron(patronUI.patronRef);
+            // determine which ability is selected
+            patronManager.selectNewPatron(patronUI.patronRef, patronUI.currentSelectedAbility);
         }
 
         for (int i = 0; i < currentChoicePrefabs.Count; i++)

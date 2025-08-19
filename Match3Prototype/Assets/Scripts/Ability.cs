@@ -64,11 +64,14 @@ public abstract class Ability : MonoBehaviour
     {
         if (maxLevel == 0) // determine max level if not preset
         {
-            foreach (Ability ability in patron.abilitiesByLevel)
+            foreach (List<Ability> abilityList in patron.allAbilityMatrix)
             {
-                if (ability.title == title)
+                foreach (Ability ability in abilityList)
                 {
-                    maxLevel++;
+                    if (ability.title == title)
+                    {
+                        maxLevel++;
+                    }
                 }
             }
         }

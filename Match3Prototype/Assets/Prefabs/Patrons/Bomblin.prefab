@@ -45,13 +45,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Bomblin
+  levelOneAbilities:
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  levelTwoAbilities:
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  levelThreeAbilities:
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  levelFourAbilities:
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  levelFiveAbilities:
+  - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
+  activeAbilites: []
   abilitiesByLevel:
   - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
   - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
   - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
   - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
   - {fileID: 2772343540171079217, guid: 199d1ea537bbc7846a6aaa710791ce33, type: 3}
-  activeAbilites: []
   level: 0
   maxLevel: 0
   index: 0

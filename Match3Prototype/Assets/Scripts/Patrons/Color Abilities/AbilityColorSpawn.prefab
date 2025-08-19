@@ -49,7 +49,7 @@ MonoBehaviour:
   constantEffect: 1
   canTrigger: 1
   level: 0
-  maxLevel: 3
+  maxLevel: 0
   patron: {fileID: 0}
   procEffectDuration: 0.3
   procTweenDuration: 0.2

@@ -45,13 +45,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Scout
+  levelOneAbilities:
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  levelTwoAbilities:
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  levelThreeAbilities:
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  levelFourAbilities:
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  levelFiveAbilities:
+  - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  activeAbilites: []
   abilitiesByLevel:
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
-  activeAbilites: []
   level: 0
   maxLevel: 0
   index: 0

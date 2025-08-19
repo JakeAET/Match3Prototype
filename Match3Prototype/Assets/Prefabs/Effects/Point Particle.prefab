@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 449820464709379025}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7248180152511523285}
@@ -158,7 +158,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1728117695
   m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: 49fe4ec3976531343b09e109b7f71226, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -189,9 +189,17 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 79ab352cc738cb44789cc8bc4e64ee5a, type: 3}
   - {fileID: 21300000, guid: ad841c5a11b6e0d40b286786966d7b18, type: 3}
   - {fileID: 21300000, guid: c9ba584e4d82e67468fba03905bbe9b7, type: 3}
+  weaponGlowSprites:
+  - {fileID: 21300000, guid: 4f1341e81648b6643b59b8bf930791d9, type: 3}
+  - {fileID: 21300000, guid: 395e9bcb93b38724bbb048a7eec39c72, type: 3}
+  - {fileID: 21300000, guid: 183293898a5e9c14794911421b3a7c02, type: 3}
+  - {fileID: 21300000, guid: eebcf90a5d6dae742b987e707144f6c3, type: 3}
+  - {fileID: 21300000, guid: 6eb6fb0b3ddb5bc49997b32f87a67c05, type: 3}
   glowSR: {fileID: 4861037526807070452}
   targetPos: {x: 0, y: 0, z: 0}
   fracComplete: 0
   duration: 0.5
   isSpinning: 0
   pointAtTarget: 0
+  spinSpeed: 0
+  weaponHitEffect: {fileID: 3776165315172348051, guid: 2971ee0b21405b54d94727e55df12dbc, type: 3}

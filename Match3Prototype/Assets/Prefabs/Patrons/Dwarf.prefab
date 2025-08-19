@@ -45,13 +45,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Dwarf
+  levelOneAbilities:
+  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
+  levelTwoAbilities:
+  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
+  levelThreeAbilities:
+  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
+  levelFourAbilities:
+  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
+  levelFiveAbilities:
+  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
+  activeAbilites: []
   abilitiesByLevel:
   - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
   - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
   - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
   - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
   - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
-  activeAbilites: []
   level: 0
   maxLevel: 0
   index: 0

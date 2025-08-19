@@ -45,11 +45,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Rogue
+  levelOneAbilities:
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  levelTwoAbilities:
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  levelThreeAbilities:
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  levelFourAbilities:
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  levelFiveAbilities:
+  - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
+  activeAbilites: []
   abilitiesByLevel:
   - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
   - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
   - {fileID: 767243529663418715, guid: b14e0ae696a717e4baee55fa8d4eec20, type: 3}
-  activeAbilites: []
   level: 0
   maxLevel: 3
   index: 0

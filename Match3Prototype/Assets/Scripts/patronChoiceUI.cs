@@ -39,9 +39,12 @@ public class patronChoiceUI : MonoBehaviour
     [SerializeField] GameObject coveredMask;
     //[SerializeField] Image backgroundImg;
     public Patron patronRef;
+    //public Ability selectedAbility;
     public Toggle patronToggle;
     private UIManager ui;
     public int patronChoiceListIndex;
+
+    public Ability currentSelectedAbility;
 
     public void initialize(Patron patron)
     {
@@ -52,6 +55,7 @@ public class patronChoiceUI : MonoBehaviour
         //backgroundImg.color = darkenColor;
         //titleTxt.color = patronRef.color;
 
+        currentSelectedAbility = null;
         patronRef = patron;
         PatronManager patronManager = FindObjectOfType<PatronManager>();
 
@@ -78,14 +82,16 @@ public class patronChoiceUI : MonoBehaviour
 
         Ability nextAbility = patronRef.existingAbility(patronRef.abilitiesByLevel[patronRef.level]);
 
-        if (nextAbility != null)
-        {
-            descriptionTxt.text = nextAbility.patronSelectDescription();
-        }
-        else
-        {
-            descriptionTxt.text = patronRef.abilitiesByLevel[patronRef.level].patronSelectDescription();
-        }
+        descriptionTxt.text = "";
+
+        //if (nextAbility != null)
+        //{
+        //    descriptionTxt.text = nextAbility.patronSelectDescription();
+        //}
+        //else
+        //{
+        //    descriptionTxt.text = patronRef.abilitiesByLevel[patronRef.level].patronSelectDescription();
+        //}
 
         ui = FindObjectOfType<UIManager>();
         ui.currentChoicePrefabs.Add(gameObject);
@@ -139,6 +145,8 @@ public class patronChoiceUI : MonoBehaviour
         }
         else
         {
+            descriptionTxt.text = "";
+
             patronImgObj.GetComponent<RectTransform>().DOScale(startPtrnScaleSize, tweenSpeed);
             patronImgObj.GetComponent<RectTransform>().DOLocalMoveY(startPtrnPos.y, tweenSpeed);
             // adjust gradient
@@ -194,6 +202,14 @@ public class patronChoiceUI : MonoBehaviour
             }
 
             backgroundImg.sprite = disabledSprite;
+        }
+    }
+
+    public void updateDescription()
+    {
+        if(currentSelectedAbility != null)
+        {
+            descriptionTxt.text = currentSelectedAbility.patronSelectDescription();
         }
     }
 }

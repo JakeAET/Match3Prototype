@@ -66,7 +66,7 @@ public class PatronManager : MonoBehaviour
         return chosenPatrons;
     }
 
-    public void selectNewPatron(Patron patron)
+    public void selectNewPatron(Patron patron, Ability ability)
     {
         Patron targetPatron = null;
 
@@ -88,7 +88,8 @@ public class PatronManager : MonoBehaviour
         if (preExisting)
         {
             targetPatron.index = index;
-            targetPatron.levelUp();
+
+            targetPatron.levelUp(ability);
         }
         else
         {
@@ -105,7 +106,7 @@ public class PatronManager : MonoBehaviour
             //    targetPatron.triggerEffect();
             //}
 
-            targetPatron.levelUp();
+            targetPatron.levelUp(ability);
         }
     }
 
