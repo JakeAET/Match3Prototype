@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        //Application.targetFrameRate = 10;
 
         foreach (BossRound br in bossRounds)
         {
@@ -131,6 +132,7 @@ public class GameManager : MonoBehaviour
         currentTurn--;
         ui.turnEffect(-1);
         ui.updateTurns(currentTurn);
+        ui.lowTurnEffect(currentTurn <= 2);
     }
 
     public void turnEnded()
@@ -250,7 +252,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            board.currentState = GameState.Waiting;
+            board.currentState = GameState.CreateElementalTiles;
             currentTurn += currentTurnIncrease;
         }
 
@@ -264,7 +266,7 @@ public class GameManager : MonoBehaviour
         ui.updateRounds(currentRound);
         ui.updateGames(currentGame);
         //ui.updateTargetScore(currentTargetScore);
-        ui.updateScoreProgress( currentScore, currentTargetScore);
+        ui.updateScoreDirectly( currentScore, currentTargetScore);
         ui.undoCountUpdate(currentUndos);
 
         undoAllowed = false;

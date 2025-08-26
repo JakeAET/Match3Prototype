@@ -105,6 +105,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] SkillTreeUI skillTree;
 
+    [SerializeField] Animator turnCountAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -135,6 +137,27 @@ public class UIManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void lowTurnEffect(bool active)
+    {
+        turnCountAnimator.SetBool("low turns", active);
+    }
+
+    public void updateScoreDirectly(float score, float target)
+    {
+        //progressText.text = score + " / " + target;
+        progressText.text = target - score + " HP";
+
+        //float sliderValue = score / target;
+        float sliderValue = (target - score) / target;
+
+        if (sliderValue < 0)
+        {
+            sliderValue = 0;
+        }
+
+        progressSlider.value = sliderValue;
     }
 
     public void updateSliderColor(int round)
@@ -171,6 +194,8 @@ public class UIManager : MonoBehaviour
 
     IEnumerator delayedSliderFlex(float delay, float value)
     {
+        sliderObj.GetComponent<RectTransform>().localScale = Vector3.one;
+
         yield return new WaitForSeconds(delay);
 
         sliderFill.color = sliderBaseColor;

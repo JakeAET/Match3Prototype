@@ -5,16 +5,24 @@ using UnityEngine.UI;
 
 public class SkillTreeTierUI : MonoBehaviour
 {
-    private SkillTreeUI skillTreeRef;
+    public SkillTreeUI skillTreeRef;
     [SerializeField] GameObject choicePrefab;
+    [SerializeField] GameObject fillerPrefab;
     private List<SkillTreeChoice> skillTreeChoices = new List<SkillTreeChoice>();
     private ToggleGroup tg;
     public Ability currentAbilityChoice;
+    public GameObject chosenSkillObj;
+    public bool initialized = false;
 
     public void initialize(SkillTreeUI treeRef, Patron patronRef, List<Ability> abilities, int level, bool activeLevel)
     {
         skillTreeRef = treeRef;
         tg = GetComponent<ToggleGroup>();
+
+        if (level % 2 == 0)
+        {
+            Instantiate(fillerPrefab, transform);
+        }
 
         for (int i = 0; i < abilities.Count; i++)
         {
@@ -33,12 +41,27 @@ public class SkillTreeTierUI : MonoBehaviour
             SkillTreeChoice choiceRef = choice.GetComponent<SkillTreeChoice>();
             choiceRef.initialize(this, abilities[i], activeLevel, isChosen, tg);
             skillTreeChoices.Add(choiceRef);
+
+            if (isChosen)
+            {
+                chosenSkillObj = choice;
+            }
+        }
+
+        if (level % 2 != 0)
+        {
+            Instantiate(fillerPrefab, transform);
         }
 
         if (activeLevel)
         {
             currentAbilityChoice = currentChoice();
         }
+
+        //Debug.Log(level + " - chosen object: " + chosenSkillObj);
+
+        Canvas.ForceUpdateCanvases();
+        initialized = true;
     }
 
     // Start is called before the first frame update

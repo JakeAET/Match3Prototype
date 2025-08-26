@@ -27,6 +27,8 @@ public abstract class Patron : MonoBehaviour
     public Color color;
     public GameObject patronChoiceUIPrefab;
 
+    public bool banished = false;
+
     //public bool matrixGenerated = false;
 
     public void generateAbilityMatrix()

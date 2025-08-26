@@ -20,11 +20,14 @@ public class BssRndDisablePtrn : BossRound
 
         affectedPatron.reduceLevel(levelsReduced);
 
+        affectedPatron.banished = true;
+
         ui.patronSlotUIRefs[affectedPatron.index].disabledIcon.SetActive(true);
     }
 
     public override void deactivateConstraint()
     {
+        affectedPatron.banished = false;
         affectedPatron.restoreLevel(levelsReduced);
         ui = FindObjectOfType<UIManager>();
         ui.patronSlotUIRefs[affectedPatron.index].disabledIcon.SetActive(false);

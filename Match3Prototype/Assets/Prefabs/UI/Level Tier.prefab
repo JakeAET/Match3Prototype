@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   choicePrefab: {fileID: 8366923330303688929, guid: ec778242322d7fa4197088802aeeb61e, type: 3}
+  fillerPrefab: {fileID: 5544843133601060414, guid: b0e0aa0527704b741a3da6559b932026, type: 3}
   currentAbilityChoice: {fileID: 0}
 --- !u!114 &622571228035179291
 MonoBehaviour:

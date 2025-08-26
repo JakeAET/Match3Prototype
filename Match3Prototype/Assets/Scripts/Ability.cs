@@ -31,8 +31,11 @@ public abstract class Ability : MonoBehaviour
 
     public virtual void procEffect()
     {
-        UIManager ui = FindObjectOfType<UIManager>();
-        ui.patronSlotUIRefs[patron.index].patronEffectTriggered(procEffectDuration, procTweenDuration);
+        if (!patron.banished)
+        {
+            UIManager ui = FindObjectOfType<UIManager>();
+            ui.patronSlotUIRefs[patron.index].patronEffectTriggered(procEffectDuration, procTweenDuration);
+        }
     }
 
     public virtual void levelUp()

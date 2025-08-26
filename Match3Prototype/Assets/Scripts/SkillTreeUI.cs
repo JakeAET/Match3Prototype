@@ -21,10 +21,19 @@ public class SkillTreeUI : MonoBehaviour
     [SerializeField] GameObject infoPanel;
     [SerializeField] TMP_Text infoText;
     [SerializeField] float yInc;
+    [SerializeField] GameObject lineRenderPrefab;
 
     public Patron currentPatronRef;
     public patronChoiceUI patronUI;
     public Ability currentSelectedAbility;
+
+    public Ability currentHighlightedAbility;
+
+    public GameObject confirmSkillButton;
+
+    public GameObject activeLine;
+    public List<GameObject> currentLines = new List<GameObject>();
+
 
     // current skill tree tier reference
 
@@ -59,7 +68,7 @@ public class SkillTreeUI : MonoBehaviour
         confirmPatronsButton.SetActive(false);
         patronContainer.SetActive(false);
         skillTreePanel.SetActive(true);
-        generateSkillTree();
+        StartCoroutine(generateSkillTree());
     }
 
     public void closeSkillTree(bool confirmed)
@@ -89,10 +98,11 @@ public class SkillTreeUI : MonoBehaviour
         skillTreePanel.SetActive(false);
         patronContainer.SetActive(true);
         infoPanel.SetActive(false);
+        activeLine = null;
         resetSkillTree();
     }
 
-    private void generateSkillTree()
+    private IEnumerator generateSkillTree()
     {
         // set starting pos
         //float currentYInc = 0;
@@ -123,6 +133,28 @@ public class SkillTreeUI : MonoBehaviour
 
             // increment pos
             //currentYInc += yInc;
+
+            while (!tierUIRef.initialized)
+            {
+                yield return null;
+            }
+
+            if(currentLevel > 1 && (currentPatronRef.level + 1) > 2 && currentLevel < (currentPatronRef.level + 1))
+            {
+                // determine start point
+                Vector3 startPos = tierUIRef.chosenSkillObj.GetComponent<RectTransform>().transform.position;
+
+                SkillTreeTierUI lowerTierUIRef = currentSkillTreeTiers[currentLevel - 2].GetComponent<SkillTreeTierUI>();
+
+                // determine end point
+                Vector3 endPos = lowerTierUIRef.chosenSkillObj.GetComponent<RectTransform>().transform.position;
+
+                // create line renderer
+                //CreateLine(lineRenderPrefab, startPos, endPos, Color.white);
+                //Debug.Log("making line with " + tierUIRef.chosenSkillObj.name + " and " + lowerTierUIRef.chosenSkillObj.name);
+                //Debug.Log(startPos + " - " + endPos);
+            }
+
             currentLevel++;
         }
     }
@@ -136,7 +168,31 @@ public class SkillTreeUI : MonoBehaviour
             Destroy(target);
         }
 
+        for (int i = 0; i < currentLines.Count; i++)
+        {
+            GameObject target = currentLines[i];
+            Destroy(target);
+        }
+
+        currentLines.Clear();
         currentSkillTreeTiers.Clear();
+    }
+
+    public void clickedOnChoice(Ability currentAbility)
+    {
+        //Debug.Log("clicked on " + currentAbility);
+        currentHighlightedAbility = currentAbility;
+        infoText.text = currentAbility.patronSelectDescription();
+        infoPanel.SetActive(true);
+    }
+
+    public void clickedOffChoice(Ability currentAbility)
+    {
+        //if (currentHighlightedAbility == currentAbility && currentSelectedAbility == null)
+        //{
+        //    currentHighlightedAbility = null;
+        //    infoPanel.SetActive(false);
+        //}
     }
     
     public void toggleChanged(bool confirmAllowed, Ability currentAbility)
@@ -144,7 +200,7 @@ public class SkillTreeUI : MonoBehaviour
         confirmSkillTreeButton.interactable = confirmAllowed;
         currentSelectedAbility = currentAbility;
 
-        if(currentAbility == null)
+        if (currentAbility == null)
         {
             infoPanel.SetActive(false);
         }
@@ -153,7 +209,6 @@ public class SkillTreeUI : MonoBehaviour
             infoText.text = currentAbility.patronSelectDescription();
             infoPanel.SetActive(true);
         }
-        
 
         if (confirmAllowed)
         {
@@ -175,5 +230,27 @@ public class SkillTreeUI : MonoBehaviour
             col.a = 0.3f;
             confirmSTButtonTxt.color = col;
         }
+    }
+
+    public void CreateLine(GameObject lineRender, Vector3 positionOne, Vector3 positionTwo, Color color)
+    {
+        GameObject lineInstance = Instantiate(lineRender, skillTreePanel.transform);
+
+        Image m_image = lineInstance.GetComponent<Image>();
+        RectTransform m_myTransform = lineInstance.GetComponent<RectTransform>();
+
+        m_image.color = color;
+
+        Vector2 point1 = new Vector2(positionTwo.x, positionTwo.y);
+        Vector2 point2 = new Vector2(positionOne.x, positionOne.y);
+        Vector2 midpoint = (point1 + point2) / 2f;
+
+        //Debug.Log(point1 + " - " + point2);
+
+        m_myTransform.position = midpoint;
+
+        Vector2 dir = point1 - point2;
+        m_myTransform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
+        m_myTransform.localScale = new Vector3(dir.magnitude, 1f, 1f);
     }
 }
