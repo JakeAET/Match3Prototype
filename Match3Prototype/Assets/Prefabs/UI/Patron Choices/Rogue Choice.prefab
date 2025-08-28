@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 317517385607051356, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_fontSize
-      value: 27.6
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 360673939403029372, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -21,7 +21,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2476230649807904869, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_fontSize
-      value: 27.6
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2604793989834563255, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_Pivot.x
@@ -193,11 +193,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7620914360511369275, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_fontSize
-      value: 47.6
+      value: 43.1
       objectReference: {fileID: 0}
     - target: {fileID: 8850217864300994108, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 0f263a2bf16154d4aa891c8c6c24f2fe, type: 3}
+      objectReference: {fileID: 21300000, guid: 1c66214bd4461e744b5e48ae3ff7ee7d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}

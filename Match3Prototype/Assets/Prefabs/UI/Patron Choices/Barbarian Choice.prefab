@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 317517385607051356, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_fontSize
-      value: 36
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 317517385607051356, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_fontSizeBase
@@ -25,7 +25,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2476230649807904869, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_fontSize
-      value: 26.05
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2604793989834563255, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_Pivot.x
@@ -201,7 +201,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7620914360511369275, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_fontSize
-      value: 37.45
+      value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: 8850217864300994108, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: dddfa89850ba1b648814f69bac28576d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
