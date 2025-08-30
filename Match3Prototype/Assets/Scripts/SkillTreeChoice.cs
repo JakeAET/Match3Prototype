@@ -15,6 +15,10 @@ public class SkillTreeChoice : MonoBehaviour
     [SerializeField] Image selectedHighlight;
     [SerializeField] Outline iconOutline;
     [SerializeField] Color disabledIconColor;
+    Color enabledIconOutline;
+    Color enabledIconColor;
+    [SerializeField] Color chosenIconOutline;
+    [SerializeField] Color chosenIconColor;
     [SerializeField] GameObject touchZone;
     [SerializeField] GameObject selectedRing;
     [SerializeField] float enlargeScaleFactor;
@@ -22,12 +26,19 @@ public class SkillTreeChoice : MonoBehaviour
     private Vector3 enlargedScale;
     private RectTransform rect;
 
+    [SerializeField] Sprite disabledSprite;
+    [SerializeField] Sprite enabledSprite;
+    [SerializeField] Sprite chosenSprite;
+
     public void initialize(SkillTreeTierUI tierUI, Ability targetAbility, bool active, bool chosen, ToggleGroup toggleGroup)
     {
         tierUIRef = tierUI;
         ability = targetAbility;
         toggle.group = toggleGroup;
         isChosen = true;
+
+        enabledIconColor = icon.color;
+        enabledIconOutline = iconOutline.effectColor;
 
         enlargedScale = new Vector3(enlargeScaleFactor, enlargeScaleFactor, enlargeScaleFactor);
         rect = GetComponent<RectTransform>();
@@ -37,6 +48,7 @@ public class SkillTreeChoice : MonoBehaviour
         if (active)
         {
             toggle.interactable = true;
+            selectedHighlight.sprite = enabledSprite;
         }
         else
         {
@@ -46,16 +58,21 @@ public class SkillTreeChoice : MonoBehaviour
                 toggle.interactable = false;
                 //toggle.enabled = false;
 
-                Color col = bg.color;
-                col.a = 0.5f;
-                bg.color = col;
+                //Color col = bg.color;
+                //col.a = 0.5f;
+                //bg.color = col;
+                selectedHighlight.sprite = chosenSprite;
 
-                col = selectedHighlight.color;
+                Color col = selectedHighlight.color;
                 col.a = 0.5f;
                 selectedHighlight.color = col;
+
+                icon.color = chosenIconColor;
+                iconOutline.effectColor = chosenIconOutline;
             }
             else
             {
+                selectedHighlight.sprite = disabledSprite;
                 toggle.interactable = false;
                 icon.color = disabledIconColor;
                 iconOutline.effectColor = disabledIconColor;
@@ -110,10 +127,16 @@ public class SkillTreeChoice : MonoBehaviour
         if (toggle.isOn)
         {
             rect.DOScale(enlargedScale, 0.3f);
+            selectedHighlight.sprite = chosenSprite;
+            icon.color = chosenIconColor;
+            iconOutline.effectColor = chosenIconOutline;
         }
         else
         {
             rect.DOScale(Vector3.one, 0.3f);
+            selectedHighlight.sprite = enabledSprite;
+            icon.color = enabledIconColor;
+            iconOutline.effectColor = enabledIconOutline;
         }
     }
 

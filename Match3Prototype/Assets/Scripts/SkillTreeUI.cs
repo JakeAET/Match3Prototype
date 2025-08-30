@@ -34,6 +34,11 @@ public class SkillTreeUI : MonoBehaviour
     public GameObject activeLine;
     public List<GameObject> currentLines = new List<GameObject>();
 
+    [SerializeField] GameObject winPanel;
+    [SerializeField] GameObject board;
+    [SerializeField] GameObject skillTreeBG;
+    [SerializeField] GameObject centeredPanel;
+
 
     // current skill tree tier reference
 
@@ -65,6 +70,10 @@ public class SkillTreeUI : MonoBehaviour
         col.a = 0.3f;
         confirmSTButtonTxt.color = col;
 
+        winPanel.SetActive(false);
+        centeredPanel.SetActive(false);
+        skillTreeBG.SetActive(true);
+        board.SetActive(false);
         confirmPatronsButton.SetActive(false);
         patronContainer.SetActive(false);
         skillTreePanel.SetActive(true);
@@ -93,7 +102,11 @@ public class SkillTreeUI : MonoBehaviour
         currentSelectedAbility = null;
         currentPatronRef = null;
         patronUI = null;
-         
+
+        winPanel.SetActive(true);
+        centeredPanel.SetActive(true);
+        skillTreeBG.SetActive(false);
+        board.SetActive(true);
         confirmPatronsButton.SetActive(true);
         skillTreePanel.SetActive(false);
         patronContainer.SetActive(true);

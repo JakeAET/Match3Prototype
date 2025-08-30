@@ -103,6 +103,8 @@ public class BoardManager : MonoBehaviour
     ElementInfo[,] boardTilesGrid;
     bool[,] maskedTilesGrid;
 
+    [SerializeField] GameObject boardContainer;
+
 
     //0 = red
     //1 = blue
@@ -278,7 +280,7 @@ public class BoardManager : MonoBehaviour
                 Vector2 tempPos = new Vector2(i * xSpawnOffsetMult, j * ySpawnOffsetMult);
                 GameObject thisTile = Instantiate(tilePrefab, tempPos, Quaternion.identity) as GameObject;
                 Tile tile = thisTile.GetComponent<Tile>();
-                thisTile.transform.parent = transform;
+                thisTile.transform.parent = boardContainer.transform;
                 tile.column = i;
                 tile.row = j;
                 thisTile.name = "Tile ( " + i + "," + j + " )";
@@ -675,7 +677,7 @@ public class BoardManager : MonoBehaviour
         allElements[column, row] = newBomb;
         targetSpawned.row = row;
         targetSpawned.column = column;
-        newBomb.transform.parent = transform;
+        newBomb.transform.parent = boardContainer.transform;
         if (targetSpawned.color == banishedType)
         {
             targetSpawned.banish();
@@ -696,7 +698,7 @@ public class BoardManager : MonoBehaviour
             allElements[column, row] = newRocket;
             targetSpawned.row = row;
             targetSpawned.column = column;
-            newRocket.transform.parent = transform;
+            newRocket.transform.parent = boardContainer.transform;
             if (targetSpawned.color == banishedType)
             {
                 targetSpawned.banish();
@@ -715,7 +717,7 @@ public class BoardManager : MonoBehaviour
             allElements[column, row] = newRocket;
             targetSpawned.row = row;
             targetSpawned.column = column;
-            newRocket.transform.parent = transform;
+            newRocket.transform.parent = boardContainer.transform;
             if (targetSpawned.color == banishedType)
             {
                 targetSpawned.banish();
@@ -874,7 +876,7 @@ public class BoardManager : MonoBehaviour
                     allElements[i,j] = element;
                     targetElement.row = j;
                     targetElement.column = i;
-                    element.transform.parent = transform;
+                    element.transform.parent = boardContainer.transform;
                     if (targetElement.color == banishedType)
                     {
                         targetElement.banish();
@@ -929,7 +931,7 @@ public class BoardManager : MonoBehaviour
                     Element targetElement = element.GetComponent<Element>();
                     targetElement.row = j;
                     targetElement.column = i;
-                    element.transform.parent = transform;
+                    element.transform.parent = boardContainer.transform;
 
                     if(targetElement.color == banishedType)
                     {
@@ -1117,7 +1119,7 @@ public class BoardManager : MonoBehaviour
                         allElements[i, j] = element;
                         element.GetComponent<Element>().row = j;
                         element.GetComponent<Element>().column = i;
-                        element.transform.parent = transform;
+                        element.transform.parent = boardContainer.transform;
                         if (element.GetComponent<Element>().color == banishedType)
                         {
                             element.GetComponent<Element>().banish();

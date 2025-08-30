@@ -371,9 +371,15 @@ MonoBehaviour:
   selectedHighlight: {fileID: 8366923329114694161}
   iconOutline: {fileID: 8366923330688333690}
   disabledIconColor: {r: 0, g: 0, b: 0, a: 0.5019608}
+  chosenIconOutline: {r: 0.7688679, g: 0.8899371, b: 1, a: 0.7176471}
+  chosenIconColor: {r: 0, g: 0.515625, b: 1, a: 1}
   touchZone: {fileID: 9075195468315698673}
   selectedRing: {fileID: 7507728104997416988}
   enlargeScaleFactor: 1.1
+  isChosen: 0
+  disabledSprite: {fileID: 646037570, guid: 9f930de352f2fe747b1f2fc87b2002f1, type: 3}
+  enabledSprite: {fileID: -1533995337, guid: 9f930de352f2fe747b1f2fc87b2002f1, type: 3}
+  chosenSprite: {fileID: 180772588, guid: 9f930de352f2fe747b1f2fc87b2002f1, type: 3}
 --- !u!1 &8366923330688333684
 GameObject:
   m_ObjectHideFlags: 0
