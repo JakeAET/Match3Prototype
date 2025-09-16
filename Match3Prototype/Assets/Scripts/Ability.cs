@@ -4,6 +4,14 @@ using UnityEngine;
 
 public abstract class Ability : MonoBehaviour
 {
+    [Header("Skill Tree Sprites")]
+    public Sprite dormantSprite;
+    public Sprite selectableSprite;
+    public Sprite selectedSprite;
+    public Sprite chosenSprite;
+
+    [Header("Main Variables")]
+
     public string title;
     public bool conditionalEffect;
     public bool constantEffect;
