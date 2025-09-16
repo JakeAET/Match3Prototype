@@ -2,13 +2,10 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine;
 using DG.Tweening.Core.Easing;
 using Unity.VisualScripting;
 using System.Threading;
-using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour
 {

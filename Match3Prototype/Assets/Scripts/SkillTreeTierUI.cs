@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 
 public class SkillTreeTierUI : MonoBehaviour
 {
@@ -9,23 +10,34 @@ public class SkillTreeTierUI : MonoBehaviour
     [SerializeField] GameObject choicePrefab;
     [SerializeField] GameObject fillerPrefab;
     private List<SkillTreeChoice> skillTreeChoices = new List<SkillTreeChoice>();
-    private ToggleGroup tg;
+    //private ToggleGroup tg;
     public Ability currentAbilityChoice;
     public GameObject chosenSkillObj;
     public bool initialized = false;
+    public float numCanBeChosen = 0;
+    public int thisLevel;
 
-    public void initialize(SkillTreeUI treeRef, Patron patronRef, List<Ability> abilities, int level, bool activeLevel)
+    public List<SkillTreeChoice> selectedChoices = new List<SkillTreeChoice>();
+
+    public void initialize(SkillTreeUI treeRef, Patron patronRef, List<Ability> abilities, int level, bool activeLevel, float xGap, float staggerGap, float canBeChosen)
     {
         skillTreeRef = treeRef;
-        tg = GetComponent<ToggleGroup>();
+        thisLevel = level;
+        //tg = GetComponent<ToggleGroup>();
+
+        Vector2 startPos = transform.position;
+        float gap = xGap;
 
         if (level % 2 == 0)
         {
-            Instantiate(fillerPrefab, transform);
+            startPos.x += staggerGap;
         }
+
+        int alternator = 0;
 
         for (int i = 0; i < abilities.Count; i++)
         {
+            Vector2 currentPos = startPos;
             bool isChosen = false;
 
             if (!activeLevel)
@@ -37,9 +49,27 @@ public class SkillTreeTierUI : MonoBehaviour
                 }
             }
 
-            GameObject choice = Instantiate(choicePrefab, transform);
+            if(i != 0)
+            {
+                if (alternator < 2)
+                {
+                    gap *= -1f;
+                    alternator++;
+                }
+                else
+                {
+                    currentPos = startPos;
+                    gap *= 2f;
+                    alternator = 0;
+                }
+
+                currentPos.x += gap;
+            }
+
+            GameObject choice = Instantiate(choicePrefab, currentPos, Quaternion.identity);
+            choice.transform.SetParent(transform, true);
             SkillTreeChoice choiceRef = choice.GetComponent<SkillTreeChoice>();
-            choiceRef.initialize(this, abilities[i], activeLevel, isChosen, tg);
+            choiceRef.initialize(this, abilities[i], activeLevel, isChosen);
             skillTreeChoices.Add(choiceRef);
 
             if (isChosen)
@@ -48,10 +78,10 @@ public class SkillTreeTierUI : MonoBehaviour
             }
         }
 
-        if (level % 2 != 0)
-        {
-            Instantiate(fillerPrefab, transform);
-        }
+        //if (level % 2 != 0)
+        //{
+        //    Instantiate(fillerPrefab, transform);
+        //}
 
         if (activeLevel)
         {
@@ -60,7 +90,7 @@ public class SkillTreeTierUI : MonoBehaviour
 
         //Debug.Log(level + " - chosen object: " + chosenSkillObj);
 
-        Canvas.ForceUpdateCanvases();
+        //Canvas.ForceUpdateCanvases();
         initialized = true;
     }
 
@@ -82,7 +112,7 @@ public class SkillTreeTierUI : MonoBehaviour
 
         foreach (SkillTreeChoice choice in skillTreeChoices)
         {
-            if (choice.toggle.isOn)
+            if (choice.toggledOn)
             {
                 selectedChoice = choice.ability;
             }
@@ -99,17 +129,18 @@ public class SkillTreeTierUI : MonoBehaviour
             {
                 if(choice != targetChoice)
                 {
-                    choice.toggle.isOn = false;
+                    choice.toggledOn = false;
+                    choice.toggleOff();
                 }
             }
 
             currentAbilityChoice = targetChoice.ability;
-            skillTreeRef.toggleChanged(true, targetChoice.ability);
+            skillTreeRef.toggleChanged(true, targetChoice.ability, this, targetChoice);
         }
         else
         {
             currentAbilityChoice = null;
-            skillTreeRef.toggleChanged(false, null);
+            skillTreeRef.toggleChanged(false, null, this, null);
         }
     }
 }

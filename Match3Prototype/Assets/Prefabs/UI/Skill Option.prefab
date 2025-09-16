@@ -365,11 +365,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ability: {fileID: 0}
-  toggle: {fileID: 0}
-  icon: {fileID: 8366923330688333691}
-  bg: {fileID: 8366923330296014160}
-  selectedHighlight: {fileID: 8366923329114694161}
-  iconOutline: {fileID: 8366923330688333690}
+  toggledOn: 0
+  interactable: 0
+  icon: {fileID: 0}
+  bg: {fileID: 0}
+  selectedHighlight: {fileID: 0}
+  iconOutline: {fileID: 0}
   disabledIconColor: {r: 0, g: 0, b: 0, a: 0.5019608}
   chosenIconOutline: {r: 0.7688679, g: 0.8899371, b: 1, a: 0.7176471}
   chosenIconColor: {r: 0, g: 0.515625, b: 1, a: 1}

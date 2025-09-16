@@ -1,7 +1,9 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class SkillTreeUI : MonoBehaviour
@@ -28,16 +30,37 @@ public class SkillTreeUI : MonoBehaviour
     public Ability currentSelectedAbility;
 
     public Ability currentHighlightedAbility;
+    public SkillTreeChoice currentHighlightedRef;
 
     public GameObject confirmSkillButton;
 
     public GameObject activeLine;
     public List<GameObject> currentLines = new List<GameObject>();
 
+    public GameObject activeForceField;
+    public List<GameObject> currentForceFields = new List<GameObject>();
+
+    [SerializeField] GameObject lineParticlePrefab;
+    [SerializeField] GameObject forceFieldPrefab;
+
+    public GameObject activeLineParticle;
+    public List<GameObject> currentLineParticles = new List<GameObject>();
+
     [SerializeField] GameObject winPanel;
     [SerializeField] GameObject board;
     [SerializeField] GameObject skillTreeBG;
     [SerializeField] GameObject centeredPanel;
+
+    Vector2 treeStartPos;
+    [SerializeField] float treeYGap;
+    [SerializeField] float treeXGap;
+    [SerializeField] float treeStaggerGap;
+    [SerializeField] float treeYSpawnOffset;
+
+    [SerializeField] touchCam tcam;
+
+    [SerializeField] Color lrStartColor;
+    [SerializeField] Color lrEndColor;
 
 
     // current skill tree tier reference
@@ -47,6 +70,13 @@ public class SkillTreeUI : MonoBehaviour
     {
         skillTreePanel.SetActive(false);
         infoPanel.SetActive(false);
+
+        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+        if (cam != null)
+        {
+            treeStartPos = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+            treeStartPos.y += treeYSpawnOffset;
+        }
     }
 
     // Update is called once per frame
@@ -77,11 +107,16 @@ public class SkillTreeUI : MonoBehaviour
         confirmPatronsButton.SetActive(false);
         patronContainer.SetActive(false);
         skillTreePanel.SetActive(true);
+        tcam.unlockCam();
         StartCoroutine(generateSkillTree());
     }
 
     public void closeSkillTree(bool confirmed)
     {
+        winPanel.SetActive(true);
+        tcam.lockCam();
+        tcam.setBoundsCenter(tcam.defaultBoundsPos);
+
         if (confirmed)
         {
             patronUI.currentSelectedAbility = currentSelectedAbility;
@@ -93,7 +128,7 @@ public class SkillTreeUI : MonoBehaviour
             patronUI.toggledPatron();
         }
 
-        if(currentSelectedAbility == null)
+        if (currentSelectedAbility == null)
         {
             patronUI.patronToggle.isOn = false;
             patronUI.toggledPatron();
@@ -103,7 +138,6 @@ public class SkillTreeUI : MonoBehaviour
         currentPatronRef = null;
         patronUI = null;
 
-        winPanel.SetActive(true);
         centeredPanel.SetActive(true);
         skillTreeBG.SetActive(false);
         board.SetActive(true);
@@ -111,7 +145,6 @@ public class SkillTreeUI : MonoBehaviour
         skillTreePanel.SetActive(false);
         patronContainer.SetActive(true);
         infoPanel.SetActive(false);
-        activeLine = null;
         resetSkillTree();
     }
 
@@ -126,10 +159,40 @@ public class SkillTreeUI : MonoBehaviour
             currentPatronRef.generateAbilityMatrix();
         }
 
+        float maxY = treeStartPos.y;
+        float minY = treeStartPos.y;
+
         foreach (List<Ability> abilityList in currentPatronRef.allAbilityMatrix)
         {
+            Vector2 currentPos = treeStartPos;
+            float numToChoose = 0;
+
+            if (currentLevel == currentPatronRef.level + 1)
+            {
+                numToChoose = 1;
+            }
+            else if(currentLevel < currentPatronRef.level + 1)
+            {
+                currentPos.y += (currentLevel - (currentPatronRef.level + 1)) * treeYGap;
+            }
+            else if (currentLevel > currentPatronRef.level + 1)
+            {
+                currentPos.y += (currentLevel - (currentPatronRef.level + 1)) * treeYGap;
+            }
+
+
+            if (currentPos.y < minY)
+            {
+                minY = currentPos.y;
+            }
+            else if (currentPos.y > maxY)
+            {
+                maxY = currentPos.y;
+            }
+
             //instantiate tier prefab
-            GameObject tier = Instantiate(skillTreeTierPrefab, skillTreeContainer.transform);
+            GameObject tier = Instantiate(skillTreeTierPrefab, currentPos, Quaternion.identity);
+            tier.transform.SetParent(skillTreeContainer.transform, true);
             tier.name = "Level " + currentLevel + " Tier";
             //Vector3 pos = tier.transform.position;
             //pos.y += yInc;
@@ -138,8 +201,9 @@ public class SkillTreeUI : MonoBehaviour
             //Debug.Log("Spawning level " + currentLevel + "for patron at level " + currentPatronRef.level);
 
             //initialize tier prefab
+
             SkillTreeTierUI tierUIRef = tier.GetComponent<SkillTreeTierUI>();
-            tierUIRef.initialize(this, currentPatronRef, abilityList, currentLevel, currentLevel == currentPatronRef.level + 1);
+            tierUIRef.initialize(this, currentPatronRef, abilityList, currentLevel, currentLevel == currentPatronRef.level + 1, treeXGap, treeStaggerGap, numToChoose);
 
             //add tier prefab to list
             currentSkillTreeTiers.Add(tier);
@@ -155,21 +219,27 @@ public class SkillTreeUI : MonoBehaviour
             if(currentLevel > 1 && (currentPatronRef.level + 1) > 2 && currentLevel < (currentPatronRef.level + 1))
             {
                 // determine start point
-                Vector3 startPos = tierUIRef.chosenSkillObj.GetComponent<RectTransform>().transform.position;
+                Vector3 startPos = tierUIRef.chosenSkillObj.transform.position;
 
                 SkillTreeTierUI lowerTierUIRef = currentSkillTreeTiers[currentLevel - 2].GetComponent<SkillTreeTierUI>();
 
                 // determine end point
-                Vector3 endPos = lowerTierUIRef.chosenSkillObj.GetComponent<RectTransform>().transform.position;
+                Vector3 endPos = lowerTierUIRef.chosenSkillObj.transform.position;
 
                 // create line renderer
-                //CreateLine(lineRenderPrefab, startPos, endPos, Color.white);
+                CreateLine(lineRenderPrefab, startPos, endPos, false);
                 //Debug.Log("making line with " + tierUIRef.chosenSkillObj.name + " and " + lowerTierUIRef.chosenSkillObj.name);
                 //Debug.Log(startPos + " - " + endPos);
             }
 
+            //currentPos.y += treeYGap;
+
             currentLevel++;
         }
+
+        Vector3 tcamPos = new Vector3(treeStartPos.x, (Mathf.Abs(maxY) - Mathf.Abs(minY)) / 2);
+
+        tcam.setBoundsCenter(tcamPos);
     }
 
     private void resetSkillTree()
@@ -187,28 +257,77 @@ public class SkillTreeUI : MonoBehaviour
             Destroy(target);
         }
 
+        for (int i = 0; i < currentLineParticles.Count; i++)
+        {
+            GameObject target = currentLineParticles[i];
+            Destroy(target);
+        }
+
+        for (int i = 0; i < currentForceFields.Count; i++)
+        {
+            GameObject target = currentForceFields[i];
+            Destroy(target);
+        }
+
+
+        if (activeLine != null)
+        {
+            Destroy(activeLine);
+            activeLine = null;
+        }
+
+        if (activeLineParticle != null)
+        {
+            Destroy(activeLineParticle);
+            activeLineParticle = null;
+        }
+
         currentLines.Clear();
+        currentForceFields.Clear();
+        currentLineParticles.Clear();
         currentSkillTreeTiers.Clear();
     }
 
-    public void clickedOnChoice(Ability currentAbility)
+    public void clickedOnChoice(Ability currentAbility, SkillTreeChoice choice)
     {
-        //Debug.Log("clicked on " + currentAbility);
+        if(currentHighlightedRef == choice)
+        {
+            clickedOffChoice(currentAbility, choice);
+        }
+        else
+        {
+            currentHighlightedAbility = currentAbility;
+            currentHighlightedRef = choice;
+            infoText.text = currentAbility.patronSelectDescription();
+            infoPanel.SetActive(true);
+        }
+
+        //StartCoroutine(clickedOnChoiceEnum(currentAbility, obj));
+        //currentHighlightedAbility = currentAbility;
+        //currentHighlightedRef = choice;
+        //infoText.text = currentAbility.patronSelectDescription();
+        //infoPanel.SetActive(true);
+    }
+
+    public void clickedOffChoice(Ability currentAbility, SkillTreeChoice choice)
+    {
+        currentHighlightedAbility = null;
+        currentHighlightedRef = null;
+        infoPanel.SetActive(false);
+    }
+
+    IEnumerator clickedOnChoiceEnum(Ability currentAbility, SkillTreeChoice choice)
+    {
+        yield return new WaitForSeconds(0.1f);
+
         currentHighlightedAbility = currentAbility;
+        currentHighlightedRef = choice;
         infoText.text = currentAbility.patronSelectDescription();
         infoPanel.SetActive(true);
     }
 
-    public void clickedOffChoice(Ability currentAbility)
-    {
-        //if (currentHighlightedAbility == currentAbility && currentSelectedAbility == null)
-        //{
-        //    currentHighlightedAbility = null;
-        //    infoPanel.SetActive(false);
-        //}
-    }
-    
-    public void toggleChanged(bool confirmAllowed, Ability currentAbility)
+
+    public void toggleChanged(bool confirmAllowed, Ability currentAbility, SkillTreeTierUI tierRef, SkillTreeChoice choice)
     {
         confirmSkillTreeButton.interactable = confirmAllowed;
         currentSelectedAbility = currentAbility;
@@ -243,27 +362,105 @@ public class SkillTreeUI : MonoBehaviour
             col.a = 0.3f;
             confirmSTButtonTxt.color = col;
         }
+
+        if (currentAbility == null)
+        {
+            if(activeLine != null)
+            {
+                Destroy(activeLine);
+                activeLine = null;
+            }
+
+            if (activeLineParticle != null)
+            {
+                Destroy(activeLineParticle);
+                activeLineParticle = null;
+            }
+        }
+        else
+        {
+            if(activeLine != null)
+            {
+                Destroy(activeLine);
+                activeLine = null;
+            }
+
+            if (activeLineParticle != null)
+            {
+                Destroy(activeLineParticle);
+                activeLineParticle = null;
+            }
+
+            if (tierRef.thisLevel - 2 >= 0)
+            {
+
+                SkillTreeTierUI lowerTierUIRef = currentSkillTreeTiers[tierRef.thisLevel - 2].GetComponent<SkillTreeTierUI>();
+
+                if (lowerTierUIRef.chosenSkillObj != null)
+                {
+                    // determine start point
+                    Vector3 startPos = choice.transform.position;
+
+                    // determine end point
+                    Vector3 endPos = lowerTierUIRef.chosenSkillObj.transform.position;
+
+                    // create line renderer
+                    CreateLine(lineRenderPrefab, startPos, endPos, true);
+                    //Debug.Log("making line with " + tierUIRef.chosenSkillObj.name + " and " + lowerTierUIRef.chosenSkillObj.name);
+                    //Debug.Log(startPos + " - " + endPos);
+                }
+            }
+        }
     }
 
-    public void CreateLine(GameObject lineRender, Vector3 positionOne, Vector3 positionTwo, Color color)
+    public void CreateLine(GameObject lineRender, Vector3 positionOne, Vector3 positionTwo, bool tempLine)
     {
-        GameObject lineInstance = Instantiate(lineRender, skillTreePanel.transform);
+        GameObject lineInstance = Instantiate(lineRender, skillTreeContainer.transform);
 
-        Image m_image = lineInstance.GetComponent<Image>();
-        RectTransform m_myTransform = lineInstance.GetComponent<RectTransform>();
+        LineRenderer lr = lineInstance.GetComponent<LineRenderer>();
+        Transform t = lineInstance.transform;
 
-        m_image.color = color;
+        lr.startColor = lrStartColor;
+        lr.endColor = lrEndColor;
 
-        Vector2 point1 = new Vector2(positionTwo.x, positionTwo.y);
-        Vector2 point2 = new Vector2(positionOne.x, positionOne.y);
-        Vector2 midpoint = (point1 + point2) / 2f;
+        lr.SetPosition(0, positionOne);
+        lr.SetPosition(1, positionTwo);
 
-        //Debug.Log(point1 + " - " + point2);
+        lineInstance.SetActive(true);
 
-        m_myTransform.position = midpoint;
+        GameObject lrParticle = Instantiate(lineParticlePrefab, skillTreeContainer.transform);
+        //Vector2 point1 = new Vector2(positionTwo.x, positionTwo.y);
+        //Vector2 point2 = new Vector2(positionOne.x, positionOne.y);
+        //Vector2 dir = point1 - point2;
+        lrParticle.transform.position = positionTwo;
+        lrParticle.transform.LookAt(positionOne);
+        //lrParticle.transform.rotation = Quaternion.Euler(Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg, lrParticle.transform.rotation.y, lrParticle.transform.rotation.z);
 
-        Vector2 dir = point1 - point2;
-        m_myTransform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
-        m_myTransform.localScale = new Vector3(dir.magnitude, 1f, 1f);
+        //GameObject ffInstance = Instantiate(forceFieldPrefab, skillTreeContainer.transform);
+        //ffInstance.transform.position = positionOne;
+        //currentForceFields.Add(ffInstance);
+
+        if (tempLine)
+        {
+            activeLine = lineInstance;
+            activeLineParticle = lrParticle;
+        }
+        else
+        {
+            currentLines.Add(lineInstance);
+            currentLineParticles.Add(lrParticle);
+        }
+
+        //Vector2 point1 = new Vector2(positionTwo.x, positionTwo.y);
+        //Vector2 point2 = new Vector2(positionOne.x, positionOne.y);
+        //Vector2 midpoint = (point1 + point2) / 2f;
+
+        ////Debug.Log(point1 + " - " + point2);
+
+        //t.position = midpoint;
+
+        //Vector2 dir = point1 - point2;
+        //t.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
+        //t.localScale = new Vector3(dir.magnitude, 1f, 1f);
     }
 }
