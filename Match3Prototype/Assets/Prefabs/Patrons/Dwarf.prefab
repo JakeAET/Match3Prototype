@@ -56,15 +56,11 @@ MonoBehaviour:
   levelFiveAbilities:
   - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
   activeAbilites: []
-  abilitiesByLevel:
-  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
-  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
-  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
-  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
-  - {fileID: 1420358117723587464, guid: 5df135a119493b041af44272f30f2677, type: 3}
+  abilitiesByLevel: []
   level: 0
   maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: 337c832f0a6f07e4fab718002e546817, type: 3}
   color: {r: 0.8679245, g: 0.31848508, b: 0, a: 1}
   patronChoiceUIPrefab: {fileID: 5863754952809736263, guid: 2e544103024fa3641a6b61017ae7dffd, type: 3}
+  banished: 0

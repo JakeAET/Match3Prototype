@@ -96,6 +96,7 @@ public abstract class Patron : MonoBehaviour
                 targetAbility = Instantiate(ability);
                 targetAbility.transform.SetParent(gameObject.transform);
                 activeAbilites.Add(targetAbility);
+                abilitiesByLevel.Add(targetAbility);
                 targetAbility.patron = this;
                 targetAbility.initialize();
                 targetAbility.levelUp();

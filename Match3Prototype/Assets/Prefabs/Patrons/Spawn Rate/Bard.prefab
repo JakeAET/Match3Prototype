@@ -61,18 +61,13 @@ MonoBehaviour:
   - {fileID: 1016457447748494144, guid: 22d70501e478247578f4ea296753027c, type: 3}
   - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
   activeAbilites: []
-  abilitiesByLevel:
-  - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
-  - {fileID: 1016457447748494144, guid: 22d70501e478247578f4ea296753027c, type: 3}
-  - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
-  - {fileID: 1016457447748494144, guid: 22d70501e478247578f4ea296753027c, type: 3}
-  - {fileID: 8997689360247144916, guid: 794841531a24b4a71a56ce218cf7dcd5, type: 3}
+  abilitiesByLevel: []
   level: 0
   maxLevel: 0
   index: 0
   sprite: {fileID: 21300000, guid: 2b22ee2f633314940bc317eda4f53046, type: 3}
   color: {r: 0.6039216, g: 0.19607845, b: 0.9058824, a: 1}
   patronChoiceUIPrefab: {fileID: 8135142262022621938, guid: 5646582ec1981eb41879c333528396cb, type: 3}
-  matrixGenerated: 0
+  banished: 0
   targetColor: 4
   effectTriggered: 0

@@ -16,6 +16,7 @@ public class SkillTreeTierUI : MonoBehaviour
     public bool initialized = false;
     public float numCanBeChosen = 0;
     public int thisLevel;
+    public bool active;
 
     public List<SkillTreeChoice> selectedChoices = new List<SkillTreeChoice>();
 
@@ -23,6 +24,7 @@ public class SkillTreeTierUI : MonoBehaviour
     {
         skillTreeRef = treeRef;
         thisLevel = level;
+        active = activeLevel;
         //tg = GetComponent<ToggleGroup>();
 
         Vector2 startPos = transform.position;
@@ -42,8 +44,22 @@ public class SkillTreeTierUI : MonoBehaviour
 
             if (!activeLevel)
             {
-                //Debug.Log("Ability checking " + abilities[i] + "v.s. patron ability" + patronRef.abilitiesByLevel[level - 1]);
-                if(level <= patronRef.level && abilities[i] == patronRef.abilitiesByLevel[level - 1])
+                //Debug.Log(level - 1 + " - " + patronRef.abilitiesByLevel.Count);
+                //if ((level - 1) <= patronRef.abilitiesByLevel.Count)
+                //{
+                //    Debug.Log("Ability checking " + abilities[i] + "v.s. patron ability" + patronRef.abilitiesByLevel[level - 1]);
+                //    if (level <= patronRef.level && abilities[i] == patronRef.abilitiesByLevel[level - 1])
+                //    {
+                //        isChosen = true;
+                //    }
+                //}
+
+                if(patronRef.abilitiesByLevel.Count > 0 && (level - 1) < patronRef.abilitiesByLevel.Count)
+                {
+                    //Debug.Log("Ability at this level = " + patronRef.abilitiesByLevel[level - 1].name + ", checked with " + abilities[i].name);
+                }
+
+                if (level - 1 < patronRef.level && abilities[i].title == patronRef.abilitiesByLevel[level - 1].title)
                 {
                     isChosen = true;
                 }

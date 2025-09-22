@@ -80,7 +80,7 @@ public class patronChoiceUI : MonoBehaviour
             levelUpTxt.text = "Lvl " + patronRef.level + " -> Lvl " + (patronRef.level + 1);
         }
 
-        Ability nextAbility = patronRef.existingAbility(patronRef.abilitiesByLevel[patronRef.level]);
+        //Ability nextAbility = patronRef.existingAbility(patronRef.abilitiesByLevel[patronRef.level]);
 
         descriptionTxt.text = "";
 
