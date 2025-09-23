@@ -85,13 +85,25 @@ public class GameManager : MonoBehaviour
         {"yellow", 0 }
     };
 
-    [SerializeField] collectibleItem[] colletibleItems;
+    [SerializeField] GameObject collectedItemsGroup;
+    [SerializeField] collectibleItem[] collectibleItems;
+    [SerializeField] collectedItem[] collectedItems;
     [SerializeField] Color collectibleDisabledColor;
     [SerializeField] Color collectibleEnabledColor;
+
+    [SerializeField] Sprite[] collectibleItemSprites;
+
+    [SerializeField] Image bagImage;
+    [SerializeField] Sprite openBagSprite;
+    [SerializeField] Sprite closedBagSprite;
+
+    private Vector3 collectedItemsStartPos;
 
     void Start()
     {
         //Application.targetFrameRate = 10;
+
+        collectedItemsStartPos = collectedItemsGroup.GetComponent<RectTransform>().position;
 
         foreach (BossRound br in bossRounds)
         {
@@ -124,9 +136,16 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<LevelProgress>().levelProgressStart();
         //startRound();
 
-        foreach (collectibleItem c in colletibleItems)
+        foreach (collectibleItem c in collectibleItems)
         {
+            c.sprite.sprite = collectibleItemSprites[0];
             c.sprite.color = collectibleDisabledColor;
+        }
+
+        for (int i = 0; i < collectedItems.Length; i++)
+        {
+            collectedItems[i].sprite.sprite = collectibleItemSprites[i];
+            collectedItems[i].sprite.color = collectibleDisabledColor;
         }
     }
 
@@ -187,18 +206,18 @@ public class GameManager : MonoBehaviour
             //UnityEngine.Debug.Log("Round Won");
             //board.clearBoard();
 
-            colletibleItems[currentRound - 1].transform.DOScale(new Vector3(1.2f,1.2f,1.2f), 0.25f);
+            collectibleItems[currentRound - 1].transform.DOScale(new Vector3(1.2f,1.2f,1.2f), 0.25f);
 
-            colletibleItems[currentRound - 1].whiteEffect.DOFade(1f, 1f);
-
-            yield return new WaitForSeconds(0.25f);
-
-            colletibleItems[currentRound - 1].transform.DOScale(Vector3.one, 0.25f);
+            collectibleItems[currentRound - 1].whiteEffect.DOFade(1f, 1f);
 
             yield return new WaitForSeconds(0.25f);
 
-            colletibleItems[currentRound - 1].whiteEffect.DOFade(0f, 0.5f);
-            colletibleItems[currentRound - 1].sprite.color = collectibleEnabledColor;
+            collectibleItems[currentRound - 1].transform.DOScale(Vector3.one, 0.25f);
+
+            yield return new WaitForSeconds(0.25f);
+
+            collectibleItems[currentRound - 1].whiteEffect.DOFade(0f, 0.5f);
+            collectibleItems[currentRound - 1].sprite.color = collectibleEnabledColor;
 
             yield return new WaitForSeconds(0.5f);
 
@@ -210,6 +229,30 @@ public class GameManager : MonoBehaviour
             }
             else if (currentRound == 5)
             {
+                // item collection routine
+
+                bagImage.sprite = openBagSprite;
+                collectedItemsGroup.GetComponent<RectTransform>().DOMoveY(collectedItemsStartPos.y + 7, 0.5f);
+
+                yield return new WaitForSeconds(0.5f);
+
+                collectedItems[currentGame - 1].transform.DOPunchScale(new Vector3(0.2f, 0.2f, 0.2f), 0.5f, 0, 0);
+                collectedItems[currentGame - 1].sprite.color = collectibleEnabledColor;
+                collectedItems[currentGame - 1].count.text = "" + currentRound;
+
+                collectedItems[currentGame - 1].whiteEffect.DOFade(1f, 0.25f);
+
+                yield return new WaitForSeconds(0.25f);
+
+                collectedItems[currentGame - 1].whiteEffect.DOFade(0f, 0.25f);
+
+                yield return new WaitForSeconds(2f);
+
+                bagImage.sprite = closedBagSprite;
+                collectedItemsGroup.GetComponent<RectTransform>().DOMoveY(collectedItemsStartPos.y, 0.5f);
+
+                yield return new WaitForSeconds(0.5f);
+
                 board.clearBoard();
                 // show boss win screen with stats
                 // select from 5 patrons now
@@ -282,7 +325,7 @@ public class GameManager : MonoBehaviour
             board.currentState = GameState.SettingBoard;
             currentTurn = maxTurns;
 
-            foreach (collectibleItem c in colletibleItems)
+            foreach (collectibleItem c in collectibleItems)
             {
                 c.sprite.color = collectibleDisabledColor;
             }
