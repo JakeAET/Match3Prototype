@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5521232800781614576}
   - component: {fileID: 622571228035179291}
   m_Layer: 5
-  m_Name: Level Tier
+  m_Name: Old - Level Tier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

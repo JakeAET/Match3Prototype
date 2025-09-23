@@ -44,6 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 674cde65877b86f4bb6d112f6a7c573e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dormantSprite: {fileID: 541964074, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
+  selectableSprite: {fileID: 162882786, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
+  selectedSprite: {fileID: 889905812, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
+  chosenSprite: {fileID: -87220909, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
   title: Last Turn
   conditionalEffect: 1
   constantEffect: 0

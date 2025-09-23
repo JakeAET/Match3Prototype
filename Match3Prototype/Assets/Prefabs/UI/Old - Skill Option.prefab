@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 8366923330303688935}
   - component: {fileID: 7720831771368897323}
   m_Layer: 5
-  m_Name: Skill Option
+  m_Name: Old - Skill Option
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

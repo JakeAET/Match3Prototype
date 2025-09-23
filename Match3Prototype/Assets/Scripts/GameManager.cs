@@ -85,6 +85,10 @@ public class GameManager : MonoBehaviour
         {"yellow", 0 }
     };
 
+    [SerializeField] collectibleItem[] colletibleItems;
+    [SerializeField] Color collectibleDisabledColor;
+    [SerializeField] Color collectibleEnabledColor;
+
     void Start()
     {
         //Application.targetFrameRate = 10;
@@ -119,6 +123,11 @@ public class GameManager : MonoBehaviour
         determineBossCondition();
         FindObjectOfType<LevelProgress>().levelProgressStart();
         //startRound();
+
+        foreach (collectibleItem c in colletibleItems)
+        {
+            c.sprite.color = collectibleDisabledColor;
+        }
     }
 
     // Update is called once per frame
@@ -170,12 +179,28 @@ public class GameManager : MonoBehaviour
         roundActive = false;
         undoAllowed = false;
         ui.toggleUndoInteract(false);
+
         yield return new WaitForSeconds(0.5f);
 
         if (roundWon)
         {
             //UnityEngine.Debug.Log("Round Won");
             //board.clearBoard();
+
+            colletibleItems[currentRound - 1].transform.DOScale(new Vector3(1.2f,1.2f,1.2f), 0.25f);
+
+            colletibleItems[currentRound - 1].whiteEffect.DOFade(1f, 1f);
+
+            yield return new WaitForSeconds(0.25f);
+
+            colletibleItems[currentRound - 1].transform.DOScale(Vector3.one, 0.25f);
+
+            yield return new WaitForSeconds(0.25f);
+
+            colletibleItems[currentRound - 1].whiteEffect.DOFade(0f, 0.5f);
+            colletibleItems[currentRound - 1].sprite.color = collectibleEnabledColor;
+
+            yield return new WaitForSeconds(0.5f);
 
             if (currentRound == maxRounds - 1) // Boss Round
             {
@@ -218,16 +243,23 @@ public class GameManager : MonoBehaviour
             ui.displayLoseScreen();
             gameOver();
         }
+
+
     }
 
     public void startRound()
+    {
+        StartCoroutine(startRoundEnum());
+    }
+
+    private IEnumerator startRoundEnum()
     {
         if (currentRound == maxRounds)
         {
             currentRound = 1;
             currentGame++;
 
-            if(currentGame > 1)
+            if (currentGame > 1)
             {
                 board.assignRandomTileMask();
             }
@@ -249,6 +281,11 @@ public class GameManager : MonoBehaviour
         {
             board.currentState = GameState.SettingBoard;
             currentTurn = maxTurns;
+
+            foreach (collectibleItem c in colletibleItems)
+            {
+                c.sprite.color = collectibleDisabledColor;
+            }
         }
         else
         {
@@ -261,27 +298,21 @@ public class GameManager : MonoBehaviour
 
         currentTargetScore = (baseTargetScore * (currentGame * (gameScoreIncMult - 1))) * (1 + (roundScoreIncMult * (currentRound - 1))) * extraHighPointMulti;
 
-        //ui.updateScore(currentScore);
         ui.updateTurns(currentTurn);
         ui.updateRounds(currentRound);
         ui.updateGames(currentGame);
-        //ui.updateTargetScore(currentTargetScore);
-        ui.updateScoreDirectly( currentScore, currentTargetScore);
+        ui.updateScoreDirectly(currentScore, currentTargetScore);
         ui.undoCountUpdate(currentUndos);
 
         undoAllowed = false;
         ui.toggleUndoInteract(false);
 
-        //scoreText.text = "Score: " + currentScore;
-        //streakText.text = "Streak: " + streakValue;
-        //turnsText.text = "Turns Left: " + currentTurn;
-        //roundsText.text = "Round: " + currentRound;
-        //targetScoreText.text = "Target Score: " + currentTargetScore;
-
-        if(extraTurns > 0)
+        if (extraTurns > 0)
         {
             ui.turnEffect(extraTurns);
         }
+
+        yield return null;
     }
 
     private void gameOver()
