@@ -1056,7 +1056,7 @@ MonoBehaviour:
   treeYSpawnOffset: -3
   tcam: {fileID: 2115333443}
   lrStartColor: {r: 0.26666668, g: 0.83921576, b: 0.95294124, a: 0}
-  lrEndColor: {r: 0.26666668, g: 0.83921576, b: 0.95294124, a: 0.5019608}
+  lrEndColor: {r: 0.26666668, g: 0.83921576, b: 0.95294124, a: 0.2}
 --- !u!4 &77303329
 Transform:
   m_ObjectHideFlags: 0
@@ -8627,7 +8627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd86eb834766c38469dd8769eb8dbfd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTargetScore: 1000
+  baseTargetScore: 0
   roundScoreIncMult: 0.5
   gameScoreIncMult: 2
   extraHighPointMulti: 1
