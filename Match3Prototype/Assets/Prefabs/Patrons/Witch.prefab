@@ -49,12 +49,16 @@ MonoBehaviour:
   - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
   levelTwoAbilities:
   - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 1518356972237946907, guid: 575fcf55d892649d0b41fe73a964ea89, type: 3}
   levelThreeAbilities:
   - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 1518356972237946907, guid: 575fcf55d892649d0b41fe73a964ea89, type: 3}
   levelFourAbilities:
   - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 1518356972237946907, guid: 575fcf55d892649d0b41fe73a964ea89, type: 3}
   levelFiveAbilities:
   - {fileID: 5134283454997890827, guid: 0ec2011d0e4b90e4792eb3c919b16fd9, type: 3}
+  - {fileID: 1518356972237946907, guid: 575fcf55d892649d0b41fe73a964ea89, type: 3}
   activeAbilites: []
   abilitiesByLevel: []
   level: 0

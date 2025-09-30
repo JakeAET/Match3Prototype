@@ -1,3 +1,4 @@
+using DG.Tweening;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,6 +63,15 @@ public class SkillTreeUI : MonoBehaviour
     [SerializeField] Color lrStartColor;
     [SerializeField] Color lrEndColor;
 
+    private Dictionary<int, int> levelToLayerIDs = new Dictionary<int, int>
+    {
+        {2, 6},
+        {3, 7},
+        {4, 8},
+        {5, 9}
+    };
+
+    [SerializeField] LayerMask[] forceFieldMasks;
 
     // current skill tree tier reference
 
@@ -227,7 +237,7 @@ public class SkillTreeUI : MonoBehaviour
                 Vector3 endPos = lowerTierUIRef.chosenSkillObj.transform.position;
 
                 // create line renderer
-                CreateLine(lineRenderPrefab, startPos, endPos, false);
+                CreateLine(lineRenderPrefab, startPos, endPos, false, currentLevel);
                 //Debug.Log("making line with " + tierUIRef.chosenSkillObj.name + " and " + lowerTierUIRef.chosenSkillObj.name);
                 //Debug.Log(startPos + " - " + endPos);
             }
@@ -296,6 +306,11 @@ public class SkillTreeUI : MonoBehaviour
         }
         else
         {
+            if(currentHighlightedRef != null && currentHighlightedAbility != null)
+            {
+                clickedOffChoice(currentHighlightedAbility, currentHighlightedRef);
+            }
+
             currentHighlightedAbility = currentAbility;
             currentHighlightedRef = choice;
             infoText.text = currentAbility.patronSelectDescription();
@@ -311,6 +326,7 @@ public class SkillTreeUI : MonoBehaviour
 
     public void clickedOffChoice(Ability currentAbility, SkillTreeChoice choice)
     {
+        choice.unselect();
         currentHighlightedAbility = null;
         currentHighlightedRef = null;
         infoPanel.SetActive(false);
@@ -338,6 +354,8 @@ public class SkillTreeUI : MonoBehaviour
         }
         else
         {
+            currentHighlightedAbility = currentAbility;
+            currentHighlightedRef = choice;
             infoText.text = currentAbility.patronSelectDescription();
             infoPanel.SetActive(true);
         }
@@ -405,7 +423,7 @@ public class SkillTreeUI : MonoBehaviour
                     Vector3 endPos = lowerTierUIRef.chosenSkillObj.transform.position;
 
                     // create line renderer
-                    CreateLine(lineRenderPrefab, startPos, endPos, true);
+                    CreateLine(lineRenderPrefab, startPos, endPos, true, tierRef.thisLevel);
                     //Debug.Log("making line with " + tierUIRef.chosenSkillObj.name + " and " + lowerTierUIRef.chosenSkillObj.name);
                     //Debug.Log(startPos + " - " + endPos);
                 }
@@ -413,20 +431,25 @@ public class SkillTreeUI : MonoBehaviour
         }
     }
 
-    public void CreateLine(GameObject lineRender, Vector3 positionOne, Vector3 positionTwo, bool tempLine)
+    public void CreateLine(GameObject lineRender, Vector3 positionOne, Vector3 positionTwo, bool tempLine, int level)
     {
         GameObject lineInstance = Instantiate(lineRender, skillTreeContainer.transform);
 
         LineRenderer lr = lineInstance.GetComponent<LineRenderer>();
-        Transform t = lineInstance.transform;
+        //Transform t = lineInstance.transform;
 
-        lr.startColor = lrStartColor;
-        lr.endColor = lrEndColor;
+        //lr.startColor = lrStartColor;
+        //lr.endColor = lrEndColor;
 
-        lr.SetPosition(0, positionOne);
-        lr.SetPosition(1, positionTwo);
+        //lr.SetPosition(0, positionOne);
+        //lr.SetPosition(1, positionTwo);
 
         lineInstance.SetActive(true);
+
+        lineInstance.GetComponent<SkillTreeLine>().initialize(positionTwo, positionOne, lrStartColor, lrEndColor);
+
+        //lr.widthMultiplier = 0;
+        //DOTween.To(() => lr.widthMultiplier, x => lr.widthMultiplier = x, 0.6f, 0.3f);
 
         GameObject lrParticle = Instantiate(lineParticlePrefab, skillTreeContainer.transform);
         //Vector2 point1 = new Vector2(positionTwo.x, positionTwo.y);
@@ -436,9 +459,13 @@ public class SkillTreeUI : MonoBehaviour
         lrParticle.transform.LookAt(positionOne);
         //lrParticle.transform.rotation = Quaternion.Euler(Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg, lrParticle.transform.rotation.y, lrParticle.transform.rotation.z);
 
-        //GameObject ffInstance = Instantiate(forceFieldPrefab, skillTreeContainer.transform);
-        //ffInstance.transform.position = positionOne;
-        //currentForceFields.Add(ffInstance);
+        GameObject ffInstance = Instantiate(forceFieldPrefab, skillTreeContainer.transform);
+        ffInstance.transform.position = positionOne;
+        ffInstance.layer = levelToLayerIDs[level];
+        currentForceFields.Add(ffInstance);
+
+        var externalForces = lrParticle.GetComponent<ParticleSystem>().externalForces;
+        externalForces.influenceMask = forceFieldMasks[level - 2];
 
         if (tempLine)
         {
@@ -449,7 +476,11 @@ public class SkillTreeUI : MonoBehaviour
         {
             currentLines.Add(lineInstance);
             currentLineParticles.Add(lrParticle);
+            var psMain = lrParticle.GetComponent<ParticleSystem>().main;
+            psMain.prewarm = true;
         }
+
+        lrParticle.SetActive(true);
 
         //Vector2 point1 = new Vector2(positionTwo.x, positionTwo.y);
         //Vector2 point2 = new Vector2(positionOne.x, positionOne.y);

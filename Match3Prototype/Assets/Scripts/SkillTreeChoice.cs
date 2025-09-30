@@ -13,7 +13,7 @@ public class SkillTreeChoice : MonoBehaviour
     public bool interactable;
     public bool selected;
     [SerializeField] GameObject touchZone;
-    [SerializeField] GameObject selectedRing;
+    [SerializeField] SelectedCursor selectedRing;
     [SerializeField] float enlargeScaleFactor;
     public bool isChosen;
     private Vector3 enlargedScale;
@@ -87,13 +87,13 @@ public class SkillTreeChoice : MonoBehaviour
                 {
                     if (this == tierUIRef.skillTreeRef.currentHighlightedRef)
                     {
-                        selectedRing.SetActive(false);
+                        selectedRing.toggleEffect(false);
                         tierUIRef.skillTreeRef.clickedOnChoice(ability, this);
                         transform.DOScale(Vector3.one, 0.3f);
                     }
                     else
                     {
-                        selectedRing.SetActive(true);
+                        selectedRing.toggleEffect(true);
                         tierUIRef.skillTreeRef.clickedOnChoice(ability, this);
                         transform.DOScale(enlargedScale, 0.3f);
                     }
@@ -109,19 +109,18 @@ public class SkillTreeChoice : MonoBehaviour
             }
             else
             {
-                selectedRing.SetActive(false);
-                //Debug.Log("clicked off");
-                if (!interactable)
-                {
-                    //tierUIRef.skillTreeRef.clickedOffChoice(ability, gameObject);
-                    transform.DOScale(Vector3.one, 0.3f);
-                }
-                else
-                {
-                    //tierUIRef.skillTreeRef.clickedOffChoice(ability, gameObject);
-                    transform.DOScale(Vector3.one, 0.3f);
-                }
-
+                //selectedRing.toggleEffect(false);
+                ////Debug.Log("clicked off");
+                //if (!interactable)
+                //{
+                //    //tierUIRef.skillTreeRef.clickedOffChoice(ability, gameObject);
+                //    transform.DOScale(Vector3.one, 0.3f);
+                //}
+                //else
+                //{
+                //    //tierUIRef.skillTreeRef.clickedOffChoice(ability, gameObject);
+                //    transform.DOScale(Vector3.one, 0.3f);
+                //}
             }
         }
     }
@@ -131,7 +130,7 @@ public class SkillTreeChoice : MonoBehaviour
         toggledOn = isToggledOn;
 
         tierUIRef.toggledSkill(this, toggledOn);
-        selectedRing.SetActive(toggledOn);
+        selectedRing.toggleEffect(toggledOn);
 
         if (toggledOn)
         {
@@ -147,13 +146,15 @@ public class SkillTreeChoice : MonoBehaviour
 
     public void unselect()
     {
-
+        selectedRing.toggleEffect(false);
+        //Debug.Log("clicked off");
+        transform.DOScale(Vector3.one, 0.3f);
     }
 
     public void toggleOff()
     {
-        transform.DOScale(Vector3.one, 0.3f);
+        //transform.DOScale(Vector3.one, 0.3f);
         sr.sprite = selectableSprite;
-        selectedRing.SetActive(false);
+        //selectedRing.toggleEffect(false);
     }
 }

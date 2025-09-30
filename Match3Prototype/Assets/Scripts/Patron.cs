@@ -89,6 +89,7 @@ public abstract class Patron : MonoBehaviour
             if (targetAbility != null) // already exists
             {
                 targetAbility.levelUp();
+                abilitiesByLevel.Add(targetAbility);
 
             }
             else // new ability

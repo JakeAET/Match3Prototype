@@ -14,22 +14,28 @@ public class BssRndDisablePtrn : BossRound
         pm = FindObjectOfType<PatronManager>();
         ui = FindObjectOfType<UIManager>();
 
-        affectedPatron = pm.activePatrons[UnityEngine.Random.Range(0, pm.activePatrons.Count)];
+        if (pm.activePatrons.Count > 0)
+        {
+            affectedPatron = pm.activePatrons[UnityEngine.Random.Range(0, pm.activePatrons.Count)];
 
-        levelsReduced = affectedPatron.level;
+            levelsReduced = affectedPatron.level;
 
-        affectedPatron.reduceLevel(levelsReduced);
+            affectedPatron.reduceLevel(levelsReduced);
 
-        affectedPatron.banished = true;
+            affectedPatron.banished = true;
 
-        ui.patronSlotUIRefs[affectedPatron.index].disabledIcon.SetActive(true);
+            ui.patronSlotUIRefs[affectedPatron.index].disabledIcon.SetActive(true);
+        }
     }
 
     public override void deactivateConstraint()
     {
-        affectedPatron.banished = false;
-        affectedPatron.restoreLevel(levelsReduced);
-        ui = FindObjectOfType<UIManager>();
-        ui.patronSlotUIRefs[affectedPatron.index].disabledIcon.SetActive(false);
+        if (pm.activePatrons.Count > 0)
+        {
+            affectedPatron.banished = false;
+            affectedPatron.restoreLevel(levelsReduced);
+            ui = FindObjectOfType<UIManager>();
+            ui.patronSlotUIRefs[affectedPatron.index].disabledIcon.SetActive(false);
+        }
     }
 }

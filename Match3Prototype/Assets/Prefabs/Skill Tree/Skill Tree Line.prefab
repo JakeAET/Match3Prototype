@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6244248839425765277}
   - component: {fileID: 5292717077761736704}
+  - component: {fileID: 8207767289579067681}
   m_Layer: 0
   m_Name: Skill Tree Line
   m_TagString: Untagged
@@ -52,7 +53,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: d1e0f23f3750942c39be31eb4aa95ab0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,7 +76,7 @@ LineRenderer:
   m_SortingOrder: 5
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.6
@@ -131,3 +132,16 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
+--- !u!114 &8207767289579067681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3833407377019432105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 490673ef8cabf45c285fa5fc1a9d8c23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10

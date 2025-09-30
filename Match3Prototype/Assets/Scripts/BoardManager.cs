@@ -135,9 +135,19 @@ public class BoardManager : MonoBehaviour
     public delegate float ScoutTrigger(string colorName);
     public static event ScoutTrigger OnScoutTrigger;
 
+    public delegate float RogueCritTrigger();
+    public static event RogueCritTrigger OnRogueCritTrigger;
+
+    public delegate float ElementalTrigger(bool isElemental);
+    public static event ElementalTrigger OnFrozenTrigger;
+    public static event ElementalTrigger OnEnchantedTrigger;
+
     public delegate float TurnBonus();
     public static event TurnBonus OnFirstTurn;
     public static event TurnBonus OnLastTurn;
+
+    public delegate float UndoBonus();
+    public static event UndoBonus OnUndoBonusTrigger;
 
     public delegate void abilityProcEffect();
     public static event abilityProcEffect OnFrozenTileCreated;
@@ -1290,6 +1300,21 @@ public class BoardManager : MonoBehaviour
             //    }
             //}
 
+            if (OnFrozenTrigger != null)
+            {
+                targetElement.pointValue += OnFrozenTrigger(targetElement.isFrozen);
+            }
+
+            if (OnEnchantedTrigger != null)
+            {
+                targetElement.pointValue += OnEnchantedTrigger(targetElement.isEnchanted);
+            }
+
+            if (OnUndoBonusTrigger != null)
+            {
+                targetElement.pointValue += OnUndoBonusTrigger();
+            }
+
             if (OnScoutTrigger != null)
             {
                 targetElement.pointValue += OnScoutTrigger(targetElement.colorName);
@@ -1313,6 +1338,11 @@ public class BoardManager : MonoBehaviour
             {
                 scoreMulti += OnLastTurn();
             }
+        }
+
+        if(OnRogueCritTrigger != null)
+        {
+            scoreMulti += OnRogueCritTrigger();
         }
 
         int horizMatchLength = targetElement.horizMatchLength;

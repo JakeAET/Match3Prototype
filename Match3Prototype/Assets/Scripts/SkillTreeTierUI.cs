@@ -146,6 +146,7 @@ public class SkillTreeTierUI : MonoBehaviour
                 if(choice != targetChoice)
                 {
                     choice.toggledOn = false;
+                    choice.unselect();
                     choice.toggleOff();
                 }
             }
