@@ -47,14 +47,19 @@ MonoBehaviour:
   title: Scout
   levelOneAbilities:
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: -5434187584856181393, guid: eaeb0da873355c1439e15f2bcc6904b5, type: 3}
   levelTwoAbilities:
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: -5434187584856181393, guid: eaeb0da873355c1439e15f2bcc6904b5, type: 3}
   levelThreeAbilities:
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: -5434187584856181393, guid: eaeb0da873355c1439e15f2bcc6904b5, type: 3}
   levelFourAbilities:
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: -5434187584856181393, guid: eaeb0da873355c1439e15f2bcc6904b5, type: 3}
   levelFiveAbilities:
   - {fileID: 999711994887931756, guid: 9cf63952f3eb4ee48a805cbe75def769, type: 3}
+  - {fileID: -5434187584856181393, guid: eaeb0da873355c1439e15f2bcc6904b5, type: 3}
   activeAbilites: []
   abilitiesByLevel: []
   level: 0

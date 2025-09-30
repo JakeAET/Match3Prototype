@@ -4,12 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbilityCritChance : Ability
+public class AbilityExtraTurnChance : Ability
 {
-    public float initialCritChance;
+    public float initialChance;
     public float chanceIncrease;
-    public float critMulti;
-    private float currentCritChance;
+    public int extraTurnAmount;
+    private float currentChance;
     private GameManager gm;
 
     public override void initialize()
@@ -17,28 +17,28 @@ public class AbilityCritChance : Ability
         gm = FindObjectOfType<GameManager>();
         determineMaxLevel();
 
-        BoardManager.OnRogueCritTrigger += increaseAmount;
+        GameManager.OnExtraTurnChance += extraTurns;
     }
 
     private void OnDisable()
     {
-        BoardManager.OnRogueCritTrigger -= increaseAmount;
+        GameManager.OnExtraTurnChance -= extraTurns;
     }
 
-    private float increaseAmount()
+    private int extraTurns()
     {
         //Debug.Log("color name: " + colorName);
 
         //Debug.Log("scout activated");
         gm = FindObjectOfType<GameManager>();
-        float amount = 0;
+        int amount = 0;
 
         float rand = UnityEngine.Random.Range(0, 1f);
 
-        if (rand <= currentCritChance)
+        if (rand <= currentChance)
         {
-            amount += critMulti;
-            Debug.Log("Rogue Crit activated: Rand = " + rand);
+            amount += extraTurnAmount;
+            //Debug.Log("Extra Turn activated: Rand = " + rand);
         }
 
         if (amount > 0)
@@ -57,11 +57,11 @@ public class AbilityCritChance : Ability
 
             if (level == 1)
             {
-                currentCritChance += initialCritChance;
+                currentChance += initialChance;
             }
             else
             {
-                currentCritChance += chanceIncrease;
+                currentChance += chanceIncrease;
             }
         }
     }
@@ -74,11 +74,11 @@ public class AbilityCritChance : Ability
 
             if (level == 1)
             {
-                currentCritChance -= initialCritChance;
+                currentChance -= initialChance;
             }
             else
             {
-                currentCritChance -= chanceIncrease;
+                currentChance -= chanceIncrease;
             }
         }
     }
@@ -94,7 +94,7 @@ public class AbilityCritChance : Ability
     public override string description()
     {
 
-        string desc = "- Increase the chance of a tile <color=\"green\">Crit (" + critMulti + "X Score)</color> by " + "<color=\"green\">+" + currentCritChance * 100 + "%</color>";
+        string desc = "- Increased chance of an extra <color=\"green\">" + extraTurnAmount + " turns</color> by " + "<color=\"green\">+" + currentChance * 100 + "%</color> each turn";
 
         return desc;
     }
@@ -105,14 +105,14 @@ public class AbilityCritChance : Ability
 
         if (level == 0)
         {
-            increase = initialCritChance * 100;
+            increase = initialChance * 100;
         }
         else
         {
             increase = chanceIncrease * 100;
         }
 
-        string desc = "+ Increase chance of a tile <color=\"green\">Crit (" + critMulti + "X Score)</color> by <color=\"green\">+" + increase + "%</color>";
+        string desc = "- Increased chance of an extra <color=\"green\">" + extraTurnAmount + " turns</color> by " + "<color=\"green\">+" + increase + "%</color> each turn";
 
         return desc;
     }

@@ -26,6 +26,7 @@ public class BssRndReduceLvl : BossRound
                 }
 
                 //ui.patronSlotUIRefs[p.index].levelDownIcon.SetActive(true);
+                Debug.Log("actual reduced: " + actualReduced);
 
                 affectedPatrons.Add(p);
                 levelsReducedRef.Add(actualReduced);

@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1216011901772401966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8136472977148600124}
+  - component: {fileID: -5434187584856181393}
+  m_Layer: 0
+  m_Name: Ability Extra Turn Chance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8136472977148600124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216011901772401966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5434187584856181393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216011901772401966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79088cc90e9d4c4c8d5fa6cc362d378, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dormantSprite: {fileID: 541964074, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
+  selectableSprite: {fileID: 162882786, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
+  selectedSprite: {fileID: 889905812, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
+  chosenSprite: {fileID: -87220909, guid: 5bbb8e6c0b670a646bda93b1b5129585, type: 3}
+  title: Extra Turn Chance
+  conditionalEffect: 0
+  constantEffect: 1
+  canTrigger: 1
+  level: 0
+  maxLevel: 0
+  patron: {fileID: 0}
+  procEffectDuration: 0.5
+  procTweenDuration: 0.2
+  initialChance: 0.05
+  chanceIncrease: 0.05
+  extraTurnAmount: 1

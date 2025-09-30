@@ -114,7 +114,7 @@ public abstract class Patron : MonoBehaviour
         for (int i = 0; i < levelNum; i++)
         {
             //Ability ability = abilitiesByLevel[level - 1];
-            existingAbility(abilitiesByLevel[level]).undoAbility(1);
+            existingAbility(abilitiesByLevel[abilitiesByLevel.Count - (i + 1)]).undoAbility(1);
 
             level--;
             FindObjectOfType<PatronManager>().updatePatronLvl(index, level);

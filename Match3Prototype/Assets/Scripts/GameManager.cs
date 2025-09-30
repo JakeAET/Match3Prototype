@@ -6,6 +6,7 @@ using System.Diagnostics;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using DG.Tweening;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     public int maxUndos = 0;
     public int currentUndos = 0;
     public bool undoAllowed = false;
+    private float lastTurnsScore = 0;
 
     public int maxRefreshes = 0;
     public int currentRefreshes = 0;
@@ -64,6 +66,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] BossRound[] bossRounds;
     private List<BossRound> availableBossRounds = new List<BossRound>();
     public BossRound currentBossRound;
+
+    public delegate int extraTurnChance();
+    public static event extraTurnChance OnExtraTurnChance;
 
     public Color[] tileColors;
     //0 = red
@@ -157,10 +162,33 @@ public class GameManager : MonoBehaviour
 
     public void turnStarted()
     {
+        StartCoroutine(turnStartedEnum());
+    }
+
+    private IEnumerator turnStartedEnum()
+    {
+        lastTurnsScore = currentScore;
         currentTurn--;
         ui.turnEffect(-1);
         ui.updateTurns(currentTurn);
+
+        if(OnExtraTurnChance != null)
+        {
+            int extraTurnNum = OnExtraTurnChance();
+            //UnityEngine.Debug.Log("Extra Turn Checked, Returned: " + extraTurnNum + " Extra Turns");
+            if (extraTurnNum > 0)
+            {
+                yield return new WaitForSeconds(0.5f);
+
+                currentTurn += extraTurnNum;
+                ui.turnEffect(extraTurnNum);
+                ui.updateTurns(currentTurn);
+            }
+        }
+
         ui.lowTurnEffect(currentTurn <= 2);
+
+        yield return null;
     }
 
     public void turnEnded()
@@ -248,10 +276,11 @@ public class GameManager : MonoBehaviour
 
                 yield return new WaitForSeconds(2f);
 
-                bagImage.sprite = closedBagSprite;
                 collectedItemsGroup.GetComponent<RectTransform>().DOMoveY(collectedItemsStartPos.y, 0.5f);
 
                 yield return new WaitForSeconds(0.5f);
+
+                bagImage.sprite = closedBagSprite;
 
                 board.clearBoard();
                 // show boss win screen with stats
@@ -384,6 +413,12 @@ public class GameManager : MonoBehaviour
         ui.updateTurns(currentTurn);
     }
 
+    public void addTempExtraTurns(int num)
+    {
+        currentTurn += num;
+        ui.updateTurns(currentTurn);
+    }
+
     public void increaseMaxUndos(int num)
     {
         maxUndos += num;
@@ -394,6 +429,8 @@ public class GameManager : MonoBehaviour
     public void useUndoMove()
     {
         currentUndos--;
+        currentScore = lastTurnsScore;
+        ui.updateScoreProgress(currentScore, currentTargetScore);
         board.undoLastMove();
         ui.undoCountUpdate(currentUndos);
         undoAllowed = false;
@@ -424,7 +461,7 @@ public class GameManager : MonoBehaviour
 
     private void determineBossCondition()
     {
-        currentBossRound = availableBossRounds[Random.Range(0, availableBossRounds.Count)];
+        currentBossRound = availableBossRounds[UnityEngine.Random.Range(0, availableBossRounds.Count)];
         availableBossRounds.Remove(currentBossRound);
     }
 
