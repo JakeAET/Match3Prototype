@@ -29,6 +29,7 @@ public class SkillTreeTierUI : MonoBehaviour
 
         Vector2 startPos = transform.position;
         float gap = xGap;
+        bool evenSkills = false;
 
         if (level % 2 == 0)
         {
@@ -37,23 +38,20 @@ public class SkillTreeTierUI : MonoBehaviour
 
         int alternator = 0;
 
-        for (int i = 0; i < abilities.Count; i++)
+        if (abilities.Count % 2 == 0)
+        {
+            evenSkills = true;
+            gap /= 2f;
+            //alternator = 1;
+        }
+
+        for (int i = 0; i < abilities.Count; i++) // breaks with more than 5 skills, I should fix it... maybe later
         {
             Vector2 currentPos = startPos;
             bool isChosen = false;
 
             if (!activeLevel)
             {
-                //Debug.Log(level - 1 + " - " + patronRef.abilitiesByLevel.Count);
-                //if ((level - 1) <= patronRef.abilitiesByLevel.Count)
-                //{
-                //    Debug.Log("Ability checking " + abilities[i] + "v.s. patron ability" + patronRef.abilitiesByLevel[level - 1]);
-                //    if (level <= patronRef.level && abilities[i] == patronRef.abilitiesByLevel[level - 1])
-                //    {
-                //        isChosen = true;
-                //    }
-                //}
-
                 if(patronRef.abilitiesByLevel.Count > 0 && (level - 1) < patronRef.abilitiesByLevel.Count)
                 {
                     //Debug.Log("Ability at this level = " + patronRef.abilitiesByLevel[level - 1].name + ", checked with " + abilities[i].name);
@@ -65,7 +63,7 @@ public class SkillTreeTierUI : MonoBehaviour
                 }
             }
 
-            if(i != 0)
+            if(i != 0 || evenSkills)
             {
                 if (alternator < 2)
                 {
@@ -75,9 +73,28 @@ public class SkillTreeTierUI : MonoBehaviour
                 else
                 {
                     currentPos = startPos;
-                    gap *= 2f;
+
+                    if (evenSkills)
+                    {
+                        gap *= 3f;
+                    }
+                    else
+                    {
+                        gap *= 2f;
+                    }
+
                     alternator = 0;
                 }
+
+                //if(evenSkills && i < 2)
+                //{
+                //    float tempGap = gap / 2f;
+                //    currentPos.x += tempGap;
+                //}
+                //else
+                //{
+                //    currentPos.x += gap;
+                //}
 
                 currentPos.x += gap;
             }

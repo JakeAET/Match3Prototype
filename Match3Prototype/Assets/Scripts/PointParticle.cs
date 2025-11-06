@@ -21,7 +21,7 @@ public class PointParticle : MonoBehaviour
 
     private Vector3 startPosition;
     //public AnimationCurve movementCurve;
-    public float duration = 2f;
+    public float duration;
 
     private float startTime;
     private bool isMoving = true;
@@ -44,8 +44,10 @@ public class PointParticle : MonoBehaviour
         {TargetColor.Yellow, 4},
     };
 
-    public void initialize(Vector3 targetPosInput, Vector3 newScale)
+    public void initialize(Vector3 targetPosInput, Vector3 newScale, float delayTime)
     {
+        duration += delayTime;
+        Debug.Log("duration: " + duration);
         startTime = Time.time;
         startPosition = gameObject.transform.position;
 
@@ -143,6 +145,7 @@ public class PointParticle : MonoBehaviour
                 Vector3 pos = transform.position;
                 GameObject burstEffect = Instantiate(weaponHitEffect, pos, Quaternion.identity);
                 burstEffect.GetComponent<WeaponHitBurst>().initialize(glowSR.color);
+                AudioManager.instance.PlayCustomPitch("hp hit", Random.Range(0.8f, 1.2f));
                 Destroy(gameObject);
             }
         }

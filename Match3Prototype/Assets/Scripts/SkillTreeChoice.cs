@@ -105,6 +105,15 @@ public class SkillTreeChoice : MonoBehaviour
                     toggledOn = !toggledOn;
                     tierUIRef.skillTreeRef.clickedOnChoice(ability, this);
                     skillToggled(toggledOn);
+
+                    if (toggledOn)
+                    {
+                        AudioManager.instance.Play("ui pop");
+                    }
+                    else
+                    {
+
+                    }
                 }
             }
             else

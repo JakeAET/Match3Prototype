@@ -48,13 +48,13 @@ MonoBehaviour:
   - name: tile swap
     clip: {fileID: 8300000, guid: e81f855738c74df4ea19727dbb0e553f, type: 3}
     priority: 2
-    volume: 0.8
+    volume: 0.5
     pitch: 1
     loop: 0
     soundType: 1
     source: {fileID: 0}
   - name: tile break
-    clip: {fileID: 8300000, guid: 3cb7416f09b305f42a4f1ba7c7bdabaa, type: 3}
+    clip: {fileID: 8300000, guid: dd25aa18f73bc564a9c18bd79f649660, type: 3}
     priority: 1
     volume: 0.4
     pitch: 1
@@ -78,7 +78,7 @@ MonoBehaviour:
     soundType: 1
     source: {fileID: 0}
   - name: tile setting
-    clip: {fileID: 8300000, guid: e3138e042793bc44bb74b77f1c4d27e1, type: 3}
+    clip: {fileID: 8300000, guid: 36449b1a3d0ccfa4589ff22a52d4896b, type: 3}
     priority: 1
     volume: 0.3
     pitch: 0.9
@@ -102,9 +102,9 @@ MonoBehaviour:
     soundType: 1
     source: {fileID: 0}
   - name: firework
-    clip: {fileID: 8300000, guid: 1bb8a9031c4c94b46a566b077630a61b, type: 3}
+    clip: {fileID: 8300000, guid: 7ec49f01816f7fd4986f59de935e5149, type: 3}
     priority: 1
-    volume: 1
+    volume: 0.5
     pitch: 1
     loop: 0
     soundType: 1
@@ -112,12 +112,46 @@ MonoBehaviour:
   - name: bomb
     clip: {fileID: 8300000, guid: b1bde9355a242c0418ba30c17f875c61, type: 3}
     priority: 1
-    volume: 0.1
+    volume: 0.4
     pitch: 1
+    loop: 0
+    soundType: 1
+    source: {fileID: 0}
+  - name: spawn special
+    clip: {fileID: 8300000, guid: aa7d839b384147146a56dbe22ce115e4, type: 3}
+    priority: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    soundType: 1
+    source: {fileID: 0}
+  - name: menu music
+    clip: {fileID: 8300000, guid: 77d3fa3fedce592449d46fa3d1112969, type: 3}
+    priority: 1
+    volume: 0.2
+    pitch: 1
+    loop: 1
+    soundType: 0
+    source: {fileID: 0}
+  - name: game music
+    clip: {fileID: 8300000, guid: 2cf00d541f703a14586eb0479eaa86eb, type: 3}
+    priority: 1
+    volume: 0.05
+    pitch: 1
+    loop: 1
+    soundType: 0
+    source: {fileID: 0}
+  - name: hp hit
+    clip: {fileID: 8300000, guid: cbc008dc5bd078e4892129c0b09c0580, type: 3}
+    priority: 1
+    volume: 0.5
+    pitch: 1.6
     loop: 0
     soundType: 1
     source: {fileID: 0}
   sfxMuted: 0
   musicMuted: 0
+  masterVolume: 0
   sfxToggle: {fileID: 0}
   musicToggle: {fileID: 0}
+  masterVolumeSlider: {fileID: 0}

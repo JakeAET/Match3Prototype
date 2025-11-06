@@ -11,6 +11,9 @@ public class AbilityExtraTurnChance : Ability
     public int extraTurnAmount;
     private float currentChance;
     private GameManager gm;
+    public Color popupColor;
+    public float popupFontSize;
+    //public string popupText;
 
     public override void initialize()
     {
@@ -44,6 +47,8 @@ public class AbilityExtraTurnChance : Ability
         if (amount > 0)
         {
             procEffect();
+            Vector2 pos = new Vector2(BoardManager.GetInstance().boardCenter.x + UnityEngine.Random.Range(-1f, 1f), BoardManager.GetInstance().boardCenter.y + UnityEngine.Random.Range(-1f, 1f));
+            BoardManager.GetInstance().spawnPopup(pos, "+ " + amount + " bonus turn", popupFontSize, popupColor);
         }
 
         return amount;

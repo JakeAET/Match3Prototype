@@ -99,6 +99,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3887872744477072077, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
+      propertyPath: checkOnSound
+      value: ui click
+      objectReference: {fileID: 0}
     - target: {fileID: 4138644226300378469, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -189,3 +193,22 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: c56bf305b66902042a00158c9bf3e7de, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
+--- !u!1 &8781500226177999709 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6016866824645927810, guid: 5e0f27e2ba049ce4c90634e84e97a5d0, type: 3}
+  m_PrefabInstance: {fileID: 3052899116926386399}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-1894975949237399122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781500226177999709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f981b45295f174984f956d35ee23a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkOnSound: 
+  checkOffSound: 

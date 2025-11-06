@@ -126,6 +126,8 @@ public class Element : MonoBehaviour
 
     [SerializeField] GameObject highlightRailPrefab;
 
+    public float ppDelay;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -408,7 +410,7 @@ public class Element : MonoBehaviour
                 if(!playedFallSound && board.currentState != GameState.SettingBoard)
                 {
                     //Debug.Log("sound");
-                    FindObjectOfType<AudioManager>().Play("tile fall");
+                    //FindObjectOfType<AudioManager>().Play("tile fall");
                     playedFallSound = true;
                 }
 
@@ -779,7 +781,7 @@ public class Element : MonoBehaviour
 
                 Vector3 pos = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
                 GameObject particle = Instantiate(pointParticlePrefabs[board.targetColorDict[color]], pos, Quaternion.identity);
-                particle.GetComponent<PointParticle>().initialize(targetPos, newScale);
+                particle.GetComponent<PointParticle>().initialize(targetPos, newScale, ppDelay);
                 //particle.transform.localScale = newScale;
                 //Debug.Log("particle spawned");
             }

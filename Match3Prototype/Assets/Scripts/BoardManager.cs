@@ -7,7 +7,9 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 using static UnityEngine.GraphicsBuffer;
 
 public enum GameState
@@ -42,6 +44,8 @@ public enum GameState
 
 public class BoardManager : MonoBehaviour
 {
+    private static BoardManager instance;
+
     [SerializeField] bool spawnWithoutMatches = false;
 
     // Game States
@@ -162,6 +166,27 @@ public class BoardManager : MonoBehaviour
     public List<Tilemap> availableTileMasks;
     [SerializeField] Tilemap tilemapBase;
     [SerializeField] Tilemap tilemapBasePrefab;
+
+    public float ppDelayInc;
+
+    [SerializeField] GameObject popupPrefab;
+    //[SerializeField] Color[] comboColors;
+    [SerializeField] float comboFontSize;
+    public Vector3 boardCenter;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogError("Found more than one Board Manager in the scene.");
+        }
+        instance = this;
+    }
+
+    public static BoardManager GetInstance()
+    {
+        return instance;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -391,7 +416,9 @@ public class BoardManager : MonoBehaviour
                     {
                         foreach (Element e in targetElement.specialMatchedElements)
                         {
-                            if(e.tileType == TileType.Bomb)
+                            e.ppDelay = targetElement.specialMatchedElements.IndexOf(e) * ppDelayInc;
+
+                            if (e.tileType == TileType.Bomb)
                             {
                                 spawnX = e.column;
                                 spawnY = e.row;
@@ -431,6 +458,8 @@ public class BoardManager : MonoBehaviour
 
                         foreach (Element e in targetElement.vertMatchedElements)
                         {
+                            e.ppDelay = targetElement.vertMatchedElements.IndexOf(e) * ppDelayInc;
+
                             if (allElements[e.column, e.row] != null)
                             {
                                 if (!e.isScored)
@@ -478,6 +507,8 @@ public class BoardManager : MonoBehaviour
 
                         foreach (Element e in targetElement.horizMatchedElements)
                         {
+                            e.ppDelay = targetElement.horizMatchedElements.IndexOf(e) * ppDelayInc;
+
                             if (allElements[e.column, e.row] != null)
                             {
                                 if (!e.isScored)
@@ -523,6 +554,8 @@ public class BoardManager : MonoBehaviour
                         {
                             if (!e.isScored && allElements[e.column, e.row] != null)
                             {
+                                e.ppDelay = targetElement.horizMatchedElements.IndexOf(e) * ppDelayInc;
+
                                 finalScore += scoreOfTile(e.column, e.row);
                                 e.isScored = true;
                             }
@@ -532,6 +565,8 @@ public class BoardManager : MonoBehaviour
                         {
                             if (!e.isScored && allElements[e.column, e.row] != null)
                             {
+                                e.ppDelay = targetElement.vertMatchedElements.IndexOf(e) * ppDelayInc;
+
                                 finalScore += scoreOfTile(e.column, e.row);
                                 e.isScored = true;
                             }
@@ -693,7 +728,7 @@ public class BoardManager : MonoBehaviour
             targetSpawned.banish();
         }
 
-
+        AudioManager.instance.Play("spawn special");
     }
 
     public void spawnRocket(bool vertical, int column, int row, TargetColor colorRef, int colorIndexRef, string tagNameRef)
@@ -713,8 +748,6 @@ public class BoardManager : MonoBehaviour
             {
                 targetSpawned.banish();
             }
-
-
         }
         else // horizontal
         {
@@ -733,6 +766,8 @@ public class BoardManager : MonoBehaviour
                 targetSpawned.banish();
             }
         }
+
+        AudioManager.instance.Play("spawn special");
     }
 
     public void DestroyMatches()
@@ -1463,6 +1498,13 @@ public class BoardManager : MonoBehaviour
         findingMatches = false;
     }
 
+    public void spawnPopup(Vector2 pos, string popupText, float fontSize, Color color, string audioName = "")
+    {
+        GameObject newPopup = Instantiate(popupPrefab, pos, Quaternion.identity);
+        //newPopup.transform.parent = transform;
+        newPopup.GetComponent<TextPopup>().initialize(popupText, fontSize, color, audioName);
+    }
+
     #region State Switch Conditions
     private void determineState()
     {
@@ -1512,7 +1554,26 @@ public class BoardManager : MonoBehaviour
                 {
                     destroyMatchesInitialized = false;
                     refillingBoard = true;
+
+                    if (matchStreak > 1)
+                    {
+                        Color col = Color.white;
+
+                        if (matchStreak - 1 > popUpColors.Length)
+                        {
+                            col = popUpColors[popUpColors.Length - 1];
+                        }
+                        else
+                        {
+                            col = popUpColors[matchStreak - 1];
+                        }
+
+                        Vector2 pos = new Vector2(boardCenter.x + UnityEngine.Random.Range(-1f, 1f), boardCenter.y + UnityEngine.Random.Range(-1f, 1f));
+                        spawnPopup(pos, matchStreak + "x Combo", comboFontSize, col);
+                    }
+
                     matchStreak++;
+
                     //Debug.Log("Destroy Matches -> Refill Board");
                     currentState = GameState.RefillBoard;
                 }

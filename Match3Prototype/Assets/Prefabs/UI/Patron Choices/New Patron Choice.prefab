@@ -1209,6 +1209,7 @@ GameObject:
   - component: {fileID: 8059392338792947371}
   - component: {fileID: 6967391297770353387}
   - component: {fileID: 1721976417980621370}
+  - component: {fileID: 3887872744477072077}
   m_Layer: 5
   m_Name: New Patron Choice
   m_TagString: Untagged
@@ -1281,6 +1282,7 @@ MonoBehaviour:
   patronRef: {fileID: 0}
   patronToggle: {fileID: 1721976417980621370}
   patronChoiceListIndex: 0
+  currentSelectedAbility: {fileID: 0}
 --- !u!114 &1721976417980621370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1341,6 +1343,20 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
+--- !u!114 &3887872744477072077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6016866824645927810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f981b45295f174984f956d35ee23a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkOnSound: ui click
+  checkOffSound: 
 --- !u!1 &9059709871417635422
 GameObject:
   m_ObjectHideFlags: 0

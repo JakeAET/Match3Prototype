@@ -50,14 +50,14 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        //if (SceneManager.GetActiveScene().name == "Title Screen" || SceneManager.GetActiveScene().name == "Start Screen")
-        //{
-        //    Play("menu_music");
-        //}
-        //else if (SceneManager.GetActiveScene().name == "Game Screen")
-        //{
-        //    Play("game_music");
-        //}
+        if (SceneManager.GetActiveScene().name == "MainMenuScene")
+        {
+            Play("menu music");
+        }
+        else if (SceneManager.GetActiveScene().name == "GameScreen")
+        {
+            Play("game music");
+        }
     }
 
     private void Update()
@@ -180,21 +180,21 @@ public class AudioManager : MonoBehaviour
 
     public void sceneChanged(string sceneName, bool continueMusic)
     {
-        if (sceneName == "Menu Screen")
+        if (sceneName == "MainMenuScene")
         {
             stopAllSFX();
-            Stop("game_music");
-            Play("menu_music");
+            Stop("game music");
+            Play("menu music");
         }
 
-        if (sceneName == "Game Screen")
+        if (sceneName == "GameScreen")
         {
             stopAllSFX();
 
             if (!continueMusic)
             {
-                Stop("menu_music");
-                Play("game_music");
+                Stop("menu music");
+                Play("game music");
             }
         }
     }

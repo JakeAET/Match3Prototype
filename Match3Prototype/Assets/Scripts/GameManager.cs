@@ -240,6 +240,8 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.25f);
 
+            AudioManager.instance.Play("collect");
+
             collectibleItems[currentRound - 1].transform.DOScale(Vector3.one, 0.25f);
 
             yield return new WaitForSeconds(0.25f);

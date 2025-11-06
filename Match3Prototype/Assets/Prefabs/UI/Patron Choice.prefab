@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1170302244202499711}
   - component: {fileID: 403696979580356060}
   - component: {fileID: 4181818267712604406}
+  - component: {fileID: 2675219545221233796}
   m_Layer: 5
   m_Name: Patron Choice
   m_TagString: Untagged
@@ -188,6 +189,20 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
+--- !u!114 &2675219545221233796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580066001502949454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f981b45295f174984f956d35ee23a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkOnSound: ui click
+  checkOffSound: 
 --- !u!1 &1065754054218972683
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +397,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -689,7 +704,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29.45
+  m_fontSize: 2
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -936,15 +951,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 653cc609e6eb81147932a37a3ac63bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: {fileID: 528804118383846820}
-  description: {fileID: 3773262598360510751}
-  patronImg: {fileID: 1332080237654116558}
-  patronImgObj: {fileID: 5426443913891127368}
-  disabledCover: {fileID: 4780839118986731837}
-  largeScaleSize: {x: 1.2, y: 1.2, z: 1}
+  tweenSpeed: 0
+  normalSprite: {fileID: 0}
+  selectedSprite: {fileID: 0}
+  disabledSprite: {fileID: 0}
   backgroundImg: {fileID: 177040015416224591}
+  titleTxt: {fileID: 0}
+  levelUpTxt: {fileID: 0}
+  descriptionTxt: {fileID: 0}
+  patronImgObj: {fileID: 5426443913891127368}
+  disabledButtonCover: {fileID: 0}
+  disabledPatronCover: {fileID: 0}
+  backgroundObj: {fileID: 0}
+  endPtrnScaleFactor: 0
+  endPtrnYFactor: 0
+  fullMask: {fileID: 0}
+  coveredMask: {fileID: 0}
   patronRef: {fileID: 0}
   patronToggle: {fileID: 4181818267712604406}
+  patronChoiceListIndex: 0
+  currentSelectedAbility: {fileID: 0}
 --- !u!1 &8975834522780289071
 GameObject:
   m_ObjectHideFlags: 0

@@ -319,7 +319,7 @@ public class UIManager : MonoBehaviour
 
     public void patronToggle(patronChoiceUI thisPatronChoice, bool toggleOn)
     {
-        FindObjectOfType<AudioManager>().Play("ui click");
+        //FindObjectOfType<AudioManager>().Play("ui click");
         if (toggleOn)
         {
             if(selectedPatronUIRefs.Count == patronChoiceLimit) // already at limit

@@ -60,3 +60,5 @@ MonoBehaviour:
   initialChance: 0.05
   chanceIncrease: 0.05
   extraTurnAmount: 1
+  popupColor: {r: 0, g: 0.5549085, b: 1, a: 1}
+  popupFontSize: 12

@@ -225,6 +225,8 @@ public class PatronTopUI : MonoBehaviour
         rect.DOScale(endScale, tweenDuration);
         rectBG.DOScale(endScaleBG, tweenDuration);
 
+        AudioManager.instance.Play("proc");
+
         yield return new WaitForSeconds(effectDuration + tweenDuration);
 
         DOTween.To(() => layoutElement.preferredWidth, x => layoutElement.preferredWidth = x, startSize, tweenDuration);

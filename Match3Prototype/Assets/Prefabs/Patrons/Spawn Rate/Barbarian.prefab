@@ -51,6 +51,7 @@ MonoBehaviour:
   levelTwoAbilities:
   - {fileID: 1016457447748494144, guid: 463abeb76eac24aaa93fa5b029b44a80, type: 3}
   - {fileID: 8997689360247144916, guid: 2f775f108664d4715b79382557a380e4, type: 3}
+  - {fileID: 8997689360247144916, guid: 2f775f108664d4715b79382557a380e4, type: 3}
   levelThreeAbilities:
   - {fileID: 1016457447748494144, guid: 463abeb76eac24aaa93fa5b029b44a80, type: 3}
   - {fileID: 8997689360247144916, guid: 2f775f108664d4715b79382557a380e4, type: 3}

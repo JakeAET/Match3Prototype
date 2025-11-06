@@ -7,6 +7,7 @@ public class TempSceneChanger : MonoBehaviour
 {
     public void changeScene(string sceneName)
     {
+        AudioManager.instance.sceneChanged(sceneName, false);
         SceneManager.LoadScene(sceneName);
     }
 }

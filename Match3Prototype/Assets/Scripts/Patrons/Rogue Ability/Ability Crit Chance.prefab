@@ -60,3 +60,5 @@ MonoBehaviour:
   initialCritChance: 0.02
   chanceIncrease: 0.02
   critMulti: 2
+  popupColor: {r: 1, g: 0, b: 0, a: 1}
+  popupFontSize: 12
