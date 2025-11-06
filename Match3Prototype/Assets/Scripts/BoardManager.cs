@@ -1559,7 +1559,7 @@ public class BoardManager : MonoBehaviour
                     {
                         Color col = Color.white;
 
-                        if (matchStreak - 1 > popUpColors.Length)
+                        if (matchStreak - 2 > popUpColors.Length)
                         {
                             col = popUpColors[popUpColors.Length - 1];
                         }
